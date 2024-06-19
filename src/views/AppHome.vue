@@ -17,7 +17,8 @@ export default {
             api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
             search_address: '',
             suggestions: [],
-            search_url: '/api/apartments/search'
+            search_url: '/api/apartments/search',
+            results: []
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
         }
@@ -67,11 +68,14 @@ export default {
         },
 
         searchApartments() {
+            this.suggestions = [];
             let url = state.base_api + this.search_url;
             axios
                 .get(url, { params: { address: this.search_address } })
                 .then(response => {
-                    console.log(response);
+                    console.log(response.data.response.data);
+                    this.results = response.data.response.data;
+                    console.log($results);
                 })
                 .catch(err => console.log(err));
         },
@@ -94,6 +98,11 @@ export default {
         <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
             suggestion.address.freeformAddress }}</li>
     </ul>
+
+    <ul v-if="results.length != 0">
+        <li v-for="result in results">{{ result.title }}</li>
+    </ul>
+    <p v-else>No results</p>
 
     <h1>Ecco i tuoi appartmenti</h1>
 
