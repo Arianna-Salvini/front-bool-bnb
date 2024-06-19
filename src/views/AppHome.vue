@@ -17,6 +17,7 @@ export default {
             api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
             search_address: '',
             suggestions: [],
+            search_url: '/api/apartments/search'
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
         }
@@ -65,6 +66,16 @@ export default {
             this.suggestions = [];
         },
 
+        searchApartments() {
+            let url = state.base_api + this.search_url;
+            axios
+                .get(url, { params: { address: this.search_address } })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(err => console.log(err));
+        },
+
 
     },
     mounted() {
@@ -75,11 +86,15 @@ export default {
 </script>
 
 <template>
-    <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
+    <form @submit.prevent="searchApartments()">
+        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
+        <button type="submit">Search</button>
+    </form>
     <ul v-if="suggestions.length != 0">
         <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
             suggestion.address.freeformAddress }}</li>
     </ul>
+
     <h1>Ecco i tuoi appartmenti</h1>
 
     <div v-for="apartment in this.apartments">
