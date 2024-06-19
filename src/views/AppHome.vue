@@ -56,7 +56,14 @@ export default {
             else {
                 this.suggestions = [];
             }
-        }
+        },
+
+        fillSearch(address) {
+            /* when I click on a suggestion, my research input gets filled */
+            this.search_address = address;
+            /* remove suggestions */
+            this.suggestions = [];
+        },
 
 
     },
@@ -70,7 +77,8 @@ export default {
 <template>
     <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
     <ul v-if="suggestions.length != 0">
-        <li v-for="suggestion in suggestions" @click="sendCoordinates">{{ suggestion.address.freeformAddress }}</li>
+        <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
+            suggestion.address.freeformAddress }}</li>
     </ul>
     <h1>Ecco i tuoi appartmenti</h1>
 
