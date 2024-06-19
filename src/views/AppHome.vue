@@ -14,8 +14,12 @@ export default {
             apartments: [],
             state: state,
 
-            search_value: '',
-        };
+            api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
+            search_address: '',
+            suggestions: [],
+            //addressValue: search_address.replace(' ', '%20'),
+            //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
+        }
     },
     methods: {
         getApartments() {
@@ -25,19 +29,49 @@ export default {
                     // console.log(response.data.results);
                     this.apartments = response.data.results.data
                     console.log(this.apartments)
-                }).catch(error => {
+                })
+                .catch(error => {
                     console.error('Error fetching projects:', error);
                 });
         },
+
+        /* get address real time suggestions on input */
+        getSuggestions() {
+            /* if search field isn't empty */
+            if (this.search_address.trim() != '') {
+                let addressValue = this.search_address.replace(' ', '%20');
+                let tomtom_url = `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${this.api_key}`;
+
+                /* call tomtom url */
+                axios
+                    .get(tomtom_url)
+                    .then(response => {
+                        //console.log(response);
+                        /* get first 5 results */
+                        this.suggestions = response.data.results.slice(0, 5);
+                        //console.log(this.suggestions);
+                    })
+                    .catch(err => console.log(err))
+            }
+            else {
+                this.suggestions = [];
+            }
+        }
+
+
     },
     mounted() {
         this.getApartments();
+        console.log(this.search_address);
     }
 };
 </script>
 
 <template>
-    <input type="search" name="search" id="search" v-model="search_value">
+    <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
+    <ul v-if="suggestions.length != 0">
+        <li v-for="suggestion in suggestions" @click="sendCoordinates">{{ suggestion.address.freeformAddress }}</li>
+    </ul>
     <h1>Ecco i tuoi appartmenti</h1>
 
     <div v-for="apartment in this.apartments">
