@@ -18,7 +18,7 @@ export default {
         };
     },
     methods: {
-        callApi() {
+        getApartments() {
             axios
                 .get(state.base_api + state.apartment_url)
                 .then(response => {
@@ -31,7 +31,7 @@ export default {
         },
     },
     mounted() {
-        this.callApi();
+        this.getApartments();
     }
 };
 </script>
