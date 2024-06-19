@@ -38,6 +38,7 @@ export default {
         <h2>{{ apartment.title }}</h2>
         <p>{{ apartment.description }}</p>
         <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
+        <p v-if="apartment.user"> {{ apartment.user.name }}</p>
         <img v-show="apartment.image" class="card-img-top" :src="base_api + '/storage/' + apartment.image" alt="Title"
             width="100" />
     </div>
