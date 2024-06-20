@@ -27,10 +27,12 @@ export default {
                 if (response.data.success) {
                     this.apartment = response.data.response;
                     //console.log(this.apartment)
-                    this.renderMap(this.apartment.longitude, this.apartment.latitude);
-                    console.log(this.renderMap)
-                } else {
-
+                    if (this.$route.params.slug === apartamentSlug) {
+                        this.renderMap(this.apartment.longitude, this.apartment.latitude);
+                        console.log(this.renderMap)
+                    } else {
+                        console.error('Error of render', error);
+                    }
                 }
             })
         },
@@ -67,8 +69,8 @@ export default {
                     </div>
                     <img v-if="apartment.image" :src="apartment.image" alt="Apartment Image" class="img-fluid w-100"
                         style="object-fit: cover; height: 400px;">
-                    <img v-else :src="'/storage/' + apartment.image" alt="Apartment Image" class="img-fluid w-100"
-                        style="object-fit: cover; height: 400px;">
+                    <img v-else :src="state.base_api + '/storage/' + apartment.image" alt="Apartment Image"
+                        class="img-fluid w-100" style="object-fit: cover; height: 400px;">
                 </div>
                 <div class="mt-3">
                     <strong>Description:</strong>
