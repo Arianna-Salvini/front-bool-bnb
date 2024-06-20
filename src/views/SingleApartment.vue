@@ -58,11 +58,11 @@ export default {
 
 <template>
 
-    <div class="container mb-4 pb-3">
+    <div class="container">
         <div class="row d-flex">
-            <div class="col-md-8 mb-4">
-                <div class="card position-relative overflow-hidden rounded-5">
-                    <div v-if="apartment.image" class="card-img-overlay d-flex align-items-center p-0">
+            <div class="col">
+                <div class="card">
+                    <div v-if="apartment.image" class="card_top">
                         <div class="w-100 h-100 bg-dark bg-opacity-25 p-4">
                             <h2 class="text-white">{{ apartment.title }}</h2>
                         </div>
