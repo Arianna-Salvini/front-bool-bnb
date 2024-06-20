@@ -4,6 +4,11 @@
     padding: 0;
 }
 
+:root {
+    --color_dark: #212529;
+    --color_grey_shadow: #bcbcbc;
+}
+
 /* Uility */
 
 .container {
@@ -18,4 +23,24 @@
     display: flex;
     flex-wrap: wrap;
     margin: 0 -1rem;
+}
+
+.box_shadow {
+    box-shadow: 0 0 20px var(--color_grey_shadow);
+}
+
+.col-100 {
+    width: 100%;
+}
+
+.col-50 {
+    width: 50%;
+}
+
+.col-4 {
+    width: calc((100% / 12) *4);
+}
+
+.col-8 {
+    width: calc((100% / 12) * 8);
 }
