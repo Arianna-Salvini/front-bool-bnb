@@ -81,6 +81,11 @@ export default {
                     if (response.data.success) {
                         console.log(response.data.response.data);
                         this.results = response.data.response.data;
+
+                        //must use query object
+                        //query objects are strings -> must convert them to json
+                        this.$router.push({ name: 'research', query: { results: JSON.stringify(this.results) } });
+                        //console.log(this.$router);
                     }
                     else {
                         this.results = [];

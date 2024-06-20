@@ -26,7 +26,6 @@ const router = createRouter({
         },
         {
             path: '/apartments/:slug',
-
             name: 'SingleApartment',
             component: SingleApartment
         },
@@ -34,6 +33,7 @@ const router = createRouter({
             path: '/research',
             name: 'research',
             component: AppResearch,
+            props: route => ({ results: route.query.results })
         }
 
     ]
