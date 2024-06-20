@@ -30,11 +30,12 @@ export default {
             axios.get(fullUrl).then(response => {
                 if (response.data.success) {
                     this.apartment = response.data.response;
+
                     console.log(this.$route.name === 'SingleApartment');
                     //console.log(this.apartment)
                     if (this.$route.name === 'SingleApartment') {
+
                         this.renderMap(this.apartment.longitude, this.apartment.latitude);
-                        console.log(this.renderMap)
                     } else {
                         console.error('Error of render', error);
                     }
@@ -44,6 +45,7 @@ export default {
                 }
             })
         },
+
         renderMap(longitude, latitude) {
             let center = [longitude, latitude];
             let map = tt.map({
@@ -64,6 +66,7 @@ export default {
     },
     mounted() {
         this.callApartment()
+
     }
 };
 </script>
@@ -72,11 +75,11 @@ export default {
 
     <div class="container">
         <div class="row d-flex">
-            <div class="col">
-                <div class="card">
+            <div class="col-8">
+                <div class="card box_shadow ">
                     <div v-if="apartment.image" class="card_top">
-                        <div class="w-100 h-100 bg-dark bg-opacity-25 p-4">
-                            <h2 class="text-white">{{ apartment.title }}</h2>
+                        <div class="title_card">
+                            <h2 class="">{{ apartment.title }}</h2>
                         </div>
                     </div>
                     <img v-if="apartment.image" :src="apartment.image" alt="Apartment Image" class="img-fluid w-100"
@@ -84,15 +87,16 @@ export default {
                     <img v-else :src="state.base_api + '/storage/' + apartment.image" alt="Apartment Image"
                         class="img-fluid w-100" style="object-fit: cover; height: 400px;">
                 </div>
-                <div class="mt-3">
+                <div class="description">
                     <strong>Description:</strong>
                     <p>{{ apartment.description }}</p>
+
                     <!--    Add Map  -->
-                    <div id="map" style="height: 400px; width: 100%;" class="mt-4 rounded-5">
+                    <div id="map" class="box_shadow">
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-4">
                 <div class="card shadow mb-4 rounded-5">
                     <div
                         class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center">
@@ -177,4 +181,35 @@ export default {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.container {
+    padding: 2rem 0;
+}
+
+.card {
+    border-radius: 1rem;
+    border: none;
+
+    .card_top {
+        background-color: var(--color_dark);
+        border-radius: 1rem 1rem 0 0;
+
+        .title_card {
+            padding: 1rem;
+            color: white;
+        }
+    }
+}
+
+.description {
+    margin: 1rem 0.8rem;
+}
+
+#map {
+    border-radius: 1rem;
+    height: 400px;
+    width: 100%;
+    margin-left: -0.8rem;
+
+}
+</style>
