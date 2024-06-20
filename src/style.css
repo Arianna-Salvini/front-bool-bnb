@@ -7,12 +7,16 @@
 :root {
     --color_dark: #212529;
     --color_grey_shadow: #bcbcbc;
+    --bnb-main: #45C2B1;
+    --bnb-lighter: white;
 }
 
 /* Uility */
 
 .container {
-    width: 1220px;
+    width: 90%;
+    margin: auto;
+    max-width: 1220px;
 }
 
 .d-flex {

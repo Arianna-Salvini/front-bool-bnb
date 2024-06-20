@@ -114,50 +114,121 @@ export default {
 </script>
 
 <template>
-    <form @submit.prevent="searchApartments()">
-        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
+    <section id="homepage">
 
+        <div class="container">
 
-        <!-- Add dinamic range input for range distance for result  -->
-        <div class="range">
-            <label for="rangeDistance">Dinstance range </label>
-            <div>
-                <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                    oninput="this.nextElementSibling.value = this.value" v-model="range_distance">
-                <output>{{ range_distance }}</output>
+            <!-- title + searchbar -->
+            <div class="top-bar d-flex">
+
+                <!-- title -->
+                <h2>All Apartments</h2>
+
+                <!-- search -->
+                <div class="search d-flex">
+
+                    <form @submit.prevent="searchApartments()" class="search-form d-flex">
+
+                        <!-- range input -->
+                        <div class="range-wrap d-flex">
+
+                            <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                                oninput="this.nextElementSibling.value = this.value" v-model="range_distance"
+                                class="range">
+                            <div class="bubble">
+                                <output>{{ range_distance }} </output>
+                                <span> km</span>
+                            </div>
+
+                        </div>
+
+                        <!-- search input -->
+                        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions"
+                            placeholder="Via dei cipressi">
+
+                        <!-- submit btn -->
+                        <button type="submit" class="btn search-btn" :disabled="!searchButton()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+
+                    </form>
+                </div>
+
             </div>
+
+            <ul v-if="suggestions.length != 0" class="suggestion-list">
+                <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
+                    {{ suggestion.address.freeformAddress }}
+                </li>
+            </ul>
+
+
+
+
         </div>
-        <button type="submit" :disabled="!searchButton()">Cerca</button>
 
-        <!--     <button type="submit">Search</button> -->
+        <div v-for="apartment in this.apartments">
+            <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }">
+                <h2>{{ apartment.title }}</h2>
+                <p>{{ apartment.description }}</p>
+                <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
+                <p v-if="apartment.user"> {{ apartment.user.name }}</p>
+                <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
+                    alt="Title" width="100" />
+                <p>{{ apartment.address }}</p>
+            </router-link>
+        </div>
 
-    </form>
-    <ul v-if="suggestions.length != 0">
-        <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
-            suggestion.address.freeformAddress }}</li>
-    </ul>
+    </section>
 
-    <ul v-if="results.length != 0 && isSearching">
-        <li v-for="result in results">
-            {{ result.title }}
-        </li>
-    </ul>
-    <p v-else-if="isError == true || (results.length == 0 && isSearching)">Your research gave 0 results. No apartments
-        found within the given range.</p>
-
-    <h1>Ecco i tuoi appartmenti</h1>
-
-    <div v-for="apartment in this.apartments">
-        <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }">
-            <h2>{{ apartment.title }}</h2>
-            <p>{{ apartment.description }}</p>
-            <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
-            <p v-if="apartment.user"> {{ apartment.user.name }}</p>
-            <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
-                alt="Title" width="100" />
-            <p>{{ apartment.address }}</p>
-        </router-link>
-    </div>
 </template>
 
-<style></style>
+<style scoped>
+.top-bar {
+    justify-content: space-between;
+    align-items: center;
+
+    .search {
+        gap: 0.5rem;
+        align-items: center;
+
+        .search-form {
+            padding: 0.5rem;
+            border: 1px solid var(--color_grey_shadow);
+            border-radius: 60px;
+            gap: 1rem;
+            align-items: center;
+
+            .range-wrap {
+                padding: 0 1rem;
+                border-right: 1px solid var(--color_grey_shadow);
+                gap: 0.5rem;
+
+                .bubble {
+                    color: var(--bnb-lighter);
+                    background-color: var(--bnb-main);
+                    border-radius: 20px;
+                    padding: 0.5rem;
+                }
+            }
+
+            #search {
+                padding: 0 1rem;
+                outline: none;
+                border: none;
+            }
+        }
+
+        .search-btn {
+            border-radius: 50%;
+            border: 1px solid var(--color_dark);
+            aspect-ratio: 1/1;
+            width: 3rem;
+            padding: 0.5rem;
+            color: var(--bnb-lighter);
+            background-color: var(--bnb-main);
+            border: none;
+        }
+    }
+}
+</style>
