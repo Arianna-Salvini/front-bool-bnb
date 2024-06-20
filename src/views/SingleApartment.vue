@@ -30,10 +30,12 @@ export default {
                 if (response.data.success) {
                     this.apartment = response.data.response;
                     //console.log(this.apartment)
-                    this.renderMap(this.apartment.longitude, this.apartment.latitude);
-                    console.log(this.renderMap)
-                } else {
-
+                    if (this.$route.params.slug === apartamentSlug) {
+                        this.renderMap(this.apartment.longitude, this.apartment.latitude);
+                        console.log(this.renderMap)
+                    } else {
+                        console.error('Error of render', error);
+                    }
                 }
             })
         },
@@ -63,19 +65,19 @@ export default {
 
 <template>
 
-    <div class="container mb-4 pb-3">
+    <div class="container">
         <div class="row d-flex">
-            <div class="col-md-8 mb-4">
-                <div class="card position-relative overflow-hidden rounded-5">
-                    <div v-if="apartment.image" class="card-img-overlay d-flex align-items-center p-0">
+            <div class="col">
+                <div class="card">
+                    <div v-if="apartment.image" class="card_top">
                         <div class="w-100 h-100 bg-dark bg-opacity-25 p-4">
                             <h2 class="text-white">{{ apartment.title }}</h2>
                         </div>
                     </div>
                     <img v-if="apartment.image" :src="apartment.image" alt="Apartment Image" class="img-fluid w-100"
                         style="object-fit: cover; height: 400px;">
-                    <img v-else :src="'/storage/' + apartment.image" alt="Apartment Image" class="img-fluid w-100"
-                        style="object-fit: cover; height: 400px;">
+                    <img v-else :src="state.base_api + '/storage/' + apartment.image" alt="Apartment Image"
+                        class="img-fluid w-100" style="object-fit: cover; height: 400px;">
                 </div>
                 <div class="mt-3">
                     <strong>Description:</strong>
