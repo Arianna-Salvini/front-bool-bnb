@@ -6,8 +6,11 @@ export default {
 
 <template>
     <section id="jumbotron">
+
         <img src="/img/suitecase.png" alt="suitcase" class="suitecase">
         <img src="/img/map.png" alt="map" class="map">
+
+
         <div class="presentation">
             <h1>Start your vacation with BnB</h1>
             <p>Where Comfort Meets Adventure!</p>
@@ -21,21 +24,22 @@ export default {
 #jumbotron {
     height: 600px;
     width: 100%;
-    background-image: url('/public/img/jumbo.png');
+    background-image: url('/img/jumbo.png');
     background-size: cover;
     background-position: center;
     position: relative;
 
+
     .suitecase {
         position: absolute;
-        right: -15%;
+        right: 0;
         top: 30%;
         transform: scale(0.8);
     }
 
     .map {
         position: absolute;
-        left: -20%;
+        left: 0;
         top: 10%;
         transform: scale(0.8);
     }
