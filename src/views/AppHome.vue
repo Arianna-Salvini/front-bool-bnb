@@ -2,12 +2,13 @@
 
 import axios from 'axios';
 import { state } from '../state.js';
+import AppJumbo from '../components/AppJumbo.vue'
 
 
 export default {
     name: 'AppHome',
     components: {
-
+        AppJumbo
     },
     data() {
         return {
@@ -116,6 +117,8 @@ export default {
 <template>
     <section id="homepage">
 
+        <AppJumbo />
+
         <div class="container">
 
             <!-- title + searchbar -->
@@ -203,12 +206,18 @@ export default {
 
 <style scoped>
 #homepage {
-    padding: 2rem 0;
+    padding-bottom: 5rem;
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
 
     .top-bar {
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        margin-top: 6rem;
 
         .search {
             gap: 0.5rem;

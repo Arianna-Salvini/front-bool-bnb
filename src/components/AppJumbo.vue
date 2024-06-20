@@ -1,0 +1,64 @@
+<script>
+export default {
+    name: 'AppJumbo'
+}
+</script>
+
+<template>
+    <section id="jumbotron">
+        <img src="/img/suitecase.png" alt="suitcase" class="suitecase">
+        <img src="/img/map.png" alt="map" class="map">
+        <div class="presentation">
+            <h1>Start your vacation with BnB</h1>
+            <p>Where Comfort Meets Adventure!</p>
+        </div>
+    </section>
+</template>
+
+
+
+<style scoped>
+#jumbotron {
+    height: 600px;
+    width: 100%;
+    background-image: url('/public/img/jumbo.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+
+    .suitecase {
+        position: absolute;
+        right: -15%;
+        top: 30%;
+        transform: scale(0.8);
+    }
+
+    .map {
+        position: absolute;
+        left: -20%;
+        top: 10%;
+        transform: scale(0.8);
+    }
+
+    .presentation {
+        color: var(--bnb-lighter);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+    }
+}
+</style>
