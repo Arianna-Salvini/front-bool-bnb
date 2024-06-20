@@ -22,24 +22,38 @@ export default {
             results: [],
             range_distance: 20, //defaulf value
             isError: false,
-            isSearching: false
+            isSearching: false,
+
+            currentPage: 1,
+            lastPage: null
 
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
         }
     },
     methods: {
-        getApartments() {
+        getApartments(url) {
             axios
-                .get(state.base_api + state.apartment_url)
+                .get(url)
                 .then(response => {
                     // console.log(response.data.results);
                     this.apartments = response.data.results.data
-                    console.log(this.apartments)
+                    console.log(this.apartments);
+                    console.log(response.data.results);
+                    this.currentPage = response.data.results.current_page;
+                    this.lastPage = response.data.results.last_page;
                 })
                 .catch(error => {
                     console.error('Error fetching projects:', error);
                 });
+        },
+
+        showNext() {
+            if (this.currentPage < this.lastPage) {
+                let nextPage = this.currentPage + 1;
+                let url = `${state.base_api}${state.apartment_url}?page=${nextPage}`;
+                this.getApartments(url);
+            }
         },
 
         /* get address real time suggestions on input */
@@ -109,7 +123,8 @@ export default {
 
     },
     mounted() {
-        this.getApartments();
+        let url = state.base_api + state.apartment_url;
+        this.getApartments(url);
         console.log(this.search_address);
     }
 };
@@ -194,6 +209,11 @@ export default {
                     </router-link>
 
                 </div>
+            </div>
+            <div class="navigation">
+                <button type="button" class="next" v-if="currentPage < lastPage" @click="showNext">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </div>
 
 
@@ -285,6 +305,24 @@ export default {
 
     .card {
         box-shadow: 0 0 12px 1px var(--color_grey_shadow);
+        height: 100%;
+    }
+
+    .navigation {
+        display: flex;
+        justify-content: end;
+        padding: 1.5rem 0;
+
+        .next {
+            border-radius: 50%;
+            border: 1px solid var(--color_dark);
+            aspect-ratio: 1/1;
+            width: 3rem;
+            padding: 0.5rem;
+            color: var(--bnb-lighter);
+            background-color: var(--bnb-main);
+            border: none;
+        }
     }
 
 }

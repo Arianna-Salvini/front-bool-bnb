@@ -89,5 +89,6 @@ img {
 
 .card {
     box-shadow: 0 0 12px 1px var(--color_grey_shadow);
+    height: 100%;
 }
 </style>
