@@ -20,6 +20,8 @@ export default {
             search_url: '/api/apartments/search',
             results: [],
             range_distance: 20, //defaulf value
+            isError: false,
+            isSearching: false
 
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
@@ -75,11 +77,21 @@ export default {
             axios
                 .get(url, { params: { address: this.search_address, range_distance: this.range_distance } }) //Add range_distance in params for back-end call
                 .then(response => {
-                    console.log(response.data.response.data);
-                    this.results = response.data.response.data;
-                    // console.log($results);
+                    console.log(response);
+                    if (response.data.success) {
+                        console.log(response.data.response.data);
+                        this.results = response.data.response.data;
+                    }
+                    else {
+                        this.results = [];
+                    }
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    console.log('non puoi fare la ricerca così');
+                    this.isError = true;
+                });
+            this.isSearching = true;
         },
 
 
@@ -120,11 +132,13 @@ export default {
             suggestion.address.freeformAddress }}</li>
     </ul>
 
-    <ul v-if="results.length != 0">
-        <li v-for="result in results">{{
-            result.title }}</li>
+    <ul v-if="results.length != 0 && isSearching">
+        <li v-for="result in results">
+            {{ result.title }}
+        </li>
     </ul>
-    <p v-else>No results</p>
+    <p v-else-if="isError == true || (results.length == 0 && isSearching)">Your research gave 0 results. No apartments
+        found within the given range.</p>
 
     <h1>Ecco i tuoi appartmenti</h1>
 
