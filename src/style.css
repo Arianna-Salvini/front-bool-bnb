@@ -9,10 +9,16 @@
     --color_grey_shadow: #bcbcbc;
 }
 
+.bg_dark {
+    background-color: var(--color_dark);
+}
+
 /* Uility */
 
 .container {
-    width: 1220px;
+    width: 90%;
+    margin: auto;
+    max-width: 1220px;
 }
 
 .d-flex {

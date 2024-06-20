@@ -76,7 +76,7 @@ export default {
     <div class="container">
         <div class="row d-flex">
             <div class="col-8">
-                <div class="cards box_shadow ">
+                <div class="cards box_shadow">
                     <div class="card_top">
                         <div class="title_card">
                             <h2 class="">{{ apartment.title }}</h2>
@@ -98,13 +98,12 @@ export default {
             </div>
             <div class="col-4">
                 <div class="cards box_shadow">
-                    <div
-                        class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center">
+                    <div class="card_header bg_dark flex">
                         <h2>Details:</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card_body">
                         <div class="d-flex flex-wrap gap-1">
-                            <div class="mb-3">
+                            <div class="">
                                 <span class="badge bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-map-pin"></i></strong>
                                     {{ apartment.address }}, {{ apartment.street_number }}, {{ apartment.zip_code }}
@@ -117,7 +116,7 @@ export default {
                                 </span>
                             </div>
                             <div class="mb-3">
-                                <span class="badge bg-dark rounded-5 p-2">
+                                <span class="badges bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-person-booth"></i></strong>
                                     {{ apartment.rooms }} rooms
                                 </span>
@@ -148,12 +147,12 @@ export default {
             </div>
         </div>
 
-        <!--  -->
+        <!-- Form -->
         <div class="cards box_shadow my-5 rounded-5">
             <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
                 <h2>Contact Owner</h2>
             </div>
-            <div class="card-body p-3">
+            <div class="card_body p-3">
                 <form @submit.prevent="handleForm">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -189,15 +188,16 @@ export default {
 }
 
 .cards {
-    border-radius: 1rem;
+    border-radius: 2rem;
     border: none;
+    box-shadow: 0 0 20px var(--color_grey_shadow);
 
     .card_top {
         background-color: var(--color_dark);
-        border-radius: 1rem 1rem 0 0;
+        border-radius: 2rem 2rem 0 0;
 
         .title_card {
-            padding: 1rem;
+            padding: 1.5rem 1.5rem 1rem;
             color: white;
         }
     }
@@ -208,7 +208,7 @@ export default {
 }
 
 #map {
-    border-radius: 1rem;
+    border-radius: 2rem;
     height: 400px;
     width: 100%;
     margin-left: 1rem 0 2rem -0.8rem;
@@ -217,5 +217,23 @@ export default {
 
 img {
     border-radius: 0 0 1rem 1rem;
+}
+
+.badges {
+    padding: 1.5rem, 2rem;
+    color: white;
+    background-color: var(--color_dark);
+}
+
+.card_header {
+    border-radius: 2rem;
+    color: white;
+    padding: 0.8rem 1.5rem 0.5rem;
+
+}
+
+.card_body {
+    padding: 1rem;
+    border-radius: 3rem;
 }
 </style>
