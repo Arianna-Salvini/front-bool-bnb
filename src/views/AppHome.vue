@@ -18,7 +18,9 @@ export default {
             search_address: '',
             suggestions: [],
             search_url: '/api/apartments/search',
-            results: []
+            results: [],
+            range_distance: 20,
+
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
         }
@@ -71,7 +73,7 @@ export default {
             this.suggestions = [];
             let url = state.base_api + this.search_url;
             axios
-                .get(url, { params: { address: this.search_address } })
+                .get(url, { params: { address: this.search_address, range_distance: this.rangeDistance } })
                 .then(response => {
                     console.log(response.data.response.data);
                     this.results = response.data.response.data;
@@ -92,7 +94,19 @@ export default {
 <template>
     <form @submit.prevent="searchApartments()">
         <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
+
+
+        <!-- Add dinamic range input for range distance for result  -->
+        <div class="range">
+            <label for="rangeDistance">Dinstance range </label>
+            <div>
+                <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                    oninput="this.nextElementSibling.value = this.value">
+                <output>20</output>
+            </div>
+        </div>
         <button type="submit">Search</button>
+
     </form>
     <ul v-if="suggestions.length != 0">
         <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
