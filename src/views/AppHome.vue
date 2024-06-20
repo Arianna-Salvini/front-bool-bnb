@@ -19,7 +19,7 @@ export default {
             suggestions: [],
             search_url: '/api/apartments/search',
             results: [],
-            range_distance: 20,
+            range_distance: 20, //defaulf value
 
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
@@ -73,11 +73,11 @@ export default {
             this.suggestions = [];
             let url = state.base_api + this.search_url;
             axios
-                .get(url, { params: { address: this.search_address, range_distance: this.rangeDistance } })
+                .get(url, { params: { address: this.search_address, range_distance: this.range_distance } }) //Add range_distance in params for back-end call
                 .then(response => {
                     console.log(response.data.response.data);
                     this.results = response.data.response.data;
-                    console.log($results);
+                    // console.log($results);
                 })
                 .catch(err => console.log(err));
         },
@@ -101,8 +101,8 @@ export default {
             <label for="rangeDistance">Dinstance range </label>
             <div>
                 <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                    oninput="this.nextElementSibling.value = this.value">
-                <output>20</output>
+                    oninput="this.nextElementSibling.value = this.value" v-model="range_distance">
+                <output>{{ range_distance }}</output>
             </div>
         </div>
         <button type="submit">Search</button>
