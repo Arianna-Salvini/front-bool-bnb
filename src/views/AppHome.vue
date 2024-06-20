@@ -84,7 +84,7 @@ export default {
 
 
         searchButton() {
-            return /^[a-zA-Z0-9][a-zA-Z0-9,\/]*$/.test(this.search_address.trim());
+            return /^[a-zA-Z0-9]+[a-zA-Z0-9 ,\/]*$/.test(this.search_address.trim());
         },
 
 
