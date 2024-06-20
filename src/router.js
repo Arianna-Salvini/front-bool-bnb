@@ -5,6 +5,7 @@ import AppContacts from './views/AppContacts.vue';
 import AppAbout from './views/AppAbout.vue';
 import SingleApartment from './views/SingleApartment.vue';
 import AppResearch from './views/AppResearch.vue';
+import NotFound from './views/NotFound.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -26,7 +27,6 @@ const router = createRouter({
         },
         {
             path: '/apartments/:slug',
-
             name: 'SingleApartment',
             component: SingleApartment
         },
@@ -34,6 +34,12 @@ const router = createRouter({
             path: '/research',
             name: 'research',
             component: AppResearch,
+            props: route => ({ results: route.query.results })
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not-found',
+            component: NotFound
         }
 
     ]
