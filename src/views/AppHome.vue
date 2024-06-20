@@ -19,7 +19,7 @@ export default {
             suggestions: [],
             search_url: '/api/apartments/search',
             results: [],
-            range_distance: 20,
+            range_distance: 20, //defaulf value
 
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
@@ -73,11 +73,11 @@ export default {
             this.suggestions = [];
             let url = state.base_api + this.search_url;
             axios
-                .get(url, { params: { address: this.search_address, range_distance: this.rangeDistance } })
+                .get(url, { params: { address: this.search_address, range_distance: this.range_distance } }) //Add range_distance in params for back-end call
                 .then(response => {
                     console.log(response.data.response.data);
                     this.results = response.data.response.data;
-                    console.log($results);
+                    // console.log($results);
                 })
                 .catch(err => console.log(err));
         },
@@ -117,24 +117,27 @@ export default {
     </form>
     <ul v-if="suggestions.length != 0">
         <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
-        suggestion.address.freeformAddress }}</li>
+            suggestion.address.freeformAddress }}</li>
     </ul>
 
     <ul v-if="results.length != 0">
-        <li v-for="result in results">{{ result.title }}</li>
+        <li v-for="result in results">{{
+            result.title }}</li>
     </ul>
     <p v-else>No results</p>
 
     <h1>Ecco i tuoi appartmenti</h1>
 
     <div v-for="apartment in this.apartments">
-        <h2>{{ apartment.title }}</h2>
-        <p>{{ apartment.description }}</p>
-        <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
-        <p v-if="apartment.user"> {{ apartment.user.name }}</p>
-        <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
-            alt="Title" width="100" />
-        <p>{{ apartment.address }}</p>
+        <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }">
+            <h2>{{ apartment.title }}</h2>
+            <p>{{ apartment.description }}</p>
+            <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
+            <p v-if="apartment.user"> {{ apartment.user.name }}</p>
+            <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
+                alt="Title" width="100" />
+            <p>{{ apartment.address }}</p>
+        </router-link>
     </div>
 </template>
 
