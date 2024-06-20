@@ -16,7 +16,8 @@ export default {
             base_api: 'http://127.0.0.1:8000/api/',
             url_apartment: 'apartments/',
             //form contact 
-            name_lastname: '',
+            name: '',
+            lastname: '',
             email: '',
             message: ''
         }
@@ -29,13 +30,17 @@ export default {
             axios.get(fullUrl).then(response => {
                 if (response.data.success) {
                     this.apartment = response.data.response;
+                    console.log(this.$route.name === 'SingleApartment');
                     //console.log(this.apartment)
-                    if (this.$route.params.slug === apartamentSlug) {
+                    if (this.$route.name === 'SingleApartment') {
                         this.renderMap(this.apartment.longitude, this.apartment.latitude);
                         console.log(this.renderMap)
                     } else {
                         console.error('Error of render', error);
                     }
+                }
+                else {
+                    this.$router.push({ name: 'not-found' });
                 }
             })
         },
@@ -130,7 +135,7 @@ export default {
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
-                        service.service_name }}</li>
+                                        service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>
