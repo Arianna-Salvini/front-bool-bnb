@@ -117,24 +117,27 @@ export default {
     </form>
     <ul v-if="suggestions.length != 0">
         <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
-        suggestion.address.freeformAddress }}</li>
+            suggestion.address.freeformAddress }}</li>
     </ul>
 
     <ul v-if="results.length != 0">
-        <li v-for="result in results">{{ result.title }}</li>
+        <li v-for="result in results">{{
+            result.title }}</li>
     </ul>
     <p v-else>No results</p>
 
     <h1>Ecco i tuoi appartmenti</h1>
 
     <div v-for="apartment in this.apartments">
-        <h2>{{ apartment.title }}</h2>
-        <p>{{ apartment.description }}</p>
-        <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
-        <p v-if="apartment.user"> {{ apartment.user.name }}</p>
-        <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
-            alt="Title" width="100" />
-        <p>{{ apartment.address }}</p>
+        <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }">
+            <h2>{{ apartment.title }}</h2>
+            <p>{{ apartment.description }}</p>
+            <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
+            <p v-if="apartment.user"> {{ apartment.user.name }}</p>
+            <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
+                alt="Title" width="100" />
+            <p>{{ apartment.address }}</p>
+        </router-link>
     </div>
 </template>
 
