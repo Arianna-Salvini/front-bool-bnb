@@ -5,7 +5,7 @@ export default {
     components: {
 
     },
-    name: 'appFooter',
+    name: 'AppFooter',
     data() {
         return {
 

@@ -113,6 +113,7 @@ export default {
         <p v-if="apartment.user"> {{ apartment.user.name }}</p>
         <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
             alt="Title" width="100" />
+        <p>{{ apartment.address }}</p>
     </div>
 </template>
 

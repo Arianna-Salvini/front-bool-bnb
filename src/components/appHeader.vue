@@ -5,7 +5,7 @@ export default {
     components: {
 
     },
-    name: 'appHeader',
+    name: 'AppHeader',
     data() {
         return {
 
