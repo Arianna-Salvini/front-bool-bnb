@@ -76,28 +76,28 @@ export default {
     <div class="container">
         <div class="row d-flex">
             <div class="col-8">
-                <div class="card box_shadow ">
-                    <div v-if="apartment.image" class="card_top">
+                <div class="cards box_shadow ">
+                    <div class="card_top">
                         <div class="title_card">
                             <h2 class="">{{ apartment.title }}</h2>
                         </div>
                     </div>
-                    <img v-if="apartment.image" :src="apartment.image" alt="Apartment Image" class="img-fluid w-100"
-                        style="object-fit: cover; height: 400px;">
-                    <img v-else :src="state.base_api + '/storage/' + apartment.image" alt="Apartment Image"
-                        class="img-fluid w-100" style="object-fit: cover; height: 400px;">
+                    <div class="card_body">
+                        <img v-if="apartment.image"
+                            :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
+                            alt="Apartment Image" class="img-fluid w-100" style="object-fit: cover; height: 400px;">
+                    </div>
                 </div>
                 <div class="description">
                     <strong>Description:</strong>
                     <p>{{ apartment.description }}</p>
-
-                    <!--    Add Map  -->
-                    <div id="map" class="box_shadow">
-                    </div>
                 </div>
+
+                <!--    Add Map  -->
+                <div id="map" class="box_shadow"></div>
             </div>
             <div class="col-4">
-                <div class="card shadow mb-4 rounded-5">
+                <div class="cards box_shadow">
                     <div
                         class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center">
                         <h2>Details:</h2>
@@ -147,11 +147,13 @@ export default {
                 </div>
             </div>
         </div>
-        <div class="card shadow mb-4 rounded-5">
-            <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center">
+
+        <!--  -->
+        <div class="cards box_shadow my-5 rounded-5">
+            <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
                 <h2>Contact Owner</h2>
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
                 <form @submit.prevent="handleForm">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -183,10 +185,10 @@ export default {
 
 <style scoped>
 .container {
-    padding: 2rem 0;
+    padding: 1rem 0;
 }
 
-.card {
+.cards {
     border-radius: 1rem;
     border: none;
 
@@ -209,7 +211,11 @@ export default {
     border-radius: 1rem;
     height: 400px;
     width: 100%;
-    margin-left: -0.8rem;
+    margin-left: 1rem 0 2rem -0.8rem;
+    padding: 3rem 0;
+}
 
+img {
+    border-radius: 0 0 1rem 1rem;
 }
 </style>
