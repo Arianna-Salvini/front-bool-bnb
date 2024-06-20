@@ -103,5 +103,10 @@ header {
     font-size: 16px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+.btn-principal:hover {
+    background-color: #3aa79e;
+    border-color: #3aa79e;
+    color: white;
+}
 
 </style>
