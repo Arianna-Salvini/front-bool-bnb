@@ -7,6 +7,8 @@
 :root {
     --color_dark: #212529;
     --color_grey_shadow: #bcbcbc;
+    --bnb-main: #45C2B1;
+    --bnb-lighter: white;
 }
 
 .bg_dark {
@@ -41,6 +43,11 @@
 
 .col-50 {
     width: 50%;
+}
+
+.col-6 {
+    width: calc((100% / 12) *6);
+    ;
 }
 
 .col-4 {

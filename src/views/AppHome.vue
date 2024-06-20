@@ -2,12 +2,13 @@
 
 import axios from 'axios';
 import { state } from '../state.js';
+import AppJumbo from '../components/AppJumbo.vue'
 
 
 export default {
     name: 'AppHome',
     components: {
-
+        AppJumbo
     },
     data() {
         return {
@@ -21,24 +22,38 @@ export default {
             results: [],
             range_distance: 20, //defaulf value
             isError: false,
-            isSearching: false
+            isSearching: false,
+
+            currentPage: 1,
+            lastPage: null
 
             //addressValue: search_address.replace(' ', '%20'),
             //tomtom_url: `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${api_key}`,
         }
     },
     methods: {
-        getApartments() {
+        getApartments(url) {
             axios
-                .get(state.base_api + state.apartment_url)
+                .get(url)
                 .then(response => {
                     // console.log(response.data.results);
                     this.apartments = response.data.results.data
-                    console.log(this.apartments)
+                    console.log(this.apartments);
+                    console.log(response.data.results);
+                    this.currentPage = response.data.results.current_page;
+                    this.lastPage = response.data.results.last_page;
                 })
                 .catch(error => {
                     console.error('Error fetching projects:', error);
                 });
+        },
+
+        showNext() {
+            if (this.currentPage < this.lastPage) {
+                let nextPage = this.currentPage + 1;
+                let url = `${state.base_api}${state.apartment_url}?page=${nextPage}`;
+                this.getApartments(url);
+            }
         },
 
         /* get address real time suggestions on input */
@@ -84,7 +99,8 @@ export default {
 
                         //must use query object
                         //query objects are strings -> must convert them to json
-                        this.$router.push({ name: 'research', query: { results: JSON.stringify(this.results) } });
+                        state.updateResults(response.data.response.data);
+                        this.$router.push({ name: 'research'/* , query: { results: JSON.stringify(this.results) } */ });
                         //console.log(this.$router);
                     }
                     else {
@@ -107,57 +123,207 @@ export default {
 
     },
     mounted() {
-        this.getApartments();
+        let url = state.base_api + state.apartment_url;
+        this.getApartments(url);
         console.log(this.search_address);
     }
 };
 </script>
 
 <template>
-    <form @submit.prevent="searchApartments()">
-        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions">
+    <section id="homepage">
 
+        <AppJumbo />
 
-        <!-- Add dinamic range input for range distance for result  -->
-        <div class="range">
-            <label for="rangeDistance">Dinstance range </label>
-            <div>
-                <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                    oninput="this.nextElementSibling.value = this.value" v-model="range_distance">
-                <output>{{ range_distance }}</output>
+        <div class="container">
+
+            <!-- title + searchbar -->
+            <div class="top-bar d-flex">
+
+                <!-- title -->
+                <h2>All Apartments</h2>
+
+                <!-- search -->
+                <div class="search d-flex">
+
+                    <form @submit.prevent="searchApartments()" class="search-form d-flex">
+
+                        <!-- range input -->
+                        <div class="range-wrap d-flex">
+
+                            <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                                oninput="this.nextElementSibling.value = this.value" v-model="range_distance"
+                                class="range">
+                            <div class="bubble">
+                                <output>{{ range_distance }} </output>
+                                <span> km</span>
+                            </div>
+
+                        </div>
+
+                        <!-- search input -->
+                        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions"
+                            placeholder="Via dei cipressi">
+
+                        <!-- submit btn -->
+                        <button type="submit" class="btn search-btn" :disabled="!searchButton()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+
+                    </form>
+                </div>
+
             </div>
+            <div class="suggestions" v-if="suggestions.length != 0">
+                <ul>
+                    <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
+                        {{ suggestion.address.freeformAddress }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="row g-4">
+                <div v-for="apartment in this.apartments" class="col-6">
+
+                    <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
+                        style="text-decoration: none;">
+                        <div class="card">
+                            <img v-if="apartment.image"
+                                :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
+                                alt="Apartment Image" class="card-img-top w-100" style="height: 350px;">
+                            <img v-else
+                                src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
+                                alt="not-available" style="height: 350px;">
+                            <div class="card-body">
+                                <h3>{{ apartment.title }}</h3>
+                                <p class="card-text">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    {{ apartment.address }}
+                                </p>
+                                <p class="card-text" v-if="apartment.description">
+                                    {{ apartment.description }}
+                                </p>
+
+                            </div>
+                        </div>
+                    </router-link>
+
+                </div>
+            </div>
+            <div class="navigation">
+                <button type="button" class="next" v-if="currentPage < lastPage" @click="showNext">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+
+
         </div>
-        <button type="submit" :disabled="!searchButton()">Cerca</button>
 
-        <!--     <button type="submit">Search</button> -->
 
-    </form>
-    <ul v-if="suggestions.length != 0">
-        <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
-            suggestion.address.freeformAddress }}</li>
-    </ul>
+    </section>
 
-    <ul v-if="results.length != 0 && isSearching">
-        <li v-for="result in results">
-            {{ result.title }}
-        </li>
-    </ul>
-    <p v-else-if="isError == true || (results.length == 0 && isSearching)">Your research gave 0 results. No apartments
-        found within the given range.</p>
-
-    <h1>Ecco i tuoi appartmenti</h1>
-
-    <div v-for="apartment in this.apartments">
-        <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }">
-            <h2>{{ apartment.title }}</h2>
-            <p>{{ apartment.description }}</p>
-            <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
-            <p v-if="apartment.user"> {{ apartment.user.name }}</p>
-            <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
-                alt="Title" width="100" />
-            <p>{{ apartment.address }}</p>
-        </router-link>
-    </div>
 </template>
 
-<style></style>
+<style scoped>
+#homepage {
+    padding-bottom: 5rem;
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    .top-bar {
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        margin-top: 6rem;
+
+        .search {
+            gap: 0.5rem;
+            align-items: center;
+
+            .search-form {
+                padding: 0.5rem;
+                border: 1px solid var(--color_grey_shadow);
+                border-radius: 60px;
+                gap: 1rem;
+                align-items: center;
+
+                .range-wrap {
+                    padding: 0 1rem;
+                    border-right: 1px solid var(--color_grey_shadow);
+                    gap: 0.5rem;
+
+                    .bubble {
+                        color: var(--bnb-lighter);
+                        background-color: var(--bnb-main);
+                        border-radius: 20px;
+                        padding: 0.5rem;
+                    }
+                }
+
+                #search {
+                    padding: 0 1rem;
+                    outline: none;
+                    border: none;
+                }
+            }
+
+            .search-btn {
+                border-radius: 50%;
+                border: 1px solid var(--color_dark);
+                aspect-ratio: 1/1;
+                width: 3rem;
+                padding: 0.5rem;
+                color: var(--bnb-lighter);
+                background-color: var(--bnb-main);
+                border: none;
+            }
+        }
+
+    }
+
+    .suggestions {
+        display: flex;
+        justify-content: end;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            padding: 1rem;
+            border: 1px solid var(--color_grey_shadow);
+            border-radius: 20px;
+        }
+    }
+
+    .card,
+    img {
+        border-radius: 20px;
+    }
+
+    .card {
+        box-shadow: 0 0 12px 1px var(--color_grey_shadow);
+        height: 100%;
+    }
+
+    .navigation {
+        display: flex;
+        justify-content: end;
+        padding: 1.5rem 0;
+
+        .next {
+            border-radius: 50%;
+            border: 1px solid var(--color_dark);
+            aspect-ratio: 1/1;
+            width: 3rem;
+            padding: 0.5rem;
+            color: var(--bnb-lighter);
+            background-color: var(--bnb-main);
+            border: none;
+        }
+    }
+
+}
+</style>

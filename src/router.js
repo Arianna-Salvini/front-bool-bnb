@@ -34,7 +34,7 @@ const router = createRouter({
             path: '/research',
             name: 'research',
             component: AppResearch,
-            props: route => ({ results: route.query.results })
+            //props: route => ({ results: JSON.parse(route.query.results) })
         },
         {
             path: '/:pathMatch(.*)*',
