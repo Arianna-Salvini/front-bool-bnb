@@ -155,80 +155,127 @@ export default {
                 </div>
 
             </div>
+            <div class="suggestions" v-if="suggestions.length != 0">
+                <ul>
+                    <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
+                        {{ suggestion.address.freeformAddress }}
+                    </li>
+                </ul>
+            </div>
 
-            <ul v-if="suggestions.length != 0" class="suggestion-list">
-                <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
-                    {{ suggestion.address.freeformAddress }}
-                </li>
-            </ul>
+            <div class="row g-4">
+                <div v-for="apartment in this.apartments" class="col-6">
 
+                    <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
+                        style="text-decoration: none;">
+                        <div class="card">
+                            <img v-if="apartment.image"
+                                :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
+                                alt="Apartment Image" class="card-img-top w-100" style="height: 350px;">
+                            <img v-else
+                                src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
+                                alt="not-available" style="height: 350px;">
+                            <div class="card-body">
+                                <h3>{{ apartment.title }}</h3>
+                                <p class="card-text">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    {{ apartment.address }}
+                                </p>
+                                <p class="card-text" v-if="apartment.description">
+                                    {{ apartment.description }}
+                                </p>
+
+                            </div>
+                        </div>
+                    </router-link>
+
+                </div>
+            </div>
 
 
 
         </div>
 
-        <div v-for="apartment in this.apartments">
-            <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }">
-                <h2>{{ apartment.title }}</h2>
-                <p>{{ apartment.description }}</p>
-                <p v-show="apartment.user_id">user_id :{{ apartment.user_id }}</p>
-                <p v-if="apartment.user"> {{ apartment.user.name }}</p>
-                <img v-show="apartment.image" class="card-img-top" :src="state.base_api + '/storage/' + apartment.image"
-                    alt="Title" width="100" />
-                <p>{{ apartment.address }}</p>
-            </router-link>
-        </div>
 
     </section>
 
 </template>
 
 <style scoped>
-.top-bar {
-    justify-content: space-between;
-    align-items: center;
+#homepage {
+    padding: 2rem 0;
 
-    .search {
-        gap: 0.5rem;
+    .top-bar {
+        justify-content: space-between;
         align-items: center;
+        margin-bottom: 0.5rem;
 
-        .search-form {
-            padding: 0.5rem;
-            border: 1px solid var(--color_grey_shadow);
-            border-radius: 60px;
-            gap: 1rem;
+        .search {
+            gap: 0.5rem;
             align-items: center;
 
-            .range-wrap {
-                padding: 0 1rem;
-                border-right: 1px solid var(--color_grey_shadow);
-                gap: 0.5rem;
+            .search-form {
+                padding: 0.5rem;
+                border: 1px solid var(--color_grey_shadow);
+                border-radius: 60px;
+                gap: 1rem;
+                align-items: center;
 
-                .bubble {
-                    color: var(--bnb-lighter);
-                    background-color: var(--bnb-main);
-                    border-radius: 20px;
-                    padding: 0.5rem;
+                .range-wrap {
+                    padding: 0 1rem;
+                    border-right: 1px solid var(--color_grey_shadow);
+                    gap: 0.5rem;
+
+                    .bubble {
+                        color: var(--bnb-lighter);
+                        background-color: var(--bnb-main);
+                        border-radius: 20px;
+                        padding: 0.5rem;
+                    }
+                }
+
+                #search {
+                    padding: 0 1rem;
+                    outline: none;
+                    border: none;
                 }
             }
 
-            #search {
-                padding: 0 1rem;
-                outline: none;
+            .search-btn {
+                border-radius: 50%;
+                border: 1px solid var(--color_dark);
+                aspect-ratio: 1/1;
+                width: 3rem;
+                padding: 0.5rem;
+                color: var(--bnb-lighter);
+                background-color: var(--bnb-main);
                 border: none;
             }
         }
 
-        .search-btn {
-            border-radius: 50%;
-            border: 1px solid var(--color_dark);
-            aspect-ratio: 1/1;
-            width: 3rem;
-            padding: 0.5rem;
-            color: var(--bnb-lighter);
-            background-color: var(--bnb-main);
-            border: none;
+    }
+
+    .suggestions {
+        display: flex;
+        justify-content: end;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            padding: 1rem;
+            border: 1px solid var(--color_grey_shadow);
+            border-radius: 20px;
         }
     }
+
+    .card,
+    img {
+        border-radius: 20px;
+    }
+
+    .card {
+        box-shadow: 0 0 12px 1px var(--color_grey_shadow);
+    }
+
 }
 </style>
