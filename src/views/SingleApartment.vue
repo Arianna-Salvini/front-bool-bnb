@@ -14,8 +14,11 @@ export default {
             state: state,
             apartment: {},
             base_api: 'http://127.0.0.1:8000/api/',
-            url_apartment: 'apartments/'
-
+            url_apartment: 'apartments/',
+            //form contact 
+            name_lastname: '',
+            email: '',
+            message: ''
         }
 
     },
@@ -46,6 +49,10 @@ export default {
             map.on('load', () => {
                 new tt.Marker().setLngLat(center).addTo(map);
             });
+        },
+        handleForm() {
+            console.log('Form ok!');
+            console.log(this.name_lastname, this.email, this.message);
         }
     },
     mounted() {
@@ -120,8 +127,8 @@ export default {
                             <div class="mb-3">
                                 <strong>Services:</strong>
                                 <ul>
-                                    <li v-for="service in apartment.services" :key="service.id">{{ service.service_name
-                                        }}</li>
+                                    <li v-for="service in apartment.services" :key="service.id">{{
+                        service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -129,6 +136,37 @@ export default {
                 </div>
             </div>
         </div>
+        <div class="card shadow mb-4 rounded-5">
+            <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center">
+                <h2>Contact Owner</h2>
+            </div>
+            <div class="card-body">
+                <form @submit.prevent="handleForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" v-model="name" required
+                            placeholder="Type your name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Lastname</label>
+                        <input type="text" class="form-control" id="lastname" v-model="lastname" required
+                            placeholder="Type your lastname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Your Email</label>
+                        <input type="email" class="form-control" id="email" v-model="email" required
+                            placeholder="Type your e-mail">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="5" v-model="message" required
+                            placeholder="Type your message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Send Message</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 </template>
 
