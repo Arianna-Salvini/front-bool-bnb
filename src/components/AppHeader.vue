@@ -31,7 +31,7 @@ export default {
                 <a :href="`${base_api} /register`">Register</a> -->
                 <!-- proobabili problematiche di sicurezza nell'accesso da siti esterni, verifica -->
                 <a href="http://127.0.0.1:8000/login">LogIn</a>
-                <a href="http://127.0.0.1:8000/login">Register</a>
+                <a href="http://127.0.0.1:8000/register">Register</a>
             </div>
         </div>
     </header>
