@@ -83,6 +83,11 @@ export default {
         },
 
 
+        searchButton() {
+            return /^[a-zA-Z0-9][a-zA-Z0-9,\/]*$/.test(this.search_address.trim());
+        },
+
+
     },
     mounted() {
         this.getApartments();
@@ -101,16 +106,18 @@ export default {
             <label for="rangeDistance">Dinstance range </label>
             <div>
                 <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                    oninput="this.nextElementSibling.value = this.value">
-                <output>20</output>
+                    oninput="this.nextElementSibling.value = this.value" v-model="range_distance">
+                <output>{{ range_distance }}</output>
             </div>
         </div>
-        <button type="submit">Search</button>
+        <button type="submit" :disabled="!searchButton()">Cerca</button>
+
+        <!--     <button type="submit">Search</button> -->
 
     </form>
     <ul v-if="suggestions.length != 0">
         <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">{{
-            suggestion.address.freeformAddress }}</li>
+        suggestion.address.freeformAddress }}</li>
     </ul>
 
     <ul v-if="results.length != 0">
