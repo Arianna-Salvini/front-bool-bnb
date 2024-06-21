@@ -118,32 +118,32 @@ export default {
                                     {{ apartment.address }}, {{ apartment.street_number }}, {{ apartment.zip_code }}
                                 </span>
                             </div>
-                            <div class="mb-3">
+                            <div class="">
                                 <span class="badges bg-dark rounded-5 p-2">
                                     <i class="fa-solid fa-ruler-combined"></i>
                                     {{ apartment.square_meters }} m²
                                 </span>
                             </div>
-                            <div class="mb-3">
+                            <div class="">
                                 <span class="badges bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-person-booth"></i></strong>
                                     {{ apartment.rooms }} rooms
                                 </span>
                             </div>
-                            <div class="mb-3">
+                            <div class="">
                                 <span class="badges bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-bed"></i></strong>
                                     {{ apartment.beds }} beds
                                 </span>
                             </div>
-                            <div class="mb-3">
+                            <div class="">
                                 <span class="badges bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-toilet"></i></strong>
                                     {{ apartment.bathrooms }} bathrooms
                                 </span>
                             </div>
                             <!-- Services -->
-                            <div class="services mb-3">
+                            <div class="services ">
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
@@ -158,28 +158,28 @@ export default {
 
         <!-- Form -->
         <div class="box_shadow my-5 rounded-5 form-container">
-            <div class="form-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
+            <div class="form-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center ">
                 <h2>Contact Owner: {{ modName }}
                     {{ modLastName }} </h2>
             </div>
             <div class="card_body p-3 ">
                 <form @submit.prevent="handleForm" class="form-body d-flex">
-                    <div class="mb-3 form-tag">
+                    <div class=" form-tag">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" v-model="name" required
                             placeholder="Type your name">
                     </div>
-                    <div class="mb-3 form-tag">
+                    <div class=" form-tag">
                         <label for="name" class="form-label">Lastname</label>
                         <input type="text" class="form-control" id="lastname" v-model="lastname" required
                             placeholder="Type your lastname">
                     </div>
-                    <div class="mb-3 form-tag">
+                    <div class=" form-tag">
                         <label for="email" class="form-label">Your Email</label>
                         <input type="email" class="form-control" id="email" v-model="email" required
                             placeholder="Type your e-mail">
                     </div>
-                    <div class="mb-3 form-tag">
+                    <div class=" form-tag">
                         <label for="message" class="form-label">Message</label>
                         <textarea class="form-control" id="message" rows="5" v-model="message" required
                             placeholder="Type your message"></textarea>
