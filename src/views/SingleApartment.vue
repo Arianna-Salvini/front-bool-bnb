@@ -22,6 +22,8 @@ export default {
             content: '',
             modName: '',
             modLastName: '',
+            apartmentId: null, // variabile per l ID dell'appartamento
+            submittedForm: false, // stato per l invio del form 
         }
 
     },
@@ -32,7 +34,7 @@ export default {
             axios.get(fullUrl).then(response => {
                 if (response.data.success) {
                     this.apartment = response.data.response;
-
+                    this.apartmentId = this.apartment.id; // memorizzo ID dell apartment
                     console.log(this.$route.name === 'SingleApartment');
                     console.log(this.apartment)
                     let renterName = this.apartment.user.name
@@ -69,7 +71,15 @@ export default {
         },
 
         handleForm() {
+            // controllo se il form e gia stato inviato
+            if (this.formSubmitted) {
+                console.log('form inviato');
+                return;
+            }
+
+
             const formData = {
+                apartment_id: this.apartmentId,
                 name: this.name,
                 lastname: this.lastname,
                 sender_email: this.sender_email,
@@ -80,6 +90,9 @@ export default {
             axios.post('http://127.0.0.1:8000/api/messages', formData)
                 .then(response => {
                     console.log('ok', response.data);
+                    // imposto su true per disabilitare il button
+                    this.submittedForm = true;
+
                     // svuoto dopo l'invio
                     this.name = '';
                     this.lastname = '';
@@ -203,7 +216,7 @@ export default {
                         <textarea class="form-control" id="content" rows="5" v-model="content" required name="content"
                             placeholder="Type your message"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-dark">Send Message</button>
+                    <button type="submit" class="btn btn-dark" :disabled="submittedForm">Send Message</button>
                 </form>
             </div>
         </div>
