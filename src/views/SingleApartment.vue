@@ -167,7 +167,7 @@ export default {
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
-                                service.service_name }}</li>
+                                        service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -198,13 +198,12 @@ export default {
 
                     <div class=" form-tag">
                         <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" id="sender_email" v-model="sender_email" required name="content"
-                            placeholder="Type your e-mail">
+                        <input type="email" class="form-control" id="sender_email" v-model="sender_email" required
+                            name="content" placeholder="Type your e-mail">
                     </div>
                     <div class=" form-tag">
                         <label for="message" class="form-label">Message</label>
                         <textarea class="form-control" id="content" rows="5" v-model="content" required name="content"
-
                             placeholder="Type your message"></textarea>
                     </div>
                     <button type="submit" class="btn btn-dark submit">Send Message</button>

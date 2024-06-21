@@ -21,6 +21,8 @@ export default {
             results: state.searchResults,
 
             services: [],
+            researchedAddress: this.$route.query.address,
+            researchedRange: this.$route.query.range
         }
     },
     methods: {
@@ -32,12 +34,27 @@ export default {
                     this.services = response.data.results;
                 })
                 .catch(err => console.log(err));
+        },
+
+        /* when refreshing page, do another api call using passed params to get back results */
+        fetchResults(address, range) {
+            let url = state.base_api + '/api/apartments/search';
+            axios
+                .get(url, { params: { address: address, range: range } })
+                .then(response => {
+                    console.log(response);
+                    this.results = response.data.response.data;
+                    state.updateResults(response.data.response.data);
+                })
         }
     },
     mounted() {
         console.log(state.searchResults);
-        let url = state.base_api + '/api/services';
-        this.getServices(url);
+        let services_url = state.base_api + '/api/services';
+        this.getServices(services_url);
+
+        /* take results back */
+        this.fetchResults(this.researchedAddress, this.researchedRange);
         //console.log(this.$route.query.results);
         //initialize results as empty array and reassign results -> results are in json -> must convert back to object
 
@@ -56,7 +73,7 @@ export default {
                 <li v-for="service in services">{{ service.service_name }}</li>
             </ul>
 
-            <div>I tuoi risultati per </div>
+            <div>I tuoi risultati per {{ researchedAddress }}</div>
             <div class="row g-4" v-if="results.length != 0">
                 <div v-for="result in results" class="col-6">
 
