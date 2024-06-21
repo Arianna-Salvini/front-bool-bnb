@@ -93,7 +93,8 @@ export default {
                     <div class="card_body">
                         <img v-if="apartment.image"
                             :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                            alt="Apartment Image" class="img-fluid w-100" style="object-fit: cover; height: 400px;">
+                            alt="Apartment Image" class=" card-img img-fluid w-100"
+                            style="object-fit: cover; height: 400px;">
                     </div>
                 </div>
                 <div class="description">
@@ -106,20 +107,20 @@ export default {
             </div>
             <div class="col-4">
                 <div class="cards box_shadow">
-                    <div class="card_header bg_dark flex">
+                    <div class="card_header bg_dark">
                         <h2>Details:</h2>
                     </div>
                     <div class="card_body">
-                        <div class="d-flex flex-wrap gap-1">
+                        <div class="d-flex services-card flex-wrap gap-1">
                             <div class="">
-                                <span class="badge bg-dark rounded-5 p-2">
+                                <span class="bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-map-pin"></i></strong>
                                     {{ apartment.address }}, {{ apartment.street_number }}, {{ apartment.zip_code }}
                                 </span>
                             </div>
                             <div class="mb-3">
-                                <span class="badge bg-dark rounded-5 p-2">
-                                    <strong><i class="fa-solid fa-ruler-combined"></i></strong>
+                                <span class="badges bg-dark rounded-5 p-2">
+                                    <i class="fa-solid fa-ruler-combined"></i>
                                     {{ apartment.square_meters }} m²
                                 </span>
                             </div>
@@ -130,19 +131,19 @@ export default {
                                 </span>
                             </div>
                             <div class="mb-3">
-                                <span class="badge bg-dark rounded-5 p-2">
+                                <span class="badges bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-bed"></i></strong>
                                     {{ apartment.beds }} beds
                                 </span>
                             </div>
                             <div class="mb-3">
-                                <span class="badge bg-dark rounded-5 p-2">
+                                <span class="badges bg-dark rounded-5 p-2">
                                     <strong><i class="fa-solid fa-toilet"></i></strong>
                                     {{ apartment.bathrooms }} bathrooms
                                 </span>
                             </div>
                             <!-- Services -->
-                            <div class="mb-3">
+                            <div class="services mb-3">
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
@@ -156,34 +157,34 @@ export default {
         </div>
 
         <!-- Form -->
-        <div class="cards box_shadow my-5 rounded-5">
+        <div class="cards box_shadow my-5 rounded-5 form-container">
             <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
                 <h2>Contact Owner: {{ modName }}
                     {{ modLastName }} </h2>
             </div>
-            <div class="card_body p-3">
-                <form @submit.prevent="handleForm">
-                    <div class="mb-3">
+            <div class="card_body p-3 ">
+                <form @submit.prevent="handleForm" class="form-body d-flex">
+                    <div class="mb-3 form-tag">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" v-model="name" required
                             placeholder="Type your name">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-tag">
                         <label for="name" class="form-label">Lastname</label>
                         <input type="text" class="form-control" id="lastname" v-model="lastname" required
                             placeholder="Type your lastname">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-tag">
                         <label for="email" class="form-label">Your Email</label>
                         <input type="email" class="form-control" id="email" v-model="email" required
                             placeholder="Type your e-mail">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-tag">
                         <label for="message" class="form-label">Message</label>
                         <textarea class="form-control" id="message" rows="5" v-model="message" required
                             placeholder="Type your message"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-dark">Send Message</button>
+                    <button type="submit" class="btn btn-dark submit">Send Message</button>
                 </form>
             </div>
         </div>
@@ -196,8 +197,20 @@ export default {
     padding: 1rem 0;
 }
 
+.row {
+    gap: 1rem;
+
+    .col-6 {
+        flex: 0 0 calc((100% / 2) - 1rem);
+    }
+
+    .col-4 {
+        flex: 0 0 calc((100% / 3) - 1rem);
+    }
+}
+
 .cards {
-    border-radius: 2rem;
+    border-radius: 3rem;
     border: none;
     box-shadow: 0 0 20px var(--color_grey_shadow);
 
@@ -225,24 +238,79 @@ export default {
 }
 
 img {
-    border-radius: 0 0 1rem 1rem;
+    border-radius: 0 0 3rem 3rem;
+    width: 100%;
 }
 
 .badges {
-    padding: 1.5rem, 2rem;
+    padding: 0.3rem;
     color: white;
     background-color: var(--color_dark);
 }
 
 .card_header {
-    border-radius: 2rem;
+    border-radius: 2rem 2rem 0 0;
     color: white;
     padding: 0.8rem 1.5rem 0.5rem;
 
 }
 
+.card-header {
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem 2rem 0 0;
+    color: white;
+    padding: 0.8rem 1.5rem 0.5rem;
+    background-color: var(--color_dark);
+    margin-top: 1rem;
+}
+
 .card_body {
-    padding: 1rem;
     border-radius: 3rem;
+    flex-direction: column;
+}
+
+.services-card {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+
+    .services {
+        margin-top: 10px;
+
+        & ul {
+            list-style: none;
+        }
+    }
+}
+
+.form-container {
+    .form-body {
+        padding: 0.5rem 1rem;
+        flex-direction: column;
+        gap: 0.3rem;
+
+        .form-control {
+            min-height: 30px;
+            border-radius: 0.3rem;
+            border: 1px solid #ced4da;
+            padding: 0.5rem;
+        }
+
+        .form-tag {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .submit {
+            align-self: center;
+            padding: 0.5rem;
+            background-color: var(--bnb-main);
+            border-color: var(--bnb-main);
+            border: none;
+            border-radius: 5px;
+            color: var(--bnb-lighter);
+        }
+    }
 }
 </style>

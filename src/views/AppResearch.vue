@@ -85,10 +85,19 @@ export default {
 .card,
 img {
     border-radius: 20px;
+    width: 100%;
 }
 
 .card {
     box-shadow: 0 0 12px 1px var(--color_grey_shadow);
     height: 100%;
+
+    .card-body {
+        padding: 1rem;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
 }
 </style>
