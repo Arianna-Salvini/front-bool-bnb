@@ -107,7 +107,7 @@ export default {
             </div>
             <div class="col-4">
                 <div class="cards box_shadow">
-                    <div class="card_header bg_dark">
+                    <div class="title_card bg_dark">
                         <h2>Details:</h2>
                     </div>
                     <div class="card_body">
@@ -157,8 +157,8 @@ export default {
         </div>
 
         <!-- Form -->
-        <div class="cards box_shadow my-5 rounded-5 form-container">
-            <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
+        <div class="box_shadow my-5 rounded-5 form-container">
+            <div class="form-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
                 <h2>Contact Owner: {{ modName }}
                     {{ modLastName }} </h2>
             </div>
@@ -195,121 +195,125 @@ export default {
 <style scoped>
 .container {
     padding: 1rem 0;
-}
 
-.row {
-    gap: 1rem;
 
-    .col-6 {
-        flex: 0 0 calc((100% / 2) - 1rem);
+    .row {
+        gap: 1rem;
+
+        .col-6 {
+            flex: 0 0 calc((100% / 2) - 1rem);
+        }
+
+        .col-4 {
+            flex: 0 0 calc((100% / 3) - 1rem);
+        }
+
+        .description {
+            margin: 1rem 0.8rem;
+        }
+
+        #map {
+            border-radius: 2rem;
+            height: 400px;
+            width: 100%;
+            margin-left: 1rem 0 2rem -0.8rem;
+            padding: 3rem 0;
+        }
+
+        img {
+            border-radius: 0 0 3rem 3rem;
+            width: 100%;
+        }
     }
 
-    .col-4 {
-        flex: 0 0 calc((100% / 3) - 1rem);
-    }
-}
 
-.cards {
-    border-radius: 3rem;
-    border: none;
-    box-shadow: 0 0 20px var(--color_grey_shadow);
+    /* Card-section */
+    .cards {
+        border-radius: 3rem;
+        border: none;
+        box-shadow: 0 0 20px var(--color_grey_shadow);
 
-    .card_top {
-        background-color: var(--color_dark);
-        border-radius: 2rem 2rem 0 0;
+        .card_top {
+            background-color: var(--color_dark);
+            border-radius: 2rem 2rem 0 0;
+
+        }
 
         .title_card {
             padding: 1.5rem 1.5rem 1rem;
             color: white;
-        }
-    }
-}
-
-.description {
-    margin: 1rem 0.8rem;
-}
-
-#map {
-    border-radius: 2rem;
-    height: 400px;
-    width: 100%;
-    margin-left: 1rem 0 2rem -0.8rem;
-    padding: 3rem 0;
-}
-
-img {
-    border-radius: 0 0 3rem 3rem;
-    width: 100%;
-}
-
-.badges {
-    padding: 0.3rem;
-    color: white;
-    background-color: var(--color_dark);
-}
-
-.card_header {
-    border-radius: 2rem 2rem 0 0;
-    color: white;
-    padding: 0.8rem 1.5rem 0.5rem;
-
-}
-
-.card-header {
-    align-items: center;
-    justify-content: center;
-    border-radius: 2rem 2rem 0 0;
-    color: white;
-    padding: 0.8rem 1.5rem 0.5rem;
-    background-color: var(--color_dark);
-    margin-top: 1rem;
-}
-
-.card_body {
-    border-radius: 3rem;
-    flex-direction: column;
-}
-
-.services-card {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
-
-    .services {
-        margin-top: 10px;
-
-        & ul {
-            list-style: none;
-        }
-    }
-}
-
-.form-container {
-    .form-body {
-        padding: 0.5rem 1rem;
-        flex-direction: column;
-        gap: 0.3rem;
-
-        .form-control {
-            min-height: 30px;
-            border-radius: 0.3rem;
-            border: 1px solid #ced4da;
-            padding: 0.5rem;
+            border-radius: 2rem 2rem 0 0;
         }
 
-        .form-tag {
-            display: flex;
+        .card_body {
+            border-radius: 3rem;
             flex-direction: column;
+
+            .services-card {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem;
+
+                .services {
+                    margin-top: 10px;
+
+                    & ul {
+                        list-style: none;
+                    }
+                }
+
+                .badges {
+                    padding: 0.3rem;
+                    color: white;
+                    background-color: var(--color_dark);
+                }
+            }
+        }
+    }
+
+    /* form-section */
+    .form-container {
+        border-radius: 3rem;
+        border: none;
+        box-shadow: 0 0 20px var(--color_grey_shadow);
+        margin: 1rem 0 2rem -0.8rem;
+
+        .form-header {
+            align-items: center;
+            justify-content: center;
+            border-radius: 2rem 2rem 0 0;
+            color: white;
+            padding: 0.8rem 1.5rem 0.5rem;
+            background-color: var(--color_dark);
+            margin-top: 1rem;
         }
 
-        .submit {
-            align-self: center;
-            padding: 0.5rem;
-            background-color: var(--bnb-main);
-            border-color: var(--bnb-main);
-            border: none;
-            border-radius: 5px;
-            color: var(--bnb-lighter);
+        .form-body {
+            padding: 0.5rem 1rem;
+            flex-direction: column;
+            gap: 0.3rem;
+
+            .form-control {
+                min-height: 30px;
+                border-radius: 0.3rem;
+                border: 1px solid #ced4da;
+                padding: 0.5rem;
+            }
+
+            .form-tag {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .submit {
+                align-self: center;
+                padding: 0.5rem;
+                background-color: var(--bnb-main);
+                border-color: var(--bnb-main);
+                border: none;
+                border-radius: 5px;
+                color: var(--bnb-lighter);
+            }
         }
     }
 }

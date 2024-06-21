@@ -47,7 +47,7 @@ export default {
 
 </template>
 
-<style>
+<style scoped>
 header {
     background-color: rgb(255, 255, 255);
     ;
