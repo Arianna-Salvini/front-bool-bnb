@@ -18,8 +18,8 @@ export default {
             //form contact 
             name: '',
             lastname: '',
-            email: '',
-            message: '',
+            sender_email: '',
+            content: '',
             modName: '',
             modLastName: '',
         }
@@ -40,7 +40,7 @@ export default {
                     this.modName = renterName[0].toUpperCase() + renterName.slice(1);
                     this.modLastName = renterLastName[0].toUpperCase() + renterLastName.slice(1);
 
-                    console.log(modName, modLastName)
+                    //console.log(modName, modLastName)
                     if (this.$route.name === 'SingleApartment') {
 
                         this.renderMap(this.apartment.longitude, this.apartment.latitude);
@@ -67,10 +67,30 @@ export default {
                 new tt.Marker().setLngLat(center).addTo(map);
             });
         },
+
         handleForm() {
-            console.log('Form ok!');
-            console.log(this.name_lastname, this.email, this.message);
+            const formData = {
+                name: this.name,
+                lastname: this.lastname,
+                sender_email: this.sender_email,
+                content: this.content
+            };
+            console.log('FormData:', formData);
+
+            axios.post('http://127.0.0.1:8000/api/messages', formData)
+                .then(response => {
+                    console.log('ok', response.data);
+                    // svuoto dopo l'invio
+                    this.name = '';
+                    this.lastname = '';
+                    this.sender_email = '';
+                    this.content = '';
+                })
+                .catch(error => {
+                    console.error('error!', error);
+                });
         }
+
     },
     mounted() {
         this.callApartment()
@@ -146,7 +166,7 @@ export default {
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
-                                        service.service_name }}</li>
+                                service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -162,25 +182,25 @@ export default {
                     {{ modLastName }} </h2>
             </div>
             <div class="card_body p-3">
-                <form @submit.prevent="handleForm">
+                <form @submit.prevent="handleForm()">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" v-model="name" required
+                        <input type="text" class="form-control" id="name" v-model="name" required name="name"
                             placeholder="Type your name">
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Lastname</label>
                         <input type="text" class="form-control" id="lastname" v-model="lastname" required
-                            placeholder="Type your lastname">
+                            name="lastname" placeholder="Type your lastname">
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" id="email" v-model="email" required
-                            placeholder="Type your e-mail">
+                        <label for="sender_email" class="form-label">Your Email</label>
+                        <input type="email" class="form-control" id="sender_email" v-model="sender_email" required
+                            name="sender_email" placeholder="Type your e-mail">
                     </div>
                     <div class="mb-3">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" rows="5" v-model="message" required
+                        <label for="content" class="form-label">Message</label>
+                        <textarea class="form-control" id="content" rows="5" v-model="content" required name="content"
                             placeholder="Type your message"></textarea>
                     </div>
                     <button type="submit" class="btn btn-dark">Send Message</button>
