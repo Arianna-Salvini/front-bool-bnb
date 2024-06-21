@@ -19,7 +19,9 @@ export default {
             name: '',
             lastname: '',
             email: '',
-            message: ''
+            message: '',
+            modName: '',
+            modLastName: '',
         }
 
     },
@@ -32,7 +34,13 @@ export default {
                     this.apartment = response.data.response;
 
                     console.log(this.$route.name === 'SingleApartment');
-                    //console.log(this.apartment)
+                    console.log(this.apartment)
+                    let renterName = this.apartment.user.name
+                    let renterLastName = this.apartment.user.lastname
+                    this.modName = renterName[0].toUpperCase() + renterName.slice(1);
+                    this.modLastName = renterLastName[0].toUpperCase() + renterLastName.slice(1);
+
+                    console.log(modName, modLastName)
                     if (this.$route.name === 'SingleApartment') {
 
                         this.renderMap(this.apartment.longitude, this.apartment.latitude);
@@ -150,7 +158,8 @@ export default {
         <!-- Form -->
         <div class="cards box_shadow my-5 rounded-5">
             <div class="card-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center py-2">
-                <h2>Contact Owner</h2>
+                <h2>Contact Owner: {{ modName }}
+                    {{ modLastName }} </h2>
             </div>
             <div class="card_body p-3">
                 <form @submit.prevent="handleForm">
