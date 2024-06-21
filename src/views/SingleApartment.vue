@@ -22,8 +22,11 @@ export default {
             content: '',
             modName: '',
             modLastName: '',
-            apartmentId: null, // variabile per l ID dell'appartamento
+            apartmentId: null, // variabile per l ID dell apartment
             submittedForm: false, // stato per l invio del form 
+            confirmSubmitForm: false, // variabile per mostrare il banner di conferma
+            submittedName: '', // il nome inviato per farlo vedere nel banner
+            submittedLastname: '', // il cognome inviato per farlo vedere nel banner
         }
 
     },
@@ -92,6 +95,14 @@ export default {
                     console.log('ok', response.data);
                     // imposto su true per disabilitare il button
                     this.submittedForm = true;
+
+                    // salvo i dati inviati per visualizzazione del nome e cognome nel banner
+                    this.submittedName = this.name;
+                    this.submittedLastname = this.lastname;
+
+                    // mostro il banner 
+                    this.confirmSubmitForm = true;
+
 
                     // svuoto dopo l'invio
                     this.name = '';
@@ -218,6 +229,10 @@ export default {
                     </div>
                     <button type="submit" class="btn btn-dark" :disabled="submittedForm">Send Message</button>
                 </form>
+                <div v-if="confirmSubmitForm" class="banner_form">
+                    The message has been successfully sent! Thanks {{ submittedName }} {{ submittedLastname }} for your
+                    contact.
+                </div>
             </div>
         </div>
 
@@ -277,5 +292,16 @@ img {
 .card_body {
     padding: 1rem;
     border-radius: 3rem;
+}
+
+.banner_form {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
 }
 </style>
