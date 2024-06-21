@@ -56,6 +56,15 @@ export default {
             }
         },
 
+        showPrev() {
+            if (this.currentPage > 1) {
+                let prevPage = this.currentPage - 1;
+                let url = `${state.base_api}${state.apartment_url}?page=${prevPage}`
+                this.getApartments(url);
+
+            }
+        },
+
         /* get address real time suggestions on input */
         getSuggestions() {
             /* if search field isn't empty */
@@ -211,6 +220,9 @@ export default {
                 </div>
             </div>
             <div class="navigation">
+                <button type="button" class="prev" v-if="currentPage > 1" @click="showPrev">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <button type="button" class="next" v-if="currentPage < lastPage" @click="showNext">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -313,7 +325,8 @@ export default {
         justify-content: end;
         padding: 1.5rem 0;
 
-        .next {
+        .next,
+        .prev {
             border-radius: 50%;
             border: 1px solid var(--color_dark);
             aspect-ratio: 1/1;
@@ -322,6 +335,11 @@ export default {
             color: var(--bnb-lighter);
             background-color: var(--bnb-main);
             border: none;
+
+        }
+
+        .prev {
+            margin-right: 1rem;
         }
     }
 
