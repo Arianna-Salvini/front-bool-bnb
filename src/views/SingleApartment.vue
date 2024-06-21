@@ -40,7 +40,7 @@ export default {
                     this.modName = renterName[0].toUpperCase() + renterName.slice(1);
                     this.modLastName = renterLastName[0].toUpperCase() + renterLastName.slice(1);
 
-                    console.log(modName, modLastName)
+                    //console.log(modName, modLastName)
                     if (this.$route.name === 'SingleApartment') {
 
                         this.renderMap(this.apartment.longitude, this.apartment.latitude);
