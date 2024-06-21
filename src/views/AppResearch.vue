@@ -18,14 +18,26 @@ export default {
     data() {
         return {
             state: state,
-            results: state.searchResults
+            results: state.searchResults,
+
+            services: [],
         }
     },
     methods: {
-
+        getServices(url) {
+            axios
+                .get(url)
+                .then(response => {
+                    console.log(response);
+                    this.services = response.data.results;
+                })
+                .catch(err => console.log(err));
+        }
     },
     mounted() {
         console.log(state.searchResults);
+        let url = state.base_api + '/api/services';
+        this.getServices(url);
         //console.log(this.$route.query.results);
         //initialize results as empty array and reassign results -> results are in json -> must convert back to object
 
@@ -37,6 +49,14 @@ export default {
 
     <section id="search-results">
         <div class="container">
+
+
+
+            <ul class="services" v-if="services.length != 0">
+                <li v-for="service in services">{{ service.service_name }}</li>
+            </ul>
+
+            <div>I tuoi risultati per </div>
             <div class="row g-4" v-if="results.length != 0">
                 <div v-for="result in results" class="col-6">
 
