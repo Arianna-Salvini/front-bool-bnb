@@ -22,8 +22,8 @@ export default {
 
             services: [],
             chosenServices: [],
-            researchedAddress: this.$route.query.address,
-            researchedRange: this.$route.query.range
+            researchedAddress: '',
+            researchedRange: ''
         }
     },
     methods: {
@@ -56,8 +56,25 @@ export default {
                 .get(filter_url, { params: { address: this.researchedAddress, range_distance: this.researchedRange, services: this.chosenServices } })
                 .then(response => {
                     console.log(response);
+                    this.results = response.data.response.data;
+                    state.updateResults(response.data.response.data);
                 })
-        }
+                .catch(err => console.log(err));
+        },
+
+        selectServices() {
+            if (this.chosenServices.length > 0) {
+                this.filterApartments();
+            }
+            else {
+                this.fetchResults();
+            }
+        },
+
+    },
+    created() {
+        this.researchedAddress = this.$route.query.address;
+        this.researchedRange = this.$route.query.range;
     },
     mounted() {
         console.log(state.searchResults);
@@ -78,11 +95,11 @@ export default {
     <section id="search-results">
         <div class="container">
 
-            <form @submit.prevent="filterApartments" v-if="services.length != 0">
+            <form v-if="services.length != 0">
                 <div class="services">
                     <div class="single-service" v-for="service in services">
                         <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
-                            :value="service.id" v-model="chosenServices">
+                            :value="service.id" v-model="chosenServices" @change="selectServices">
                         <label :for="`service-${service.id}`">{{ service.service_name }}</label>
                     </div>
                 </div>
