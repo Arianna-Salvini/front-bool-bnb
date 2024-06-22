@@ -103,6 +103,7 @@ export default {
                 .then(response => {
                     console.log(response);
                     if (response.data.success) {
+                        console.log(response);
                         console.log(response.data.response.data);
                         this.results = response.data.response.data;
                         //must use query object

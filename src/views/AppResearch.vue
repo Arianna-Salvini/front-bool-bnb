@@ -21,6 +21,7 @@ export default {
             results: state.searchResults,
 
             services: [],
+            chosenServices: [],
             researchedAddress: this.$route.query.address,
             researchedRange: this.$route.query.range
         }
@@ -46,6 +47,16 @@ export default {
                     this.results = response.data.response.data;
                     state.updateResults(response.data.response.data);
                 })
+        },
+
+        filterApartments() {
+            console.log(this.chosenServices);
+            let filter_url = state.base_api + '/api/apartments/search'
+            axios
+                .get(filter_url, { params: { address: this.researchedAddress, range_distance: this.researchedRange, services: this.chosenServices } })
+                .then(response => {
+                    console.log(response);
+                })
         }
     },
     mounted() {
@@ -67,11 +78,21 @@ export default {
     <section id="search-results">
         <div class="container">
 
+            <form @submit.prevent="filterApartments" v-if="services.length != 0">
+                <div class="services">
+                    <div class="single-service" v-for="service in services">
+                        <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
+                            :value="service.id" v-model="chosenServices">
+                        <label :for="`service-${service.id}`">{{ service.service_name }}</label>
+                    </div>
+                </div>
 
+                <button type="submit">Cerca</button>
+            </form>
 
-            <ul class="services" v-if="services.length != 0">
+            <!-- <ul class="services" v-if="services.length != 0">
                 <li v-for="service in services">{{ service.service_name }}</li>
-            </ul>
+            </ul> -->
 
             <div>I tuoi risultati per {{ researchedAddress }}</div>
             <div class="row g-4" v-if="results.length != 0">
