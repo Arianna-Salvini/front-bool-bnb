@@ -23,7 +23,13 @@ export default {
             services: [],
             chosenServices: [],
             researchedAddress: '',
-            researchedRange: ''
+            researchedRange: '',
+
+            search_address: '',
+            suggestions: [],
+            search_url: '/api/apartments/search',
+            range_distance: 20,
+            api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
         }
     },
     methods: {
@@ -39,7 +45,7 @@ export default {
                             this.chosenServices = [...this.$route.query.services];
                         }
                         else {
-                            this.chosenServices = [this.$route.query.services]
+                            this.chosenServices = this.$route.query.services.split(',');
                         }
                     }
 
@@ -52,7 +58,7 @@ export default {
         fetchResults(address, range) {
             let url = state.base_api + '/api/apartments/search';
             axios
-                .get(url, { params: { address: address, range: range } })
+                .get(url, { params: { address: address, range: range, services: this.chosenServices } })
                 .then(response => {
                     console.log(response);
                     this.results = response.data.response.data;
@@ -106,13 +112,88 @@ export default {
             }
             console.log(query);
             this.$router.replace({ path: 'research', query: query })
-        }
+        },
+
+        searchApartments() {
+            this.suggestions = [];
+            let url = state.base_api + this.search_url;
+            axios
+                .get(url, { params: { address: this.search_address, range_distance: this.range_distance, services: this.chosenServices } })
+                .then(response => {
+                    console.log(response);
+                    if (response.data.success) {
+                        console.log(response);
+                        console.log(response.data.response.data);
+                        this.results = response.data.response.data;
+                        this.researchedAddress = this.search_address;
+                        this.researchedRange = this.range_distance;
+
+                        state.updateResults(response.data.response.data);
+                        this.updateQueryString();
+                        //this.$router.push({ name: 'research', query: { address: this.search_address, range: this.range_distance, services: this.chosenServices.join(',') } });
+                        //console.log(this.$router);
+                    }
+                    else {
+                        this.results = [];
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    console.log('non puoi fare la ricerca così');
+                    this.isError = true;
+                });
+            this.isSearching = true;
+        },
+        searchButton() {
+            return /^[a-zA-Z0-9]+['a-zA-Z0-9 ,\/]*$/.test(this.search_address.trim());
+        },
+        getSuggestions() {
+            /* if search field isn't empty */
+            if (this.search_address.trim() != '') {
+                let addressValue = this.search_address.replace(' ', '%20');
+                let tomtom_url = `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${this.api_key}`;
+
+                /* call tomtom url */
+                axios
+                    .get(tomtom_url)
+                    .then(response => {
+                        //console.log(response);
+                        /* get first 5 results */
+                        this.suggestions = response.data.results.slice(0, 5);
+                        //console.log(this.suggestions);
+                    })
+                    .catch(err => console.log(err))
+            }
+            else {
+                this.suggestions = [];
+            }
+        },
+
+        fillSearch(address) {
+            /* when I click on a suggestion, my research input gets filled */
+            this.search_address = address;
+            /* remove suggestions */
+            this.suggestions = [];
+        },
 
     },
     created() {
         this.researchedAddress = this.$route.query.address;
         this.researchedRange = this.$route.query.range;
+
+        /* when I refresh the page, I must do typecheck on services in query string */
+        this.chosenServices = [];
+        if (this.$route.query.services) {
+            if (typeof this.$route.query.services === 'string') {
+                this.chosenServices = this.$route.query.services.split(',');
+            }
+            else if (Array.isArray(this.$route.query.services)) {
+                this.chosenServices = [...this.$route.query.services];
+            }
+        }
+        this.updateQueryString();
     },
+
     mounted() {
         console.log(state.searchResults);
         let services_url = state.base_api + '/api/services';
@@ -131,6 +212,50 @@ export default {
 
     <section id="search-results">
         <div class="container">
+
+            <div class="top-bar d-flex">
+
+                <!-- title -->
+                <h2>All Apartments</h2>
+
+                <!-- search -->
+                <div class="search d-flex">
+
+                    <form @submit.prevent="searchApartments()" class="search-form d-flex">
+
+                        <!-- range input -->
+                        <div class="range-wrap d-flex">
+
+                            <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                                oninput="this.nextElementSibling.value = this.value" v-model="range_distance"
+                                class="range">
+                            <div class="bubble">
+                                <output>{{ range_distance }} </output>
+                                <span> km</span>
+                            </div>
+
+                        </div>
+
+                        <!-- search input -->
+                        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions"
+                            placeholder="Via dei cipressi">
+
+                        <!-- submit btn -->
+                        <button type="submit" class="btn search-btn" :disabled="!searchButton()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+            <div class="suggestions" v-if="suggestions.length != 0">
+                <ul>
+                    <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
+                        {{ suggestion.address.freeformAddress }}
+                    </li>
+                </ul>
+            </div>
 
             <form v-if="services.length != 0">
                 <div class="services">
