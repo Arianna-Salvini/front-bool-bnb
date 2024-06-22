@@ -18,11 +18,11 @@ export default {
 </script>
 
 <template>
- <footer>
+    <footer>
         <div class="container footer-grid">
             <div class="left">
                 <div class="footer-logo">
-                <img src="../../public/img/logo.png" alt="Logo" width="70">
+                    <img src="/img/logo.png" alt="Logo" width="70">
                 </div>
                 <div class="footer-links">
                     <a><router-link :to="{ name: 'home' }">Home</router-link></a>
@@ -31,7 +31,8 @@ export default {
                 </div>
             </div>
             <div class="right footer-button">
-                <a class="btn btn-principal btn-sm rounded-5 px-3" href="http://127.0.0.1:8000/login" role="button">Rent your apartment</a>
+                <a class="btn btn-principal btn-sm rounded-5 px-3" href="http://127.0.0.1:8000/login" role="button">Rent
+                    your apartment</a>
             </div>
             <div class="footer-copyright">
                 <p>&copy; 2024 Boolbnb. All rights reserved.</p>
@@ -64,6 +65,7 @@ footer .container {
 
     gap: 20px;
 }
+
 .footer-grid {
     display: flex;
     justify-content: space-between;
@@ -83,7 +85,7 @@ footer .container {
     color: #ddd;
     text-decoration: none;
     transition: color 0.3s ease;
-    
+
 }
 
 .footer-links a:hover {
@@ -121,5 +123,4 @@ footer .container {
 .rounded-5 {
     border-radius: 5px;
 }
-
 </style>

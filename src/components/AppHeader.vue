@@ -20,7 +20,7 @@ export default {
 <template>
     <header>
         <div class="container d-flex align-items-center">
-            <div class="logo"><img src="../../public/img/logo.png" alt="" width="70"></div>
+            <div class="logo"><img src="/img/logo.png" alt="" width="70"></div>
 
 
             <div class="navigation">

@@ -33,6 +33,17 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.services = response.data.results;
+
+                    if (this.$route.query.services) {
+                        if (Array.isArray(this.$route.query.services)) {
+                            this.chosenServices = [...this.$route.query.services];
+                        }
+                        else {
+                            this.chosenServices = [this.$route.query.services]
+                        }
+                    }
+
+                    console.log(this.chosenServices);
                 })
                 .catch(err => console.log(err));
         },
@@ -46,6 +57,7 @@ export default {
                     console.log(response);
                     this.results = response.data.response.data;
                     state.updateResults(response.data.response.data);
+                    this.updateQueryString();
                 })
         },
 
@@ -53,23 +65,48 @@ export default {
             console.log(this.chosenServices);
             let filter_url = state.base_api + '/api/apartments/search'
             axios
-                .get(filter_url, { params: { address: this.researchedAddress, range_distance: this.researchedRange, services: this.chosenServices } })
+                .get(filter_url, {
+                    params: {
+                        address: this.researchedAddress,
+                        range_distance: this.researchedRange,
+                        services: this.chosenServices
+                    }
+                })
                 .then(response => {
+                    console.log(this.chosenServices);
                     console.log(response);
                     this.results = response.data.response.data;
                     state.updateResults(response.data.response.data);
+                    this.updateQueryString();
+
                 })
                 .catch(err => console.log(err));
         },
 
         selectServices() {
+            console.log(this.chosenServices);
             if (this.chosenServices.length > 0) {
                 this.filterApartments();
             }
             else {
-                this.fetchResults();
+                this.fetchResults(this.researchedAddress, this.researchedRange);
             }
         },
+
+        updateQueryString() {
+            console.log(this.chosenServices);
+            let query = { address: this.researchedAddress, range: this.researchedRange }
+            /* if there are services selected, push services id in query string separated by ,*/
+            if (Array.isArray(this.chosenServices) && this.chosenServices.length > 0) {
+                query.services = this.chosenServices.join(',');
+            }
+            /* if no services are selected, remove services from query */
+            else {
+                delete query.services;
+            }
+            console.log(query);
+            this.$router.replace({ path: 'research', query: query })
+        }
 
     },
     created() {
@@ -104,7 +141,6 @@ export default {
                     </div>
                 </div>
 
-                <button type="submit">Cerca</button>
             </form>
 
             <!-- <ul class="services" v-if="services.length != 0">
