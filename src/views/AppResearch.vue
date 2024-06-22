@@ -72,7 +72,9 @@ export default {
 
         filterApartments() {
             console.log(this.chosenServices);
-            let filter_url = state.base_api + '/api/apartments/search'
+            let filter_url = state.base_api + '/api/apartments/search';
+            this.researchedRange = this.range_distance;
+            //console.log(this.range_distance);
             axios
                 .get(filter_url, {
                     params: {
@@ -228,19 +230,6 @@ export default {
 
                     <form @submit.prevent="searchApartments()" class="search-form d-flex">
 
-                        <!-- range input -->
-                        <div class="range-wrap d-flex">
-
-                            <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                                oninput="this.nextElementSibling.value = this.value" v-model="range_distance"
-                                class="range">
-                            <div class="bubble">
-                                <output>{{ range_distance }} </output>
-                                <span> km</span>
-                            </div>
-
-                        </div>
-
                         <!-- search input -->
                         <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions"
                             placeholder="Via dei cipressi">
@@ -260,6 +249,19 @@ export default {
                         {{ suggestion.address.freeformAddress }}
                     </li>
                 </ul>
+            </div>
+
+            <!-- range input -->
+            <div class="range-wrap d-flex">
+
+                <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                    oninput="this.nextElementSibling.value = this.value" v-model="range_distance" class="range"
+                    @change="filterApartments">
+                <div class="bubble">
+                    <output>{{ range_distance }} </output>
+                    <span> km</span>
+                </div>
+
             </div>
 
 
@@ -334,18 +336,7 @@ export default {
         gap: 1rem;
         align-items: center;
 
-        .range-wrap {
-            padding: 0 1rem;
-            border-right: 1px solid var(--color_grey_shadow);
-            gap: 0.5rem;
 
-            .bubble {
-                color: var(--bnb-lighter);
-                background-color: var(--bnb-main);
-                border-radius: 20px;
-                padding: 0.5rem;
-            }
-        }
 
         #search {
             padding: 0 1rem;
@@ -363,6 +354,19 @@ export default {
         color: var(--bnb-lighter);
         background-color: var(--bnb-main);
         border: none;
+    }
+}
+
+.range-wrap {
+    padding: 0 1rem;
+    border-right: 1px solid var(--color_grey_shadow);
+    gap: 0.5rem;
+
+    .bubble {
+        color: var(--bnb-lighter);
+        background-color: var(--bnb-main);
+        border-radius: 20px;
+        padding: 0.5rem;
     }
 }
 
