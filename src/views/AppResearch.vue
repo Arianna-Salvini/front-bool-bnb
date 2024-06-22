@@ -30,6 +30,9 @@ export default {
             search_url: '/api/apartments/search',
             range_distance: 20,
             api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
+
+            rooms: 1,
+            beds: 1
         }
     },
     methods: {
@@ -75,7 +78,9 @@ export default {
                     params: {
                         address: this.researchedAddress,
                         range_distance: this.researchedRange,
-                        services: this.chosenServices
+                        services: this.chosenServices,
+                        rooms: this.rooms,
+                        beds: this.beds
                     }
                 })
                 .then(response => {
@@ -91,7 +96,7 @@ export default {
 
         selectServices() {
             console.log(this.chosenServices);
-            if (this.chosenServices.length > 0) {
+            if (this.chosenServices.length > 0 || this.bedrooms || this.beds) {
                 this.filterApartments();
             }
             else {
@@ -101,7 +106,7 @@ export default {
 
         updateQueryString() {
             console.log(this.chosenServices);
-            let query = { address: this.researchedAddress, range: this.researchedRange }
+            let query = { address: this.researchedAddress, range: this.researchedRange, rooms: this.rooms, beds: this.beds }
             /* if there are services selected, push services id in query string separated by ,*/
             if (Array.isArray(this.chosenServices) && this.chosenServices.length > 0) {
                 query.services = this.chosenServices.join(',');
@@ -257,20 +262,24 @@ export default {
                 </ul>
             </div>
 
-            <form v-if="services.length != 0">
-                <div class="services">
-                    <div class="single-service" v-for="service in services">
-                        <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
-                            :value="service.id" v-model="chosenServices" @change="selectServices">
-                        <label :for="`service-${service.id}`">{{ service.service_name }}</label>
-                    </div>
+
+            <div class="services" v-if="services.length != 0">
+                <div class="single-service" v-for="service in services">
+                    <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
+                        :value="service.id" v-model="chosenServices" @change="selectServices">
+                    <label :for="`service-${service.id}`">{{ service.service_name }}</label>
                 </div>
+            </div>
 
-            </form>
+            <div class="number-filter">
+                <label for="rooms">rooms</label>
+                <input type="number" id="rooms" name="rooms" v-model.number="rooms" min="1" placeholder="1"
+                    @input="filterApartments">
 
-            <!-- <ul class="services" v-if="services.length != 0">
-                <li v-for="service in services">{{ service.service_name }}</li>
-            </ul> -->
+                <label for="beds">beds</label>
+                <input type="number" id="beds" name="beds" v-model.number="beds" min="1" placeholder="1"
+                    @input="filterApartments">
+            </div>
 
             <div>I tuoi risultati per {{ researchedAddress }}</div>
             <div class="row g-4" v-if="results.length != 0">
@@ -314,6 +323,62 @@ export default {
 </template>
 
 <style scoped>
+.search {
+    gap: 0.5rem;
+    align-items: center;
+
+    .search-form {
+        padding: 0.5rem;
+        border: 1px solid var(--color_grey_shadow);
+        border-radius: 60px;
+        gap: 1rem;
+        align-items: center;
+
+        .range-wrap {
+            padding: 0 1rem;
+            border-right: 1px solid var(--color_grey_shadow);
+            gap: 0.5rem;
+
+            .bubble {
+                color: var(--bnb-lighter);
+                background-color: var(--bnb-main);
+                border-radius: 20px;
+                padding: 0.5rem;
+            }
+        }
+
+        #search {
+            padding: 0 1rem;
+            outline: none;
+            border: none;
+        }
+    }
+
+    .search-btn {
+        border-radius: 50%;
+        border: 1px solid var(--color_dark);
+        aspect-ratio: 1/1;
+        width: 3rem;
+        padding: 0.5rem;
+        color: var(--bnb-lighter);
+        background-color: var(--bnb-main);
+        border: none;
+    }
+}
+
+.suggestions {
+    display: flex;
+    justify-content: end;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        padding: 1rem;
+        border: 1px solid var(--color_grey_shadow);
+        border-radius: 20px;
+    }
+}
+
 #search-results {
     padding: 2rem 0;
 }
