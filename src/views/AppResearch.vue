@@ -285,7 +285,7 @@ export default {
             </div>
 
             <div>I tuoi risultati per {{ researchedAddress }}</div>
-            <div class="row g-4" v-if="results.length != 0">
+            <div class="row" v-if="results.length != 0">
                 <div v-for="result in results" class="col-6">
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: result.slug } }"
@@ -388,22 +388,17 @@ export default {
     padding: 2rem 0;
 }
 
+.row {
+    gap: 20px;
+
+    .col-6 {
+        flex: 0 0 calc((100% / 2) - 20px);
+    }
+}
+
 .card,
 img {
     border-radius: 20px;
     width: 100%;
-}
-
-.card {
-    box-shadow: 0 0 12px 1px var(--color_grey_shadow);
-    height: 100%;
-
-    .card-body {
-        padding: 1rem;
-        color: black;
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-    }
 }
 </style>

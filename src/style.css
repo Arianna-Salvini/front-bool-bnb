@@ -56,3 +56,26 @@
 .col-8 {
     width: calc((100% / 12) * 8);
 }
+
+.card {
+    box-shadow: 0 0 12px 1px var(--color_grey_shadow);
+    height: 100%;
+
+    .card-header {
+        align-items: center;
+        justify-content: center;
+        border-radius: 2rem 2rem 0 0;
+        color: white;
+        padding: 0.8rem 1.5rem 0.5rem;
+        background-color: var(--color_dark);
+        margin-top: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+        color: black;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+}

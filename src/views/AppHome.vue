@@ -310,15 +310,20 @@ export default {
         }
     }
 
+    .row {
+        gap: 20px;
+
+        .col-6 {
+            flex: 0 0 calc((100% / 2) - 20px);
+        }
+    }
+
     .card,
     img {
         border-radius: 20px;
+        width: 100%;
     }
 
-    .card {
-        box-shadow: 0 0 12px 1px var(--color_grey_shadow);
-        height: 100%;
-    }
 
     .navigation {
         display: flex;
