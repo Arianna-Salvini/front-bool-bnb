@@ -270,6 +270,7 @@ export default {
                     <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
                         :value="service.id" v-model="chosenServices" @change="selectServices">
                     <label :for="`service-${service.id}`">{{ service.service_name }}</label>
+                    <i :class="state.serviceIcons[service.service_name]"></i>
                 </div>
             </div>
 
