@@ -100,6 +100,7 @@ footer .container {
     padding: 10px 20px;
     font-size: 16px;
     transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 1.2rem;
 }
 
 .footer-button .btn-principal:hover {

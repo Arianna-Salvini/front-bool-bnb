@@ -50,7 +50,8 @@ export default {
 <style scoped>
 header {
     background-color: rgb(255, 255, 255);
-    ;
+    box-shadow: 0 0 15px var(--color_grey_shadow);
+    margin-bottom: 2rem;
 
     .container {
         max-width: 1200px;
@@ -59,7 +60,7 @@ header {
         align-items: center;
 
         .logo {
-            padding: 20px;
+            padding-top: 1rem;
         }
 
         .navigation {
@@ -104,6 +105,7 @@ header {
 .btn-principal {
     background-color: #45C2B1;
     border-color: #45C2B1;
+    border-radius: 1.2rem;
     color: white;
     padding: 10px 20px;
     font-size: 16px;
