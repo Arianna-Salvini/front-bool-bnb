@@ -50,7 +50,7 @@ export default {
 <style scoped>
 header {
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 0 15px var(--color_grey_shadow);
+    box-shadow: 0 0 10px var(--color_grey_shadow);
     margin-bottom: 2rem;
 
     .container {
