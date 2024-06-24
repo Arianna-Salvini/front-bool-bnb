@@ -103,13 +103,13 @@ export default {
                 .then(response => {
                     console.log(response);
                     if (response.data.success) {
+                        console.log(response);
                         console.log(response.data.response.data);
                         this.results = response.data.response.data;
-
                         //must use query object
                         //query objects are strings -> must convert them to json
                         state.updateResults(response.data.response.data);
-                        this.$router.push({ name: 'research'/* , query: { results: JSON.stringify(this.results) } */ });
+                        this.$router.push({ name: 'research', query: { address: this.search_address, range: this.range_distance } });
                         //console.log(this.$router);
                     }
                     else {
@@ -126,7 +126,7 @@ export default {
 
 
         searchButton() {
-            return /^[a-zA-Z0-9]+[a-zA-Z0-9 ,\/]*$/.test(this.search_address.trim());
+            return /^[a-zA-Z0-9]+['a-zA-Z0-9 ,\/]*$/.test(this.search_address.trim());
         },
 
 
@@ -310,15 +310,20 @@ export default {
         }
     }
 
+    .row {
+        gap: 20px;
+
+        .col-6 {
+            flex: 0 0 calc((100% / 2) - 20px);
+        }
+    }
+
     .card,
     img {
         border-radius: 20px;
+        width: 100%;
     }
 
-    .card {
-        box-shadow: 0 0 12px 1px var(--color_grey_shadow);
-        height: 100%;
-    }
 
     .navigation {
         display: flex;

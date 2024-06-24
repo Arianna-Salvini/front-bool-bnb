@@ -1,0 +1,21 @@
+export const serviceIcons =
+{
+    'Wifi': 'fa-solid fa-wifi',
+    'Pool': 'fa-solid fa-water-ladder',
+    'Parking spot': 'fa-solid fa-square-parking',
+    'Concierge': 'fa-solid fa-person-military-pointing',
+    'Sauna': 'fa-solid fa-hot-tub-person',
+    'Sea view': 'fa-solid fa-water',
+    'Air conditioning': 'fa-solid fa-fan',
+    'Garden': 'fa-solid fa-tree',
+    'Garage': 'fa-solid fa-warehouse',
+    'Elevator': 'fa-solid fa-elevator',
+    'Furnished': 'fa-solid fa-couch',
+    'TV': 'fa-solid fa-tv',
+    'Pet Friendly': 'fa-solid fa-dog',
+    'Wheelchair accessible': 'fa-solid fa-wheelchair',
+    'Smokers allowed': 'fa-solid fa-smoking',
+    'Bath tub': 'fa-solid fa-bath',
+    'Shower': 'fa-solid fa-shower',
+    'Balcony': 'fa-solid fa-shop',
+}
