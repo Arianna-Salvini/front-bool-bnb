@@ -31,8 +31,8 @@ export default {
             range_distance: 20,
             api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
 
-            // rooms: 1,
-            // beds: 1,
+            rooms: 1,
+            beds: 1,
         }
     },
     methods: {
@@ -222,6 +222,10 @@ export default {
             errorMessages.forEach(function (errorMessage) {
                 errorMessage.remove(); // remove the node if exist so we haven't too many messages
             });
+        },
+
+        isSelected(serviceId) {
+            return this.chosenServices.includes(serviceId);
         }
     },
     created() {
@@ -309,15 +313,6 @@ export default {
                             <input type="search" name="search" id="search" v-model="search_address"
                                 @input="getSuggestions" placeholder="Via dei cipressi">
 
-                            <div class="suggestions" v-if="suggestions.length != 0">
-                                <ul>
-                                    <li v-for="suggestion in suggestions"
-                                        @click="fillSearch(suggestion.address.freeformAddress)">
-                                        {{ suggestion.address.freeformAddress }}
-                                    </li>
-                                </ul>
-                            </div>
-
                             <!-- submit btn -->
                             <button type="submit" class="btn search-btn" :disabled="!searchButton()">
                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -328,8 +323,15 @@ export default {
 
 
                 </div>
-            </div>
 
+            </div>
+            <div class="suggestions" v-if="suggestions.length != 0">
+                <ul>
+                    <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
+                        {{ suggestion.address.freeformAddress }}
+                    </li>
+                </ul>
+            </div>
 
             <!-- Services -->
             <div class="services d-flex" v-if="services.length != 0">
@@ -367,6 +369,13 @@ export default {
                                     {{ result.description }}
                                 </p>
 
+                                <div class="service-list">
+                                    <ul class="d-flex">
+                                        <li v-for="service in result.services" class="d-flex">
+                                            {{ service.service_name }}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </router-link>
@@ -410,7 +419,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     flex-grow: 1;
-    position: relative;
 
     .search-form {
         padding: 0.5rem;
@@ -452,12 +460,10 @@ export default {
         padding: 0 1rem;
         border: 2px solid var(--color_grey_shadow);
         border-radius: 20px;
-        position: absolute;
-        top: 68px;
-        left: 0;
 
         &>li {
-            padding: 0.7rem;
+            font-size: 1rem;
+            padding: 0.7rem 0;
             border: 1px solid var(--color_grey_shadow);
             border-left: none;
             border-right: none;
@@ -556,8 +562,29 @@ export default {
     }
 }
 
+.service-list {
+    padding: 0.5rem;
+
+    ul {
+        flex-wrap: wrap;
+
+    }
+
+    li {
+        align-items: center;
+        text-align: center;
+        margin: 0.3rem;
+        list-style: none;
+        padding: 0.7rem;
+        border: 1px solid var(--color_grey_shadow);
+        border-radius: 1rem;
+    }
+}
+
 .row {
-    gap: 20px;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 2rem;
 
     .col-6 {
         flex: 0 0 calc((100% / 2) - 20px);
