@@ -182,7 +182,47 @@ export default {
             /* remove suggestions */
             this.suggestions = [];
         },
+        verifyBedsRooms() {
+            let rooms = document.getElementById("rooms");
+            let beds = document.getElementById("beds");
+            console.log(rooms, beds);
 
+            this.removeErrorMessages();
+
+            if (beds.value === "" || rooms.value === "") {
+                beds.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Fill this filed please</div>');
+                rooms.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Fill this filed please</div>');
+            } else if (beds.value <= 0 || rooms.value <= 0) {
+                console.log("numero di letti non valido");
+                beds.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Invalid number</div>');
+                rooms.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Invalid number</div>');
+            } else {
+                this.filterApartments();
+            }
+
+            // if (beds.value === "") {
+            //     beds.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Fill this filed please</div>');
+
+            // } else if (rooms.value === "") {
+            //     rooms.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Fill this filed please</div>');
+            // }
+            // else if (beds.value <= 0) {
+            //     console.log("numero di letti non valido");
+            //     beds.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Invalid number</div>');
+            // } else if (rooms.value <= 0) {
+            //     rooms.insertAdjacentHTML("afterend", '<div class="error-message" style="color: red;">Invalid number</div>');
+            // }
+            // else {
+            //     this.filterApartments();
+            // }  
+            // alternative version 
+        },
+        removeErrorMessages() {
+            let errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(function (errorMessage) {
+                errorMessage.remove(); // remove the node if exist so we haven't too many messages
+            });
+        }
     },
     created() {
         this.researchedAddress = this.$route.query.address;
@@ -277,11 +317,11 @@ export default {
             <div class="number-filter">
                 <label for="rooms">rooms</label>
                 <input type="number" id="rooms" name="rooms" v-model.number="rooms" min="1" placeholder="1"
-                    @input="filterApartments">
+                    @input="verifyBedsRooms">
 
                 <label for="beds">beds</label>
                 <input type="number" id="beds" name="beds" v-model.number="beds" min="1" placeholder="1"
-                    @input="filterApartments">
+                    @input="verifyBedsRooms">
             </div>
 
             <div>I tuoi risultati per {{ researchedAddress }}</div>
