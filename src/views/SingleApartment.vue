@@ -27,6 +27,15 @@ export default {
             confirmSubmitForm: false, // variabile per mostrare il banner di conferma
             submittedName: '', // il nome inviato per farlo vedere nel banner
             submittedLastname: '', // il cognome inviato per farlo vedere nel banner
+            nameError: '',
+            lastnameError: '',
+            emailError: '',
+            contentError: '',
+            isValidForm: true,//impostiamo il form su true
+            nameTouched: false,
+            lastnameTouched: false,
+            emailTouched: false,
+            contentTouched: false,
         }
 
     },
@@ -74,37 +83,32 @@ export default {
         },
 
         handleForm() {
-            // controllo se il form e gia stato inviato
-            if (this.formSubmitted) {
-                console.log('form inviato');
+            if (!this.validateForm()) {
                 return;
             }
-
 
             const formData = {
                 apartment_id: this.apartmentId,
                 name: this.name,
                 lastname: this.lastname,
                 sender_email: this.sender_email,
-                content: this.content
+                content: this.content,
             };
-            console.log('FormData:', formData);
 
             axios.post('http://127.0.0.1:8000/api/messages', formData)
                 .then(response => {
                     console.log('ok', response.data);
-                    // imposto su true per disabilitare il button
+                    // set submittedForm to true to disable button
                     this.submittedForm = true;
 
-                    // salvo i dati inviati per visualizzazione del nome e cognome nel banner
+                    // store sent data for display in banner
                     this.submittedName = this.name;
                     this.submittedLastname = this.lastname;
 
-                    // mostro il banner 
+                    // show confirmation banner
                     this.confirmSubmitForm = true;
 
-
-                    // svuoto dopo l'invio
+                    // clear form fields
                     this.name = '';
                     this.lastname = '';
                     this.sender_email = '';
@@ -113,9 +117,69 @@ export default {
                 .catch(error => {
                     console.error('error!', error);
                 });
-        }
+        },
 
+        validateInput(nameInput) {
+            let inputValue = this[nameInput];
+            let inputErrorDiv = `${nameInput}Error`;
+            //switch case per controllare ogni input e mostrare il errore 
+            switch (nameInput) {
+                case 'name':
+                case 'lastname':
+                    if (!inputValue || inputValue.length < 3) {
+                        this[inputErrorDiv] = `${nameInput.charAt(0).toUpperCase() + nameInput.slice(1)} must be at least 3 characters.`;
+                    } else {
+                        this[inputErrorDiv] = '';
+                    }
+                    break;
+                case 'sender_email':
+                    if (!inputValue || !this.validateEmail(inputValue)) {
+                        this[inputErrorDiv] = 'Invalid email address.';
+                    } else {
+                        this[inputErrorDiv] = '';
+                    }
+                    break;
+                case 'content':
+                    if (!inputValue || inputValue.length < 10) {
+                        this[inputErrorDiv] = 'Message must be at least 10 characters.';
+                    } else {
+                        this[inputErrorDiv] = '';
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            // imposto il campo touched solo se il campo ha un valore(touched e per tenere traccia in quale input è entrato il user)
+            if (inputValue) {
+                this[`${nameInput}Touched`] = true;
+            }
+
+            this.updateIsValidForm();
+        },
+
+
+
+        validateForm() {
+            this.validateInput('name');
+            this.validateInput('lastname');
+            this.validateInput('email');
+            this.validateInput('content');
+            return this.isValidForm;
+        },
+
+        validateEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+
+        },
+        updateIsValidForm() {
+            this.isValidForm = !this.nameError && !this.lastnameError && !this.emailError && !this.contentError;
+            console.log('form ok:', this.isValidForm);
+        }
     },
+
+
     mounted() {
         this.callApartment()
 
@@ -191,7 +255,7 @@ export default {
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
-                                        service.service_name }}</li>
+                                service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -209,29 +273,38 @@ export default {
 
             <div class="card_body p-3 ">
                 <form @submit.prevent="handleForm" class="form-body d-flex">
-                    <div class=" form-tag">
+                    <div class="form-tag">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" v-model="name" required name="name"
-                            placeholder="Type your name">
+                        <input type="text" class="form-control" :class="{ 'is-invalid': nameError && nameTouched }"
+                            id="name" v-model="name" required name="name" placeholder="Type your name"
+                            @input="validateInput('name')">
+                        <div class="error-message" v-if="nameError && nameTouched">{{ nameError }}</div>
                     </div>
-                    <div class=" form-tag">
-                        <label for="name" class="form-label">Lastname</label>
-                        <input type="text" class="form-control" id="lastname" v-model="lastname" required
-                            name="lastname" placeholder="Type your lastname">
+                    <div class="form-tag">
+                        <label for="lastname" class="form-label">Lastname</label>
+                        <input type="text" class="form-control"
+                            :class="{ 'is-invalid': lastnameError && lastnameTouched }" id="lastname" v-model="lastname"
+                            required name="lastname" placeholder="Type your lastname"
+                            @input="validateInput('lastname')">
+                        <div class="error-message" v-if="lastnameError && lastnameTouched">{{ lastnameError }}</div>
                     </div>
-
-                    <div class=" form-tag">
+                    <div class="form-tag">
                         <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" id="sender_email" v-model="sender_email" required
-                            name="content" placeholder="Type your e-mail">
+                        <input type="email" class="form-control" :class="{ 'is-invalid': emailError && emailTouched }"
+                            id="sender_email" v-model="sender_email" required name="sender_email"
+                            placeholder="Type your e-mail" @input="validateInput('sender_email')">
+                        <div class="error-message" v-if="emailError && emailTouched">{{ emailError }}</div>
                     </div>
-                    <div class=" form-tag">
+                    <div class="form-tag">
                         <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="content" rows="5" v-model="content" required name="content"
-                            placeholder="Type your message"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-dark" :disabled="submittedForm">Send Message</button>
+                        <textarea class="form-control" :class="{ 'is-invalid': contentError && contentTouched }"
+                            id="content" rows="5" v-model="content" required name="content"
+                            placeholder="Type your message" @input="validateInput('content')"></textarea>
+                        <div class="error-message" v-if="contentError && contentTouched">{{ contentError }}</div>
 
+                    </div>
+                    <button type="submit" class="btn btn-dark" :disabled="!isValidForm || submittedForm">Send
+                        Message</button>
                 </form>
                 <div v-if="confirmSubmitForm" class="banner_form">
                     The message has been successfully sent! Thanks {{ submittedName }} {{ submittedLastname }} for your
@@ -378,5 +451,18 @@ export default {
     color: #155724;
     background-color: #d4edda;
     border-color: #c3e6cb;
+}
+
+.error-message {
+    border: 1px solid #FF0000;
+    padding: 5px;
+    color: #FF0000;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.is-invalid {
+    border-color: #FF0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 </style>
