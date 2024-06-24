@@ -31,8 +31,8 @@ export default {
             range_distance: 20,
             api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
 
-            rooms: 1,
-            beds: 1
+            // rooms: 1,
+            // beds: 1,
         }
     },
     methods: {
@@ -260,71 +260,91 @@ export default {
     <section id="search-results">
         <div class="container">
 
+            <!-- research title -->
+            <div class="reseach_title d-flex">
+                <h2>Search Apartments:</h2>
+                <h3>{{ researchedAddress }}</h3>
+            </div>
+
+
+            <!-- Search and filter -->
             <div class="top-bar d-flex">
 
-                <!-- title -->
-                <h2>All Apartments</h2>
+                <div class="advance_search d-flex">
 
-                <!-- search -->
-                <div class="search d-flex">
+                    <!-- Range Input -->
+                    <div class="range-wrap d-flex">
+                        <div class="bubble">
+                            <output>{{ range_distance }} </output>
+                            <span> km</span>
+                        </div>
+                        <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                            oninput="this.nextElementSibling.value = this.value" v-model="range_distance" class="range"
+                            @change="filterApartments">
+                    </div>
 
-                    <form @submit.prevent="searchApartments()" class="search-form d-flex">
 
-                        <!-- search input -->
-                        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions"
-                            placeholder="Via dei cipressi">
+                    <!-- Room and beds -->
 
-                        <!-- submit btn -->
-                        <button type="submit" class="btn search-btn" :disabled="!searchButton()">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
+                    <div class="number-filter d-flex">
+                        <div class="rooms">
+                            <label for="rooms">Rooms</label>
+                            <input type="number" id="rooms" name="rooms" v-model.number="rooms" min="1" placeholder="1"
+                                @input="verifyBedsRooms">
+                        </div>
 
-                    </form>
+                        <div class="beds">
+                            <label for="beds">Beds</label>
+                            <input type="number" id="beds" name="beds" v-model.number="beds" min="1" placeholder="1"
+                                @input="verifyBedsRooms">
+                        </div>
+                    </div>
+
+                    <!-- searchbar -->
+                    <div class="search d-flex">
+
+                        <form @submit.prevent="searchApartments()" class="search-form d-flex">
+
+                            <!-- search input -->
+                            <input type="search" name="search" id="search" v-model="search_address"
+                                @input="getSuggestions" placeholder="Via dei cipressi">
+
+                            <div class="suggestions" v-if="suggestions.length != 0">
+                                <ul>
+                                    <li v-for="suggestion in suggestions"
+                                        @click="fillSearch(suggestion.address.freeformAddress)">
+                                        {{ suggestion.address.freeformAddress }}
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- submit btn -->
+                            <button type="submit" class="btn search-btn" :disabled="!searchButton()">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+
+                        </form>
+                    </div>
+
+
                 </div>
-
-            </div>
-            <div class="suggestions" v-if="suggestions.length != 0">
-                <ul>
-                    <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
-                        {{ suggestion.address.freeformAddress }}
-                    </li>
-                </ul>
-            </div>
-
-            <!-- range input -->
-            <div class="range-wrap d-flex">
-
-                <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                    oninput="this.nextElementSibling.value = this.value" v-model="range_distance" class="range"
-                    @change="filterApartments">
-                <div class="bubble">
-                    <output>{{ range_distance }} </output>
-                    <span> km</span>
-                </div>
-
             </div>
 
 
-            <div class="services" v-if="services.length != 0">
-                <div class="single-service" v-for="service in services">
+            <!-- Services -->
+            <div class="services d-flex" v-if="services.length != 0">
+
+                <label :for="`service-${service.id}`" class="single-service" v-for="service in services"
+                    :class="{ 'selected-service': chosenServices.includes(service.id) }">{{
+                        service.service_name }}
+                    <i :class="state.serviceIcons[service.service_name]"></i>
                     <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
                         :value="service.id" v-model="chosenServices" @change="selectServices">
-                    <label :for="`service-${service.id}`">{{ service.service_name }}</label>
-                    <i :class="state.serviceIcons[service.service_name]"></i>
-                </div>
+                </label>
+
             </div>
 
-            <div class="number-filter">
-                <label for="rooms">rooms</label>
-                <input type="number" id="rooms" name="rooms" v-model.number="rooms" min="1" placeholder="1"
-                    @input="verifyBedsRooms">
-
-                <label for="beds">beds</label>
-                <input type="number" id="beds" name="beds" v-model.number="beds" min="1" placeholder="1"
-                    @input="verifyBedsRooms">
-            </div>
-
-            <div>I tuoi risultati per {{ researchedAddress }}</div>
+            <!-- Results -->
             <div class="row" v-if="results.length != 0">
                 <div v-for="result in results" class="col-6">
 
@@ -354,8 +374,6 @@ export default {
                 </div>
             </div>
 
-            <p v-else>No apartments found within the given range.</p>
-
         </div>
 
     </section>
@@ -366,23 +384,49 @@ export default {
 </template>
 
 <style scoped>
-.search {
-    gap: 0.5rem;
+.reseach_title {
+    align-items: baseline;
+    padding-bottom: 2rem;
+
+    &>h2 {
+        padding-right: 1rem;
+        color: var(--bnb-main);
+    }
+}
+
+.advance_search {
+    width: 80%;
+    padding: 1rem 0 1.5rem;
+    justify-content: space-between;
+    margin: auto;
     align-items: center;
+    padding: 0.1rem;
+    border: 2px solid var(--color_grey_shadow);
+    border-radius: 60px;
+
+}
+
+.search {
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    position: relative;
 
     .search-form {
         padding: 0.5rem;
         border: 1px solid var(--color_grey_shadow);
-        border-radius: 60px;
-        gap: 1rem;
+        border-radius: 0 60px 60px 0;
         align-items: center;
-
+        width: 100%;
+        justify-content: space-between;
+        border: none;
 
 
         #search {
             padding: 0 1rem;
             outline: none;
             border: none;
+
         }
     }
 
@@ -398,10 +442,76 @@ export default {
     }
 }
 
+.suggestions {
+    display: flex;
+    justify-content: end;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        padding: 0 1rem;
+        border: 2px solid var(--color_grey_shadow);
+        border-radius: 20px;
+        position: absolute;
+        top: 68px;
+        left: 0;
+
+        &>li {
+            padding: 0.7rem;
+            border: 1px solid var(--color_grey_shadow);
+            border-left: none;
+            border-right: none;
+        }
+
+        &>li:first-child {
+            border-top: none;
+        }
+
+        &>li:last-child {
+            border-bottom: none;
+        }
+    }
+}
+
+.beds,
+.rooms {
+    color: var(--bnb-main);
+    padding: 0.6rem 1rem;
+    padding-left: -20px;
+    border: 2px solid var(--color_grey_shadow);
+    border-radius: 0 60px 60px 0;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+    flex-grow: 1;
+
+
+    & input {
+        width: 4.5rem;
+        text-align: center;
+        padding: 0.9rem;
+        border: 1px solid var(--color_grey_shadow);
+        border-radius: 60px;
+    }
+
+    & label {
+        margin-right: 0.5rem;
+
+    }
+}
+
 .range-wrap {
     padding: 0 1rem;
-    border-right: 1px solid var(--color_grey_shadow);
     gap: 0.5rem;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--color_grey_shadow);
+    border-radius: 0 60px 60px 0;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+
 
     .bubble {
         color: var(--bnb-lighter);
@@ -411,21 +521,39 @@ export default {
     }
 }
 
-.suggestions {
-    display: flex;
-    justify-content: end;
+.services {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 1rem;
 
-    ul {
-        list-style: none;
-        padding: 0;
+    .single-service {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 1.2rem;
+        width: 5.8rem;
+        height: 5.8rem;
+        text-align: center;
+        margin: 1rem;
         padding: 1rem;
+        justify-content: center;
         border: 1px solid var(--color_grey_shadow);
-        border-radius: 20px;
-    }
-}
 
-#search-results {
-    padding: 2rem 0;
+        & i {
+            padding: 0.3rem;
+        }
+
+        .checkbox-style i {
+            display: none;
+        }
+    }
+
+    .selected-service {
+        background-color: var(--bnb-main);
+        color: var(--bnb-lighter);
+        box-shadow: 0 0 20px var(--color_grey_shadow);
+    }
 }
 
 .row {
