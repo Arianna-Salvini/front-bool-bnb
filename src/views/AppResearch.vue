@@ -352,6 +352,8 @@ export default {
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: result.slug } }"
                         style="text-decoration: none;">
+
+                        <!-- Card results -->
                         <div class="card">
                             <img v-if="result.image"
                                 :src="result.image.startsWith('http') ? result.image : state.base_api + '/storage/' + result.image"
@@ -364,6 +366,11 @@ export default {
                                 <p class="card-text">
                                     <i class="fa-solid fa-location-dot"></i>
                                     {{ result.address }}
+                                </p>
+                                <p class="card-text">
+                                    <strong> Distance:</strong>
+                                    {{ result.distance }}
+                                    <strong>Km</strong>
                                 </p>
                                 <p class="card-text" v-if="result.description">
                                     {{ result.description }}
