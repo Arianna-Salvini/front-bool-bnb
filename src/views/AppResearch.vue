@@ -225,8 +225,9 @@ export default {
         },
 
         isSelected(serviceId) {
+            console.log(serviceId, this.chosenServices);
             return this.chosenServices.includes(serviceId);
-        }
+        },
     },
     created() {
         this.researchedAddress = this.$route.query.address;
@@ -243,6 +244,7 @@ export default {
             }
         }
         this.updateQueryString();
+        console.log(this.chosenServices);
     },
 
     mounted() {
@@ -369,7 +371,7 @@ export default {
                                 </p>
                                 <p class="card-text">
                                     <strong> Distance:</strong>
-                                    {{ result.distance }}
+                                    {{ result.distance.toFixed(1) }}
                                     <strong>Km</strong>
                                 </p>
                                 <p class="card-text" v-if="result.description">
@@ -378,7 +380,9 @@ export default {
 
                                 <div class="service-list">
                                     <ul class="d-flex">
-                                        <li v-for="service in result.services" class="d-flex">
+                                        <li v-for="(service, index) in result.services" class="d-flex"
+                                            :class="{ 'badge-selected': isSelected(service.pivot.service_id) }">
+                                            <!-- {{ service.pivot.service_id }}  -->
                                             {{ service.service_name }}
                                         </li>
                                     </ul>
@@ -400,6 +404,12 @@ export default {
 </template>
 
 <style scoped>
+.badge-selected {
+    background-color: var(--bnb-main);
+    color: var(--bnb-lighter);
+    box-shadow: 0 0 20px var(--color_grey_shadow);
+}
+
 .reseach_title {
     align-items: baseline;
     padding-bottom: 2rem;
@@ -567,6 +577,12 @@ export default {
         color: var(--bnb-lighter);
         box-shadow: 0 0 20px var(--color_grey_shadow);
     }
+}
+
+.single-service:has(input[type='checkbox']:checked).single-service {
+    background-color: var(--bnb-main);
+    color: var(--bnb-lighter);
+    box-shadow: 0 0 20px var(--color_grey_shadow);
 }
 
 .service-list {
