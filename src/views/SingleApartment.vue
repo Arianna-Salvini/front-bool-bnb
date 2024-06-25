@@ -111,6 +111,8 @@ export default {
                     this.submittedName = this.name;
                     this.submittedLastname = this.lastname;
 
+                    this.showAlert = false; // nascondo l avviso dopo l invio
+
                     // show confirmation banner
                     this.confirmSubmitForm = true;
 
@@ -189,7 +191,9 @@ export default {
 
 
     mounted() {
-        this.callApartment()
+        this.callApartment();
+        this.showAlert = true; // mostra l avviso
+
 
     }
 };
@@ -312,6 +316,9 @@ export default {
                             placeholder="Type your message" @input="validateInput('content')"></textarea>
                         <div class="error-message" v-if="contentError && contentTouched">{{ contentError }}</div>
 
+                    </div>
+                    <div style="font-style: italic;" v-if="showAlert">
+                        <span style="color: red;">*</span>All fields are required!
                     </div>
                     <button type="submit"
                         :class="[{ 'btn btn-dark submit': true }, { 'disabled_button': !isValidForm || submittedForm || loading }]"
