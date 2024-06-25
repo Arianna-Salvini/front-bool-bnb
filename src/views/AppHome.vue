@@ -213,6 +213,14 @@ export default {
                                     {{ apartment.description }}
                                 </p>
 
+                                <div class="services ">
+                                    <strong>Services:</strong>
+                                    <ul>
+                                        <li v-for="service in apartment.services" :key="service.id">{{
+                                            service.service_name }}</li>
+                                    </ul>
+                                </div>
+
                             </div>
                         </div>
                     </router-link>
@@ -238,6 +246,14 @@ export default {
 </template>
 
 <style scoped>
+.services {
+    margin-top: 10px;
+
+    & ul {
+        list-style: none;
+    }
+}
+
 #homepage {
     padding-bottom: 5rem;
 

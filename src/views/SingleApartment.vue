@@ -305,7 +305,7 @@ export default {
                         <div class="error-message" v-if="contentError && contentTouched">{{ contentError }}</div>
 
                     </div>
-                    <button type="submit" class="btn btn-dark" :disabled="!isValidForm || submittedForm">Send
+                    <button type="submit" class="btn btn-dark submit" :disabled="!isValidForm || submittedForm">Send
                         Message</button>
                 </form>
                 <div v-if="confirmSubmitForm" class="banner_form">
