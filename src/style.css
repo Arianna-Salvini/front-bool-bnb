@@ -4,6 +4,21 @@
     padding: 0;
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: lightgray;
+    border-radius: 10px;
+}
+
 :root {
     --color_dark: #212529;
     --color_grey_shadow: #bcbcbc;
