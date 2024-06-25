@@ -33,6 +33,7 @@ export default {
             contentError: '',
             isValidForm: true,//impostiamo il form su true
             nameTouched: false,
+            loading: false, // variabile per gestire lo stato di caricamento
             lastnameTouched: false,
             emailTouched: false,
             contentTouched: false,
@@ -86,6 +87,8 @@ export default {
             if (!this.validateForm()) {
                 return;
             }
+            // Attivo lo stato di caricamento
+            this.loading = true;
 
             const formData = {
                 apartment_id: this.apartmentId,
@@ -98,12 +101,17 @@ export default {
             axios.post('http://127.0.0.1:8000/api/messages', formData)
                 .then(response => {
                     console.log('ok', response.data);
+
+                    // Disattivo lo stato di caricamento
+                    this.loading = false;
                     // set submittedForm to true to disable button
                     this.submittedForm = true;
 
                     // store sent data for display in banner
                     this.submittedName = this.name;
                     this.submittedLastname = this.lastname;
+
+                    this.showAlert = false; // nascondo l avviso dopo l invio
 
                     // show confirmation banner
                     this.confirmSubmitForm = true;
@@ -116,6 +124,8 @@ export default {
                 })
                 .catch(error => {
                     console.error('error!', error);
+                    // in caso di errore disattivo loading
+                    this.loading = false;
                 });
         },
 
@@ -181,7 +191,9 @@ export default {
 
 
     mounted() {
-        this.callApartment()
+        this.callApartment();
+        this.showAlert = true; // mostra l avviso
+
 
     }
 };
@@ -257,7 +269,7 @@ export default {
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
-                                        service.service_name }}</li>
+                                service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -305,8 +317,15 @@ export default {
                         <div class="error-message" v-if="contentError && contentTouched">{{ contentError }}</div>
 
                     </div>
-                    <button type="submit" class="btn btn-dark submit" :disabled="!isValidForm || submittedForm">Send
-                        Message</button>
+                    <div style="font-style: italic;" v-if="showAlert">
+                        <span style="color: red;">*</span>All fields are required!
+                    </div>
+                    <button type="submit"
+                        :class="[{ 'btn btn-dark submit': true }, { 'disabled_button': !isValidForm || submittedForm || loading }]"
+                        :disabled="!isValidForm || submittedForm || loading">
+                        <span v-if="loading">Loading...</span>
+                        <span v-else>Send Message</span>
+                    </button>
                 </form>
                 <div v-if="confirmSubmitForm" class="banner_form">
                     The message has been successfully sent! Thanks {{ submittedName }} {{ submittedLastname }} for your
@@ -466,5 +485,12 @@ export default {
 .is-invalid {
     border-color: #FF0000;
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.disabled_button {
+    background-color: #d3d3d3 !important;
+    border-color: #d3d3d3 !important;
+    color: #ffffff !important;
+
 }
 </style>
