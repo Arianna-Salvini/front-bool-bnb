@@ -203,6 +203,8 @@ export default {
                             :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
                             alt="Apartment Image" class=" card-img img-fluid w-100"
                             style="object-fit: cover; height: 400px;">
+                        <img v-else src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
+                            alt="">
                     </div>
                 </div>
                 <div class="description">
@@ -255,7 +257,7 @@ export default {
                                 <strong>Services:</strong>
                                 <ul>
                                     <li v-for="service in apartment.services" :key="service.id">{{
-                                service.service_name }}</li>
+                                        service.service_name }}</li>
                                 </ul>
                             </div>
                         </div>

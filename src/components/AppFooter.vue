@@ -25,9 +25,9 @@ export default {
                     <img src="/img/logo.png" alt="Logo" width="70">
                 </div>
                 <div class="footer-links">
-                    <a><router-link :to="{ name: 'home' }">Home</router-link></a>
-                    <a><router-link :to="{ name: 'about' }">About</router-link></a>
-                    <a><router-link :to="{ name: 'contacts' }">Contacts</router-link></a>
+                    <router-link :to="{ name: 'home' }">Home</router-link>
+                    <router-link :to="{ name: 'about' }">About</router-link>
+                    <router-link :to="{ name: 'contacts' }">Contacts</router-link>
                 </div>
             </div>
             <div class="right footer-button">
@@ -41,15 +41,7 @@ export default {
     </footer>
 </template>
 
-<style>
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
-
+<style scoped>
 footer {
     background-color: #333;
     color: white;
@@ -86,6 +78,12 @@ footer .container {
     text-decoration: none;
     transition: color 0.3s ease;
 
+}
+
+.footer-button {
+    a {
+        text-decoration: none !important;
+    }
 }
 
 .footer-links a:hover {

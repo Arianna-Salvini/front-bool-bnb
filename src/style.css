@@ -15,6 +15,14 @@
     background-color: var(--color_dark);
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
 /* Uility */
 
 .container {

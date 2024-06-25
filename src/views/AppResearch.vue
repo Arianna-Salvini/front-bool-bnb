@@ -378,6 +378,10 @@ export default {
                                     {{ result.description }}
                                 </p>
 
+                                <p class="card-text" v-if="result.is_sponsorship_active == 1">
+                                    Sponsorizzato
+                                </p>
+
                                 <div class="service-list">
                                     <ul class="d-flex">
                                         <li v-for="(service, index) in result.services" class="d-flex"

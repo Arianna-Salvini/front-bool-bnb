@@ -28,6 +28,7 @@ export default {
     background-size: cover;
     background-position: center;
     position: relative;
+    margin-top: -2rem;
 
 
     .suitecase {
