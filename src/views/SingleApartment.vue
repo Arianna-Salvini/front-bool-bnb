@@ -460,6 +460,7 @@ export default {
                 border: none;
                 border-radius: 5px;
                 color: var(--bnb-lighter);
+                cursor: pointer;
             }
         }
     }
