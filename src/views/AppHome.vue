@@ -192,7 +192,7 @@ export default {
             </div>
 
             <div class="row g-4">
-                <div v-for="apartment in this.apartments" class="col-6">
+                <div v-for="apartment in this.apartments" class="col-3">
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
                         style="text-decoration: none;">
@@ -334,8 +334,8 @@ export default {
     .row {
         gap: 20px;
 
-        .col-6 {
-            flex: 0 0 calc((100% / 4) - 20px);
+        .col-3 {
+            flex: 0 0 calc(((100% / 12) * 3) - 20px);
         }
     }
 

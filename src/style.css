@@ -22,8 +22,10 @@
 :root {
     --color_dark: #212529;
     --color_grey_shadow: #bcbcbc;
+    --bnb-li-hover: #bcbcbc9a;
     --bnb-main: #45C2B1;
     --bnb-lighter: white;
+
 }
 
 .bg_dark {
