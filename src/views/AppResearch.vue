@@ -226,7 +226,13 @@ export default {
 
         isSelected(serviceId) {
             console.log(serviceId, this.chosenServices);
-            return this.chosenServices.includes(serviceId);
+            return this.chosenServices.includes(serviceId.toString());
+        },
+
+        toggleService(serviceId) {
+            if (this.chosenServices.includes(serviceId)) {
+                return this.chosenServices.includes(serviceId);
+            }
         },
     },
     created() {
@@ -245,6 +251,8 @@ export default {
         }
         this.updateQueryString();
         console.log(this.chosenServices);
+        this.fetchResults(this.researchedAddress, this.researchedRange);
+
     },
 
     mounted() {
@@ -255,9 +263,7 @@ export default {
         /* take results back */
         this.fetchResults(this.researchedAddress, this.researchedRange);
         //console.log(this.$route.query.results);
-        //initialize results as empty array and reassign results -> results are in json -> must convert back to object
-
-    }
+    },
 };
 </script>
 
@@ -385,7 +391,8 @@ export default {
                                 <div class="service-list">
                                     <ul class="d-flex">
                                         <li v-for="(service, index) in result.services" class="d-flex"
-                                            :class="{ 'badge-selected': isSelected(service.pivot.service_id) }">
+                                            :class="{ 'badge-selected': isSelected(service.pivot.service_id) || toggleService(service.pivot.service_id) }"
+                                            @change="toggleService(service.id)">
                                             <!-- {{ service.pivot.service_id }}  -->
                                             {{ service.service_name }}
                                         </li>
