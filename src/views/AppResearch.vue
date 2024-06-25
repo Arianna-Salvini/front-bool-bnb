@@ -378,8 +378,6 @@ export default {
                                     {{ result.description }}
                                 </p>
 
-                                {{ result }}
-
                                 <p class="card-text" v-if="result.is_sponsorship_active !== 0">
                                     Sponsorizzato
                                 </p>
