@@ -202,6 +202,7 @@ export default {
 <template>
 
     <div class="container">
+
         <div class="row d-flex">
             <div class="col-8">
                 <div class="cards box_shadow">
@@ -333,7 +334,8 @@ export default {
                 </div>
             </div>
         </div>
-
+        <router-link :to="{ name: 'research' }" class="button_back"><i class="fa fa-circle-left" aria-hidden="true"></i>
+            Back</router-link>
     </div>
 </template>
 
@@ -492,5 +494,21 @@ export default {
     border-color: #d3d3d3 !important;
     color: #ffffff !important;
 
+}
+
+.button_back {
+    text-decoration: none;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 2rem;
+    color: var(--bnb-lighter);
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.button_back:hover {
+    background-color: #47494b;
+    border-color: #3c4043;
+    color: white;
 }
 </style>
