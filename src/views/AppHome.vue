@@ -199,25 +199,29 @@ export default {
                         <div class="card">
                             <img v-if="apartment.image"
                                 :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                                alt="Apartment Image" class="card-img-top w-100" style="height: 350px;">
+                                alt="Apartment Image" class="card-img-top w-100" style="height: 200px;">
                             <img v-else
                                 src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                                alt="not-available" style="height: 350px;">
+                                alt="not-available" style="height: 200px;">
                             <div class="card-body">
                                 <h3>{{ apartment.title }}</h3>
                                 <p class="card-text">
                                     <i class="fa-solid fa-location-dot"></i>
                                     {{ apartment.address }}
                                 </p>
-                                <p class="card-text" v-if="apartment.description">
-                                    {{ apartment.description }}
+                                <p class="card-text"><strong><i class="fa-solid fa-bed"></i> Beds</strong>
+                                    {{ apartment.beds }} <strong><i class="fa-solid fa-person-booth"></i> Rooms</strong>
+                                    {{ apartment.rooms }}
+                                </p>
+                                <p class="card-text">
                                 </p>
 
-                                <div class="services ">
+                                <div class="services">
                                     <strong>Services:</strong>
-                                    <ul>
-                                        <li v-for="service in apartment.services" :key="service.id">{{
-                                            service.service_name }}</li>
+                                    <ul class="d-flex">
+                                        <li v-for="service in apartment.services" :key="service.id">
+                                            <i :class="state.serviceIcons[service.service_name]"></i>
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -330,7 +334,7 @@ export default {
         gap: 20px;
 
         .col-6 {
-            flex: 0 0 calc((100% / 2) - 20px);
+            flex: 0 0 calc((100% / 4) - 20px);
         }
     }
 
@@ -338,6 +342,11 @@ export default {
     img {
         border-radius: 20px;
         width: 100%;
+        object-fit: cover;
+    }
+
+    .card-body {
+        max-height: 250px;
     }
 
 
@@ -364,5 +373,37 @@ export default {
         }
     }
 
+}
+
+.services {
+    overflow-y: auto;
+    margin-top: 0 !important;
+
+
+    ul {
+        flex-wrap: wrap;
+
+    }
+
+    li {
+        align-items: center;
+        text-align: center;
+        margin: 0.3rem;
+        list-style: none;
+        padding: 0.3rem;
+        font-size: 1.1rem;
+        border: 1px solid var(--color_grey_shadow);
+        border-radius: 50%;
+
+        & i {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem;
+
+        }
+    }
 }
 </style>
