@@ -33,6 +33,7 @@ export default {
 
             rooms: 1,
             beds: 1,
+            tot_results: 0,
         }
     },
     methods: {
@@ -65,6 +66,7 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.results = response.data.response.data;
+                    this.tot_results = response.data.response.total;
                     state.updateResults(response.data.response.data);
                     this.updateQueryString();
                 })
@@ -89,6 +91,7 @@ export default {
                     console.log(this.chosenServices);
                     console.log(response);
                     this.results = response.data.response.data;
+                    this.tot_results = response.data.response.total;
                     state.updateResults(response.data.response.data);
                     this.updateQueryString();
 
@@ -132,6 +135,8 @@ export default {
                         console.log(response);
                         console.log(response.data.response.data);
                         this.results = response.data.response.data;
+                        this.tot_results = response.data.response.total;
+                        console.log(this.tot_results);
                         this.researchedAddress = this.search_address;
                         this.researchedRange = this.range_distance;
 
@@ -272,45 +277,42 @@ export default {
     <section id="search-results">
         <div class="container">
 
-            <!-- research title -->
-            <div class="reseach_title d-flex">
-                <h2>Search Apartments:</h2>
-                <h3>{{ researchedAddress }}</h3>
-            </div>
-
-
             <!-- Search and filter -->
             <div class="top-bar d-flex">
 
                 <div class="advance_search d-flex">
 
-                    <!-- Range Input -->
-                    <div class="range-wrap d-flex">
-                        <div class="bubble">
-                            <output>{{ range_distance }} </output>
-                            <span> km</span>
+                    <div class="d-flex search-filters-container">
+                        <!-- Range Input -->
+                        <div class="range-wrap d-flex">
+                            <div class="bubble">
+                                <output>{{ range_distance }} </output>
+                                <span> km</span>
+                            </div>
+                            <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
+                                oninput="this.nextElementSibling.value = this.value" v-model="range_distance"
+                                class="range" @change="filterApartments">
                         </div>
-                        <input type="range" id="rangeDistance" name="rangeDistance" value="20" min="1" max="80"
-                            oninput="this.nextElementSibling.value = this.value" v-model="range_distance" class="range"
-                            @change="filterApartments">
+
+
+                        <!-- Room and beds -->
+
+                        <div class="number-filter d-flex">
+                            <div class="rooms">
+                                <label for="rooms">Rooms</label>
+                                <input type="number" id="rooms" name="rooms" v-model.number="rooms" min="1"
+                                    placeholder="1" @input="verifyBedsRooms">
+                            </div>
+
+                            <div class="beds">
+                                <label for="beds">Beds</label>
+                                <input type="number" id="beds" name="beds" v-model.number="beds" min="1" placeholder="1"
+                                    @input="verifyBedsRooms">
+                            </div>
+                        </div>
+
                     </div>
 
-
-                    <!-- Room and beds -->
-
-                    <div class="number-filter d-flex">
-                        <div class="rooms">
-                            <label for="rooms">Rooms</label>
-                            <input type="number" id="rooms" name="rooms" v-model.number="rooms" min="1" placeholder="1"
-                                @input="verifyBedsRooms">
-                        </div>
-
-                        <div class="beds">
-                            <label for="beds">Beds</label>
-                            <input type="number" id="beds" name="beds" v-model.number="beds" min="1" placeholder="1"
-                                @input="verifyBedsRooms">
-                        </div>
-                    </div>
 
                     <!-- searchbar -->
                     <div class="search d-flex">
@@ -333,6 +335,8 @@ export default {
                 </div>
 
             </div>
+
+            <!-- suggestions -->
             <div class="suggestions" v-if="suggestions.length != 0">
                 <ul>
                     <li v-for="suggestion in suggestions" @click="fillSearch(suggestion.address.freeformAddress)">
@@ -340,6 +344,9 @@ export default {
                     </li>
                 </ul>
             </div>
+        </div>
+
+        <div class="container-large">
 
             <!-- Services -->
             <div class="services d-flex" v-if="services.length != 0">
@@ -354,9 +361,21 @@ export default {
 
             </div>
 
+            <!-- research title -->
+            <div class="researched-address d-flex">
+                <div class="title d-flex">
+                    <h2>Your research:</h2>
+                    <div class="address">{{ researchedAddress }}</div>
+                </div>
+
+                <div class="tot-results">
+                    Results: {{ tot_results }}
+                </div>
+            </div>
+
             <!-- Results -->
             <div class="row" v-if="results.length != 0">
-                <div v-for="result in results" class="col-6">
+                <div v-for="result in results" class="col">
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: result.slug } }"
                         style="text-decoration: none;">
@@ -415,86 +434,227 @@ export default {
 </template>
 
 <style scoped>
-.badge-selected {
-    background-color: var(--bnb-main);
-    color: var(--bnb-lighter);
-    box-shadow: 0 0 20px var(--color_grey_shadow);
+.container {
+    display: flex;
+    flex-direction: column;
 }
 
-.reseach_title {
-    align-items: baseline;
-    padding-bottom: 2rem;
-
-    &>h2 {
-        padding-right: 1rem;
-        color: var(--bnb-main);
-    }
-}
-
-.advance_search {
-    width: 80%;
-    padding: 1rem 0 1.5rem;
-    justify-content: space-between;
+.container-large {
+    width: 95%;
+    max-width: 1740px;
     margin: auto;
-    align-items: center;
-    padding: 0.1rem;
-    border: 2px solid var(--color_grey_shadow);
-    border-radius: 60px;
 
+    @media(max-width: 768px) {
+        width: 90% !important;
+    }
 }
 
-.search {
-    align-items: center;
-    justify-content: space-between;
-    flex-grow: 1;
+/* #region searchbar */
 
-    .search-form {
-        padding: 0.5rem;
-        border: 1px solid var(--color_grey_shadow);
-        border-radius: 0 60px 60px 0;
-        align-items: center;
-        width: 100%;
+.top-bar {
+    .advance_search {
+        width: 80%;
+        padding: 1rem 0 1.5rem;
         justify-content: space-between;
-        border: none;
+        margin: auto;
+        align-items: center;
+        padding: 0.1rem;
+        border: 2px solid var(--color_grey_shadow);
+        border-radius: 60px;
 
-
-        #search {
-            padding: 0 1rem;
-            outline: none;
+        @media (max-width:1176px) {
+            order: 0;
             border: none;
-
         }
+
+        .range-wrap {
+            padding: 0 1rem;
+            gap: 0.5rem;
+            flex-grow: 1;
+            justify-content: center;
+            padding: 0.9rem 1rem;
+            border: 2px solid var(--color_grey_shadow);
+            border-radius: 0 60px 60px 0;
+            border-left: none;
+            border-top: none;
+            border-bottom: none;
+
+
+            .bubble {
+                color: var(--bnb-lighter);
+                background-color: var(--bnb-main);
+                border-radius: 20px;
+                padding: 0.5rem;
+
+                @media(max-width:1176px) {
+                    order: 1;
+                    text-align: center;
+                }
+            }
+
+            @media(max-width:1176px) {
+                border: none;
+                order: 1;
+                justify-content: end;
+                padding: 1rem 0;
+                align-items: center;
+            }
+
+            @media (max-width:768px) {
+                justify-content: space-between;
+                padding: 0;
+
+                input {
+                    width: 80%;
+                }
+
+                .bubble {
+                    width: 20%;
+                }
+            }
+        }
+
+        .number-filter {
+            @media (max-width:768px) {
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
+
+        .beds,
+        .rooms {
+            color: var(--bnb-main);
+            padding: 0.6rem 1rem;
+            padding-left: -20px;
+            border: 2px solid var(--color_grey_shadow);
+            border-radius: 0 60px 60px 0;
+            border-left: none;
+            border-top: none;
+            border-bottom: none;
+            flex-grow: 1;
+
+
+            & input {
+                width: 4.5rem;
+                text-align: center;
+                padding: 0.9rem;
+                border: 1px solid var(--color_grey_shadow);
+                border-radius: 60px;
+            }
+
+            & label {
+                margin-right: 0.5rem;
+
+            }
+
+            @media(max-width:1176px) {
+                border: none;
+                padding: 1rem 0.5rem 1rem 0;
+            }
+
+            @media (max-width:768px) {
+                flex-grow: 0;
+
+                input {
+                    width: 2.5rem;
+                    padding: 0.5rem;
+                }
+            }
+        }
+
+        .search {
+            align-items: center;
+            justify-content: space-between;
+            flex-grow: 1;
+
+            .search-form {
+                padding: 0.5rem;
+                border: 1px solid var(--color_grey_shadow);
+                border-radius: 0 60px 60px 0;
+                align-items: center;
+                width: 100%;
+                justify-content: space-between;
+                border: none;
+
+
+                #search {
+                    padding: 0 1rem;
+                    outline: none;
+                    border: none;
+
+                }
+            }
+
+            .search-btn {
+                border-radius: 50%;
+                border: 1px solid var(--color_dark);
+                aspect-ratio: 1/1;
+                width: 3rem;
+                padding: 0.5rem;
+                color: var(--bnb-lighter);
+                background-color: var(--bnb-main);
+                border: none;
+            }
+
+            @media(max-width:1176px) {
+                order: 0;
+                width: 100%;
+                border-radius: 60px;
+                border: 2px solid var(--color_grey_shadow);
+            }
+        }
+
+        @media (max-width:1176px) {
+            flex-direction: column;
+
+            .search-filters-container {
+                width: 100%;
+                justify-content: space-between;
+                order: 1;
+
+                @media (max-width:768px) {
+                    flex-direction: column;
+                }
+            }
+        }
+
+
+
     }
 
-    .search-btn {
-        border-radius: 50%;
-        border: 1px solid var(--color_dark);
-        aspect-ratio: 1/1;
-        width: 3rem;
-        padding: 0.5rem;
-        color: var(--bnb-lighter);
-        background-color: var(--bnb-main);
-        border: none;
-    }
+
+
 }
 
+/* #endregion searchbar*/
+
+/* #region suggestions */
 .suggestions {
     display: flex;
     justify-content: end;
+    width: 80%;
+    margin: auto;
+    padding: 0.5rem;
 
     ul {
         list-style: none;
-        padding: 0;
-        padding: 0 1rem;
         border: 2px solid var(--color_grey_shadow);
         border-radius: 20px;
+        position: absolute;
+        background-color: var(--bnb-lighter);
+        padding: 0.5rem;
 
         &>li {
             font-size: 1rem;
-            padding: 0.7rem 0;
             border: 1px solid var(--color_grey_shadow);
             border-left: none;
             border-right: none;
+            padding: 1rem;
+
+            &:hover {
+                background: linear-gradient(to right, var(--bnb-lighter), var(--bnb-li-hover), var(--bnb-lighter));
+                cursor: pointer;
+            }
         }
 
         &>li:first-child {
@@ -507,58 +667,14 @@ export default {
     }
 }
 
-.beds,
-.rooms {
-    color: var(--bnb-main);
-    padding: 0.6rem 1rem;
-    padding-left: -20px;
-    border: 2px solid var(--color_grey_shadow);
-    border-radius: 0 60px 60px 0;
-    border-left: none;
-    border-top: none;
-    border-bottom: none;
-    flex-grow: 1;
+/* #endregion suggestions */
 
-
-    & input {
-        width: 4.5rem;
-        text-align: center;
-        padding: 0.9rem;
-        border: 1px solid var(--color_grey_shadow);
-        border-radius: 60px;
-    }
-
-    & label {
-        margin-right: 0.5rem;
-
-    }
-}
-
-.range-wrap {
-    padding: 0 1rem;
-    gap: 0.5rem;
-    flex-grow: 1;
-    justify-content: center;
-    padding: 0.9rem 1rem;
-    border: 2px solid var(--color_grey_shadow);
-    border-radius: 0 60px 60px 0;
-    border-left: none;
-    border-top: none;
-    border-bottom: none;
-
-
-    .bubble {
-        color: var(--bnb-lighter);
-        background-color: var(--bnb-main);
-        border-radius: 20px;
-        padding: 0.5rem;
-    }
-}
+/* #region services */
 
 .services {
     flex-wrap: wrap;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
     padding: 1rem;
 
     .single-service {
@@ -581,6 +697,13 @@ export default {
         .checkbox-style i {
             display: none;
         }
+
+        @media(max-width:768px) {
+            width: 5rem;
+            height: 5rem;
+            margin: 0.5rem;
+            font-size: 0.8rem;
+        }
     }
 
     .selected-service {
@@ -588,12 +711,61 @@ export default {
         color: var(--bnb-lighter);
         box-shadow: 0 0 20px var(--color_grey_shadow);
     }
+
+    input[type='checkbox'] {
+        display: none;
+    }
+
+    .single-service:has(input[type='checkbox']:checked).single-service {
+        background-color: var(--bnb-main);
+        color: var(--bnb-lighter);
+        box-shadow: 0 0 20px var(--color_grey_shadow);
+    }
 }
 
-.single-service:has(input[type='checkbox']:checked).single-service {
-    background-color: var(--bnb-main);
-    color: var(--bnb-lighter);
-    box-shadow: 0 0 20px var(--color_grey_shadow);
+/* #endregion services */
+
+/* #region title */
+
+.researched-address {
+    padding-bottom: 2rem;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        h2 {
+            color: var(--bnb-main);
+        }
+
+        .address {
+            font-weight: bold;
+        }
+    }
+
+    .tot-results {
+        color: var(--color_grey_shadow);
+    }
+
+}
+
+/* #endregion title */
+
+/* #region cards */
+
+.card,
+img {
+    border-radius: 20px;
+    width: 100%;
+}
+
+.card {
+    img {
+        object-fit: cover;
+    }
 }
 
 .service-list {
@@ -616,18 +788,26 @@ export default {
 }
 
 .row {
-    display: flex;
-    justify-content: space-around;
     padding-bottom: 2rem;
+    gap: 20px;
+    justify-content: center;
 
-    .col-6 {
-        flex: 0 0 calc((100% / 2) - 20px);
+    .col {
+        flex: 0 0 calc(((100% / 12) * 3) - 20px);
+
+        @media(max-width: 1176px) {
+            flex: 0 0 calc(((100% / 12) * 6) - 20px);
+        }
+
+        @media(max-width: 768px) {
+            flex: 0 0 calc(((100% / 12) * 12) - 20px) !important;
+        }
     }
 }
 
-.card,
-img {
-    border-radius: 20px;
-    width: 100%;
+.badge-selected {
+    background-color: var(--bnb-main);
+    color: var(--bnb-lighter);
+    box-shadow: 0 0 20px var(--color_grey_shadow);
 }
 </style>
