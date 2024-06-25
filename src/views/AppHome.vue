@@ -196,7 +196,7 @@ export default {
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
                         style="text-decoration: none;">
-                        <div class="card">
+                        <div class="card" :class="{ gold: apartment.sponsorships.length > 0 }">
                             <img v-if="apartment.image"
                                 :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
                                 alt="Apartment Image" class="card-img-top w-100" style="height: 200px;">
@@ -213,7 +213,8 @@ export default {
                                     {{ apartment.beds }} <strong><i class="fa-solid fa-person-booth"></i> Rooms</strong>
                                     {{ apartment.rooms }}
                                 </p>
-                                <p class="card-text">
+                                <p class="card-text crown" v-if="apartment.sponsorships.length > 0">
+                                    <i class="fa-solid fa-crown"></i>
                                 </p>
 
                                 <div class="services">
@@ -338,6 +339,14 @@ export default {
         }
     }
 
+    .card {
+        position: relative;
+    }
+
+    .gold {
+        box-shadow: 0 0 12px 3px rgb(255, 193, 36);
+    }
+
     .card,
     img {
         border-radius: 20px;
@@ -347,6 +356,16 @@ export default {
 
     .card-body {
         max-height: 250px;
+
+        & .fa-crown {
+            color: rgb(255, 193, 36);
+        }
+
+        .crown {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
     }
 
 
