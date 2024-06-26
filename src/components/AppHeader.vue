@@ -20,16 +20,20 @@ export default {
 <template>
     <header>
         <div class="container d-flex align-items-center">
-            <div class="logo"><img src="/img/logo.png" alt="" width="70"></div>
+            <div class="logo_space">
+                <img src="/img/logo.png" alt="Logo BoolBnB" class="logo">
+            </div>
 
+            <div class="links d-flex">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <router-link :to="{ name: 'home' }">
+                    Home
+                </router-link>
+
+            </div>
 
             <div class="navigation">
-                <div class="links d-flex">
 
-                    <router-link :to="{ name: 'home' }">Home</router-link>
-                    <router-link :to="{ name: 'about' }">About</router-link>
-                    <router-link :to="{ name: 'contacts' }">Contacts</router-link>
-                </div>
 
                 <!-- <a :href="`${base_api} /login`">Login</a>
                     <a :href="`${base_api} /register`">Register</a> -->
@@ -54,44 +58,51 @@ header {
     margin-bottom: 2rem;
 
     .container {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: auto;
         justify-content: space-between;
         align-items: center;
 
-        .logo {
-            padding-top: 1rem;
+        .logo_space {
+            width: 20%;
+
+            .logo {
+                width: 3.5rem;
+                padding-top: 0.5rem;
+            }
         }
+
 
         .navigation {
             display: flex;
-            gap: 3rem;
+            width: 20%;
+
         }
 
         .links {
-            gap: 2.1rem;
             align-items: center;
+
 
             & a {
                 color: black;
                 text-decoration: none;
-                padding: 0.3rem 0;
                 transition: color 200ms;
+                padding: 2rem 0;
+                font-size: 1.1rem;
+
             }
 
-            .router-link-active,
-            .router-link-exact-active {
+            .fa-home {
+                padding-right: 0.5rem;
+            }
+
+            &:hover a,
+            &:hover .fa-home {
                 color: rgb(151, 151, 151);
             }
 
-            & a:hover {
-                color: rgb(151, 151, 151);
-            }
         }
 
-        .social {
-            gap: 0.4rem;
-        }
     }
 }
 
