@@ -186,6 +186,9 @@ export default {
         updateIsValidForm() {
             this.isValidForm = !this.nameError && !this.lastnameError && !this.emailError && !this.contentError;
             console.log('form ok:', this.isValidForm);
+        },
+        goBack() {
+            this.$router.go(-1); // funzione per  tornare alla pagina precedente
         }
     },
 
@@ -334,8 +337,10 @@ export default {
                 </div>
             </div>
         </div>
-        <router-link :to="{ name: 'research' }" class="button_back"><i class="fa fa-circle-left" aria-hidden="true"></i>
-            Back</router-link>
+        <button @click="goBack" class="button_back">
+            <i class="fa fa-circle-left"></i> Back
+        </button>
+
     </div>
 </template>
 
