@@ -354,6 +354,16 @@ export default {
                         </form>
                     </div>
 
+                    <!-- suggestions -->
+                    <div class="suggestions" v-if="suggestions.length != 0">
+                        <ul>
+                            <li v-for="suggestion in suggestions"
+                                @click="fillSearch(suggestion.address.freeformAddress)">
+                                {{ suggestion.address.freeformAddress }}
+                            </li>
+                        </ul>
+                    </div>
+
 
                 </div>
 
@@ -404,39 +414,55 @@ export default {
                         style="text-decoration: none;">
 
                         <!-- Card results -->
-                        <div class="card">
-                            <img v-if="result.image"
-                                :src="result.image.startsWith('http') ? result.image : state.base_api + '/storage/' + result.image"
-                                alt="result Image" class="card-img-top w-100" style="height: 350px;">
-                            <img v-else
-                                src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                                alt="not-available" style="height: 350px;">
+                        <div class="card" :class="{ sponsorship_highlight: result.is_sponsorship_active !== 0 }">
+                            <div class="image">
+                                <img v-if="result.image"
+                                    :src="result.image.startsWith('http') ? result.image : state.base_api + '/storage/' + result.image"
+                                    alt="result Image" class="card-img-top w-100" style="height: 350px;">
+                                <img v-else
+                                    src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
+                                    alt="not-available" style="height: 350px; object-fit: contain;">
+                            </div>
                             <div class="card-body">
                                 <h3>{{ result.title }}</h3>
-                                <p class="card-text">
+                                <p class="card-text address">
                                     <i class="fa-solid fa-location-dot"></i>
                                     {{ result.address }}
                                 </p>
-                                <p class="card-text">
+                                <p class="card-text distance">
                                     <strong> Distance:</strong>
                                     {{ result.distance.toFixed(1) }}
                                     <strong>Km</strong>
                                 </p>
-                                <p class="card-text" v-if="result.description">
-                                    {{ result.description }}
+                                <p class="card-text rooms-beds d-flex">
+                                <div class="beds">
+                                    <strong>{{ result.beds }}
+                                        <i class="fa-solid fa-bed"></i>
+                                        Beds
+                                    </strong>
+                                </div>
+                                <div class="rooms">
+                                    <strong>
+                                        {{ result.rooms }}
+                                        <i class="fa-solid fa-person-booth"></i>
+                                        Rooms
+                                    </strong>
+                                </div>
+
                                 </p>
 
-                                <p class="card-text" v-if="result.is_sponsorship_active !== 0">
-                                    Sponsorizzato
+                                <p class="card-text crown" v-if="result.is_sponsorship_active !== 0">
+                                    <i class="fa-solid fa-crown"></i>
                                 </p>
 
                                 <div class="service-list">
                                     <ul class="d-flex">
-                                        <li v-for="(service, index) in result.services" class="d-flex"
+                                        <li v-for="(service, index) in result.services.sort((a, b) => a.id - b.id)"
+                                            class="d-flex"
                                             :class="{ 'badge-selected': isSelected(service.pivot.service_id) || toggleService(service.pivot.service_id) }"
                                             @change="toggleService(service.id)">
                                             <!-- {{ service.pivot.service_id }}  -->
-                                            {{ service.service_name }}
+                                            <i :class="state.serviceIcons[service.service_name]"></i>
                                         </li>
                                     </ul>
                                 </div>
@@ -475,6 +501,7 @@ export default {
 </template>
 
 <style scoped>
+/* #region common */
 .container {
     display: flex;
     flex-direction: column;
@@ -489,6 +516,26 @@ export default {
         width: 90% !important;
     }
 }
+
+.row {
+    padding-bottom: 2rem;
+    gap: 20px;
+    justify-content: center;
+
+    .col {
+        flex: 0 0 calc(((100% / 12) * 3) - 20px);
+
+        @media(max-width: 1176px) {
+            flex: 0 0 calc(((100% / 12) * 6) - 20px);
+        }
+
+        @media(max-width: 768px) {
+            flex: 0 0 calc(((100% / 12) * 12) - 20px) !important;
+        }
+    }
+}
+
+/* #endregion common */
 
 /* #region searchbar */
 
@@ -622,7 +669,7 @@ export default {
                     padding: 0 1rem;
                     outline: none;
                     border: none;
-
+                    width: 100%;
                 }
             }
 
@@ -659,6 +706,14 @@ export default {
             }
         }
 
+        .suggestions {
+            display: none;
+
+            @media(max-width: 1176px) {
+                display: block;
+                width: 100%;
+            }
+        }
 
 
     }
@@ -705,6 +760,10 @@ export default {
         &>li:last-child {
             border-bottom: none;
         }
+    }
+
+    @media(max-width: 1176px) {
+        display: none;
     }
 }
 
@@ -773,6 +832,12 @@ export default {
     justify-content: space-between;
     align-items: center;
 
+    @media(max-width: 1176px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
     .title {
         display: flex;
         gap: 1rem;
@@ -797,60 +862,116 @@ export default {
 
 /* #region cards */
 
-.card,
-img {
-    border-radius: 20px;
-    width: 100%;
-}
-
 .card {
-    img {
-        object-fit: cover;
-    }
-}
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
 
-.service-list {
-    padding: 0.5rem;
-
-    ul {
-        flex-wrap: wrap;
-
+    &:hover img {
+        transform: scale(1.2);
+        transition: all 0.8s ease-in-out;
     }
 
-    li {
+    .image {
+        border-radius: 20px;
+        width: 100%;
+        overflow: hidden;
+
+        img {
+            border-radius: 20px;
+            width: 100%;
+            object-fit: cover;
+            transition: all 1s ease-in-out;
+        }
+    }
+
+
+    .address {
+        display: flex;
+        gap: 0.5rem;
         align-items: center;
-        text-align: center;
-        margin: 0.3rem;
-        list-style: none;
-        padding: 0.7rem;
-        border: 1px solid var(--color_grey_shadow);
-        border-radius: 1rem;
+
+        i {
+            color: var(--bnb-main);
+        }
+    }
+
+    .distance {
+        color: var(--color_grey_shadow);
+    }
+
+    .rooms-beds {
+        gap: 1rem;
+
+        .rooms,
+        .beds {
+            border: 1px solid black;
+            padding: 0.7rem;
+            border-radius: 10px;
+        }
+    }
+
+    .crown {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+
+        .fa-crown {
+            color: var(--bnb-crown);
+            font-size: 1.2rem;
+            width: 3rem;
+            height: 3rem;
+            background-color: var(--bnb-crown-bg);
+            border: 1px solid var(--bnb-crown-border);
+            border-radius: 50%;
+            box-shadow: 0 0 10px inset var(--bnb-crown-shadow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .service-list {
+        padding: 0.5rem 0;
+
+        ul {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        li {
+            align-items: center;
+            text-align: center;
+            list-style: none;
+            padding: 0.7rem;
+            border: 1px solid var(--color_grey_shadow);
+            border-radius: 1rem;
+        }
+    }
+
+    .badge-selected {
+        background-color: var(--bnb-main);
+        color: var(--bnb-lighter);
+        box-shadow: 0 0 5px var(--color_grey_shadow);
     }
 }
 
-.row {
-    padding-bottom: 2rem;
-    gap: 20px;
-    justify-content: center;
+.sponsorship_highlight {
+    box-shadow: 0 0 15px 2px inset #809ef1;
+    outline: 1.7px solid #8499ff;
 
-    .col {
-        flex: 0 0 calc(((100% / 12) * 3) - 20px);
-
-        @media(max-width: 1176px) {
-            flex: 0 0 calc(((100% / 12) * 6) - 20px);
-        }
-
-        @media(max-width: 768px) {
-            flex: 0 0 calc(((100% / 12) * 12) - 20px) !important;
-        }
+    & img {
+        border: 2px solid #344172;
+        box-shadow: 0 0 10px 3px #8091f1;
+        border-top: none;
+        border-left: none;
+        border-right: none;
     }
+
 }
 
-.badge-selected {
-    background-color: var(--bnb-main);
-    color: var(--bnb-lighter);
-    box-shadow: 0 0 20px var(--color_grey_shadow);
-}
+/* #endregion cards */
+
 
 
 .navigation {
@@ -905,4 +1026,5 @@ img {
     background-color: var(--bnb-main);
     color: var(--bnb-lighter);
 }
+
 </style>
