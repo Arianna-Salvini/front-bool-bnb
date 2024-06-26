@@ -128,6 +128,12 @@ export default {
         searchButton() {
             return /^[a-zA-Z0-9]+['a-zA-Z0-9 ,\/]*$/.test(this.search_address.trim());
         },
+        getPage(pageNumber) {
+            if (pageNumber !== this.currentPage) {
+                let url = `${state.base_api}${state.apartment_url}?page=${pageNumber}`;
+                this.getApartments(url);
+            }
+        },
 
 
     },
@@ -236,6 +242,13 @@ export default {
                 <button type="button" class="prev" v-if="currentPage > 1" @click="showPrev">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
+                <ul class="pagination">
+                    <li v-for="pageNumber in lastPage" :key="pageNumber"
+                        :class="{ active: pageNumber === currentPage }">
+                        <button type="button" class="btn_pagination" @click="getPage(pageNumber)">{{ pageNumber
+                            }}</button>
+                    </li>
+                </ul>
                 <button type="button" class="next" v-if="currentPage < lastPage" @click="showNext">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -373,12 +386,13 @@ export default {
         display: flex;
         justify-content: end;
         padding: 1.5rem 0;
+        align-items: center;
 
         .next,
         .prev {
             border-radius: 50%;
             border: 1px solid var(--color_dark);
-            aspect-ratio: 1/1;
+            height: 3rem;
             width: 3rem;
             padding: 0.5rem;
             color: var(--bnb-lighter);
@@ -388,11 +402,42 @@ export default {
         }
 
         .prev {
-            margin-right: 1rem;
+            margin-right: 0.5rem;
         }
     }
 
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin-right: 0.5rem;
+    }
+
+    .btn_pagination {
+        color: var(--bnb-main);
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        padding: 0.3rem 0.6rem;
+        border: 2px solid var(--bnb-main);
+        color: var(--bnb-main);
+        border-radius: 50%;
+        width: 2.5rem;
+        aspect-ratio: 1 / 1;
+    }
+
+    .pagination li button:hover,
+    .pagination li.active button {
+        background-color: var(--bnb-main);
+        color: var(--bnb-lighter);
+    }
+
 }
+
+
 
 .services {
     overflow-y: auto;
