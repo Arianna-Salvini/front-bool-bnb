@@ -202,10 +202,11 @@ export default {
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
                         style="text-decoration: none;">
-                        <div class="card" :class="{ gold: apartment.sponsorships.length > 0 }">
+                        <div class="card" :class="{ sponsorship_highlight: apartment.sponsorships.length > 0 }">
+
                             <img v-if="apartment.image"
                                 :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                                alt="Apartment Image" class="card-img-top w-100" style="height: 200px;">
+                                alt="Apartment Image" class="card-img-top w-100 " style="height: 200px;">
                             <img v-else
                                 src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
                                 alt="not-available" style="height: 200px;">
@@ -356,8 +357,18 @@ export default {
         position: relative;
     }
 
-    .gold {
-        box-shadow: 0 0 12px 3px rgb(255, 193, 36);
+    .sponsorship_highlight {
+        box-shadow: 0 0 15px 2px inset #809ef1;
+        outline: 1.7px solid #8499ff;
+
+        & img {
+            border: 2px solid #344172;
+            box-shadow: 0 0 10px 3px #8091f1;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
     }
 
     .card,
@@ -365,14 +376,27 @@ export default {
         border-radius: 20px;
         width: 100%;
         object-fit: cover;
+
     }
 
     .card-body {
         max-height: 250px;
 
+
         & .fa-crown {
-            color: rgb(255, 193, 36);
+            color: gold;
+            font-size: 1.2rem;
+            width: 3rem;
+            height: 3rem;
+            background-color: #6282f4b9;
+            border: 1px solid #4c6b9f;
+            border-radius: 50%;
+            box-shadow: 0 0 10px inset #24224a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
 
         .crown {
             position: absolute;
