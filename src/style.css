@@ -25,7 +25,10 @@
     --bnb-li-hover: #bcbcbc9a;
     --bnb-main: #45C2B1;
     --bnb-lighter: white;
-
+    --bnb-crown: gold;
+    --bnb-crown-shadow: #24224a;
+    --bnb-crown-border: #4c6b9f;
+    --bnb-crown-bg: #6282f4b9;
 }
 
 .bg_dark {
