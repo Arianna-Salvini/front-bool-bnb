@@ -42,7 +42,10 @@ export default {
                     <a href="http://127.0.0.1:8000/register">Register</a> -->
                 <div class="social d-flex">
                     <a class="btn btn-principal btn-sm rounded-5 px-3" href="http://127.0.0.1:8000/login" role="button">
-                        Rent your apartment </a>
+                        <span class="text"> Rent your apartment </span>
+                        <i class="fa-solid fa-house icon"></i>
+                        <i class="fa-sm fa-plus icon"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -111,9 +114,7 @@ header {
     display: flex;
 }
 
-
 /* move this to style.css */
-
 .btn-principal {
     background-color: #45C2B1;
     border-color: #45C2B1;
@@ -129,5 +130,44 @@ header {
     background-color: #3aa79e;
     border-color: #3aa79e;
     color: white;
+}
+
+@media (max-width: 768px) {
+    .btn-principal .text {
+        display: none;
+    }
+
+    .btn-principal .icon {
+        display: inline-block;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1176px) {
+    .btn-principal .text {
+        display: none;
+    }
+
+    .btn-principal .icon {
+        display: inline-block;
+    }
+}
+
+@media (max-width: 425px) {
+    .btn-principal {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+
+}
+
+@media (min-width: 1177px) {
+    .btn-principal .text {
+        display: inline-block;
+    }
+
+    .btn-principal .icon {
+        display: none;
+    }
 }
 </style>

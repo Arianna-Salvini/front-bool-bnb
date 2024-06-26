@@ -198,7 +198,7 @@ export default {
             </div>
 
             <div class="row g-4">
-                <div v-for="apartment in this.apartments" class="col-3">
+                <div v-for="apartment in this.apartments" class="col">
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
                         style="text-decoration: none;">
@@ -346,10 +346,20 @@ export default {
     }
 
     .row {
+        padding-bottom: 2rem;
         gap: 20px;
+        justify-content: center;
 
-        .col-3 {
+        .col {
             flex: 0 0 calc(((100% / 12) * 3) - 20px);
+
+            @media(max-width: 1176px) {
+                flex: 0 0 calc(((100% / 12) * 6) - 20px);
+            }
+
+            @media(max-width: 768px) {
+                flex: 0 0 calc(((100% / 12) * 12) - 20px) !important;
+            }
         }
     }
 
@@ -492,6 +502,46 @@ export default {
             padding: 0.8rem;
 
         }
+    }
+}
+
+@media (max-width: 425px) {
+    .top-bar {
+        flex-direction: column;
+        margin-top: 3rem;
+    }
+
+    .search-form {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .range-wrap {
+        flex-direction: column;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .prev,
+    .next {
+        margin: 1rem;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .row {
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
     }
 }
 </style>
