@@ -34,10 +34,14 @@ export default {
             rooms: 1,
             beds: 1,
             tot_results: 0,
+            currentPage: 1,
+            totalPages: 0,
         }
     },
     methods: {
+
         getServices(url) {
+
             axios
                 .get(url)
                 .then(response => {
@@ -57,16 +61,35 @@ export default {
                 })
                 .catch(err => console.log(err));
         },
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+                this.fetchResults(this.researchedAddress, this.researchedRange);
+            }
+        },
 
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.fetchResults(this.researchedAddress, this.researchedRange);
+            }
+        },
+
+        getPage(pageNumber) {
+            this.currentPage = pageNumber;
+            this.fetchResults(this.researchedAddress, this.researchedRange);
+        },
         /* when refreshing page, do another api call using passed params to get back results */
         fetchResults(address, range) {
             let url = state.base_api + '/api/apartments/search';
             axios
-                .get(url, { params: { address: address, range: range, services: this.chosenServices } })
+                .get(url, { params: { address: address, range: range, services: this.chosenServices, page: this.currentPage } })
                 .then(response => {
                     console.log(response);
                     this.results = response.data.response.data;
                     this.tot_results = response.data.response.total;
+                    this.perPage = response.data.response.per_page;
+                    this.totalPages = Math.ceil(this.tot_results / this.perPage);
                     state.updateResults(response.data.response.data);
                     this.updateQueryString();
                 })
@@ -111,7 +134,7 @@ export default {
 
         updateQueryString() {
             console.log(this.chosenServices);
-            let query = { address: this.researchedAddress, range: this.researchedRange, rooms: this.rooms, beds: this.beds }
+            let query = { address: this.researchedAddress, range: this.researchedRange, rooms: this.rooms, beds: this.beds, page: this.currentPage }
             /* if there are services selected, push services id in query string separated by ,*/
             if (Array.isArray(this.chosenServices) && this.chosenServices.length > 0) {
                 query.services = this.chosenServices.join(',');
@@ -363,7 +386,7 @@ export default {
 
                 <label :for="`service-${service.id}`" class="single-service" v-for="service in services"
                     :class="{ 'selected-service': chosenServices.includes(service.id) }">{{
-                        service.service_name }}
+                                    service.service_name }}
                     <i :class="state.serviceIcons[service.service_name]"></i>
                     <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
                         :value="service.id" v-model="chosenServices" @change="selectServices">
@@ -384,9 +407,9 @@ export default {
             </div>
 
             <!-- Results -->
+
             <div class="row" v-if="results.length != 0">
                 <div v-for="result in results" class="col">
-
                     <router-link :to="{ name: 'SingleApartment', params: { slug: result.slug } }"
                         style="text-decoration: none;">
 
@@ -448,6 +471,24 @@ export default {
                     </router-link>
 
                 </div>
+            </div>
+            <div class="navigation" v-if="totalPages > 1">
+                <button type="button" class="prev" v-if="currentPage > 1" @click="previousPage">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <ul class="pagination">
+                    <li v-for="pageNumber in totalPages" :key="pageNumber"
+                        :class="{ active: pageNumber === currentPage }">
+                        <button type="button" class="btn_pagination" @click="getPage(pageNumber)">{{ pageNumber
+                            }}</button>
+                    </li>
+                </ul>
+                <button type="button" class="next" v-if="currentPage < totalPages" @click="nextPage">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="navigation" v-else>
+                <button type="button" class="btn_pagination" disabled>1</button>
             </div>
 
         </div>
@@ -930,4 +971,60 @@ export default {
 }
 
 /* #endregion cards */
+
+
+
+.navigation {
+    display: flex;
+    justify-content: end;
+    padding: 1.5rem 0;
+    align-items: center;
+
+    .next,
+    .prev {
+        border-radius: 50%;
+        border: 1px solid var(--color_dark);
+        height: 3rem;
+        width: 3rem;
+        padding: 0.5rem;
+        color: var(--bnb-lighter);
+        background-color: var(--bnb-main);
+        border: none;
+
+    }
+
+    .prev {
+        margin-right: 0.5rem;
+    }
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin-right: 0.5rem;
+}
+
+.btn_pagination {
+    color: var(--bnb-main);
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    padding: 0.3rem 0.6rem;
+    border: 2px solid var(--bnb-main);
+    color: var(--bnb-main);
+    border-radius: 50%;
+    width: 2.5rem;
+    aspect-ratio: 1 / 1;
+}
+
+.pagination li button:hover,
+.pagination li.active button {
+    background-color: var(--bnb-main);
+    color: var(--bnb-lighter);
+}
+
 </style>
