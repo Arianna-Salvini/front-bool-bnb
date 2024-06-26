@@ -386,7 +386,7 @@ export default {
 
                 <label :for="`service-${service.id}`" class="single-service" v-for="service in services"
                     :class="{ 'selected-service': chosenServices.includes(service.id) }">{{
-                                    service.service_name }}
+                        service.service_name }}
                     <i :class="state.serviceIcons[service.service_name]"></i>
                     <input type="checkbox" :name="`service-${service.id}`" :id="`service-${service.id}`"
                         :value="service.id" v-model="chosenServices" @change="selectServices">
@@ -415,7 +415,7 @@ export default {
 
                         <!-- Card results -->
                         <div class="card" :class="{ sponsorship_highlight: result.is_sponsorship_active !== 0 }">
-                            <div class="image">
+                            <div class="image" :class="{ sponsorship_highlight: result.is_sponsorship_active !== 0 }">
                                 <img v-if="result.image"
                                     :src="result.image.startsWith('http') ? result.image : state.base_api + '/storage/' + result.image"
                                     alt="result Image" class="card-img-top w-100" style="height: 350px;">
@@ -876,6 +876,11 @@ export default {
         border-radius: 20px;
         width: 100%;
         overflow: hidden;
+        height: 350px;
+        border-bottom: 2px solid var(--color_grey_shadow);
+        border-top: none;
+        border-left: none;
+        border-right: none;
 
         img {
             border-radius: 20px;
@@ -960,7 +965,7 @@ export default {
     box-shadow: 0 0 15px 2px inset #809ef1;
     outline: 1.7px solid #8499ff;
 
-    & img {
+    & .image {
         border: 2px solid #344172;
         box-shadow: 0 0 10px 3px #8091f1;
         border-top: none;
@@ -972,11 +977,10 @@ export default {
 
 /* #endregion cards */
 
-
-
+/* #region navigation */
 .navigation {
     display: flex;
-    justify-content: end;
+    justify-content: center;
     padding: 1.5rem 0;
     align-items: center;
 
@@ -1027,4 +1031,5 @@ export default {
     color: var(--bnb-lighter);
 }
 
+/* #endregion navigation */
 </style>
