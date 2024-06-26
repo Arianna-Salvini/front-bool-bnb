@@ -33,6 +33,7 @@ export default {
             contentError: '',
             isValidForm: true,//impostiamo il form su true
             nameTouched: false,
+            loading: false, // variabile per gestire lo stato di caricamento
             lastnameTouched: false,
             emailTouched: false,
             contentTouched: false,
@@ -86,6 +87,8 @@ export default {
             if (!this.validateForm()) {
                 return;
             }
+            // Attivo lo stato di caricamento
+            this.loading = true;
 
             const formData = {
                 apartment_id: this.apartmentId,
@@ -98,12 +101,17 @@ export default {
             axios.post('http://127.0.0.1:8000/api/messages', formData)
                 .then(response => {
                     console.log('ok', response.data);
+
+                    // Disattivo lo stato di caricamento
+                    this.loading = false;
                     // set submittedForm to true to disable button
                     this.submittedForm = true;
 
                     // store sent data for display in banner
                     this.submittedName = this.name;
                     this.submittedLastname = this.lastname;
+
+                    this.showAlert = false; // nascondo l avviso dopo l invio
 
                     // show confirmation banner
                     this.confirmSubmitForm = true;
@@ -116,6 +124,8 @@ export default {
                 })
                 .catch(error => {
                     console.error('error!', error);
+                    // in caso di errore disattivo loading
+                    this.loading = false;
                 });
         },
 
@@ -176,12 +186,17 @@ export default {
         updateIsValidForm() {
             this.isValidForm = !this.nameError && !this.lastnameError && !this.emailError && !this.contentError;
             console.log('form ok:', this.isValidForm);
+        },
+        goBack() {
+            this.$router.go(-1); // funzione per  tornare alla pagina precedente
         }
     },
 
 
     mounted() {
-        this.callApartment()
+        this.callApartment();
+        this.showAlert = true; // mostra l avviso
+
 
     }
 };
@@ -189,10 +204,12 @@ export default {
 
 <template>
     <div class="container">
+
         <div class="actions">
-            <router-link :to="{ name: 'research' }" class="button_back">
-                <i class="fa fa-circle-left" aria-hidden="true"></i> Back
-            </router-link>
+           
+<button @click="goBack" class="button_back">
+            <i class="fa fa-circle-left"></i> Back
+        </button>
         </div>
         <h2>{{ apartment.title }}</h2>
         <div class="row main">
@@ -202,6 +219,7 @@ export default {
                         :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
                         alt="Apartment Image" class="img w-100">
                     <img v-else src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png" alt="Image not available" class="img w-100">
+
                 </div>
 
                 <div class="description">
@@ -264,6 +282,7 @@ export default {
             <h2>Contact Owner: {{ modName }} {{ modLastName }} </h2>
         </div>
 
+
         <div class="card_body p-3">
             <form @submit.prevent="handleForm" class="form-body">
                 <div class="form-tag">
@@ -286,6 +305,7 @@ export default {
                         id="sender_email" v-model="sender_email" required name="sender_email"
                         placeholder="Type your e-mail" @input="validateInput('sender_email')">
                     <div class="error-message" v-if="emailError && emailTouched">{{ emailError }}</div>
+
                 </div>
                 <div class="form-tag">
                     <label for="message" class="form-label">Message</label>
@@ -298,7 +318,7 @@ export default {
                     <span class="alert-message">* All fields are required!</span>
                 </div>
                 <button type="submit"
-                    :class="[{ 'submit': true }, { 'disabled_button': !isValidForm || submittedForm || loading }]"
+                    :class="[{ 'btn btn-dark submit': true }, { 'disabled_button': !isValidForm || submittedForm || loading }]"
                     :disabled="!isValidForm || submittedForm || loading">
                     <span v-if="loading">Loading...</span>
                     <span v-else>Send Message</span>
@@ -312,6 +332,12 @@ export default {
     </div>
             </div>
         </div>
+
+        <button @click="goBack" class="button_back">
+            <i class="fa fa-circle-left"></i> Back
+        </button>
+
+
     </div>
 </template>
 
@@ -464,8 +490,21 @@ export default {
     transition: background-color 0.3s ease;
 }
 
+
 .services li:hover {
     background-color: #1a6f65;
+    }
+
+            .submit {
+                align-self: center;
+                padding: 0.5rem;
+                background-color: var(--bnb-main);
+                border-color: var(--bnb-main);
+                border: none;
+                border-radius: 5px;
+                color: var(--bnb-lighter);
+                cursor: pointer;
+
 }
 
 .form-container {
@@ -534,13 +573,9 @@ export default {
     transition: background-color 0.3s ease;
 }
 
+
 .submit:hover {
     background-color: #1a6f65;
-}
-
-.disabled_button {
-    background-color: grey;
-    cursor: not-allowed;
 }
 
 .banner_form {
@@ -591,6 +626,30 @@ export default {
     .box_shadow {
         padding: 0.5em;
     }
+}
+
+
+.disabled_button {
+    background-color: #d3d3d3 !important;
+    border-color: #d3d3d3 !important;
+    color: #ffffff !important;
+
+}
+
+.button_back {
+    text-decoration: none;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 2rem;
+    color: var(--bnb-lighter);
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.button_back:hover {
+    background-color: #47494b;
+    border-color: #3c4043;
+    color: white;
 }
 
 </style>

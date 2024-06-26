@@ -128,6 +128,12 @@ export default {
         searchButton() {
             return /^[a-zA-Z0-9]+['a-zA-Z0-9 ,\/]*$/.test(this.search_address.trim());
         },
+        getPage(pageNumber) {
+            if (pageNumber !== this.currentPage) {
+                let url = `${state.base_api}${state.apartment_url}?page=${pageNumber}`;
+                this.getApartments(url);
+            }
+        },
 
 
     },
@@ -192,26 +198,40 @@ export default {
             </div>
 
             <div class="row g-4">
-                <div v-for="apartment in this.apartments" class="col-6">
+                <div v-for="apartment in this.apartments" class="col-3">
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
                         style="text-decoration: none;">
-                        <div class="card">
+                        <div class="card" :class="{ sponsorship_highlight: apartment.sponsorships.length > 0 }">
+
                             <img v-if="apartment.image"
                                 :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                                alt="Apartment Image" class="card-img-top w-100" style="height: 350px;">
+                                alt="Apartment Image" class="card-img-top w-100 " style="height: 200px;">
                             <img v-else
                                 src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                                alt="not-available" style="height: 350px;">
+                                alt="not-available" style="height: 200px;">
                             <div class="card-body">
                                 <h3>{{ apartment.title }}</h3>
                                 <p class="card-text">
                                     <i class="fa-solid fa-location-dot"></i>
                                     {{ apartment.address }}
                                 </p>
-                                <p class="card-text" v-if="apartment.description">
-                                    {{ apartment.description }}
+                                <p class="card-text"><strong><i class="fa-solid fa-bed"></i> Beds</strong>
+                                    {{ apartment.beds }} <strong><i class="fa-solid fa-person-booth"></i> Rooms</strong>
+                                    {{ apartment.rooms }}
                                 </p>
+                                <p class="card-text crown" v-if="apartment.sponsorships.length > 0">
+                                    <i class="fa-solid fa-crown"></i>
+                                </p>
+
+                                <div class="services">
+                                    <strong>Services:</strong>
+                                    <ul class="d-flex">
+                                        <li v-for="service in apartment.services" :key="service.id">
+                                            <i :class="state.serviceIcons[service.service_name]"></i>
+                                        </li>
+                                    </ul>
+                                </div>
 
                             </div>
                         </div>
@@ -223,6 +243,13 @@ export default {
                 <button type="button" class="prev" v-if="currentPage > 1" @click="showPrev">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
+                <ul class="pagination">
+                    <li v-for="pageNumber in lastPage" :key="pageNumber"
+                        :class="{ active: pageNumber === currentPage }">
+                        <button type="button" class="btn_pagination" @click="getPage(pageNumber)">{{ pageNumber
+                            }}</button>
+                    </li>
+                </ul>
                 <button type="button" class="next" v-if="currentPage < lastPage" @click="showNext">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -238,6 +265,14 @@ export default {
 </template>
 
 <style scoped>
+.services {
+    margin-top: 10px;
+
+    & ul {
+        list-style: none;
+    }
+}
+
 #homepage {
     padding-bottom: 5rem;
 
@@ -313,15 +348,61 @@ export default {
     .row {
         gap: 20px;
 
-        .col-6 {
-            flex: 0 0 calc((100% / 2) - 20px);
+        .col-3 {
+            flex: 0 0 calc(((100% / 12) * 3) - 20px);
         }
+    }
+
+    .card {
+        position: relative;
+    }
+
+    .sponsorship_highlight {
+        box-shadow: 0 0 15px 2px inset #809ef1;
+        outline: 1.7px solid #8499ff;
+
+        & img {
+            border: 2px solid #344172;
+            box-shadow: 0 0 10px 3px #8091f1;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
     }
 
     .card,
     img {
         border-radius: 20px;
         width: 100%;
+        object-fit: cover;
+
+    }
+
+    .card-body {
+        max-height: 250px;
+
+
+        & .fa-crown {
+            color: gold;
+            font-size: 1.2rem;
+            width: 3rem;
+            height: 3rem;
+            background-color: #6282f4b9;
+            border: 1px solid #4c6b9f;
+            border-radius: 50%;
+            box-shadow: 0 0 10px inset #24224a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .crown {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
     }
 
 
@@ -329,12 +410,13 @@ export default {
         display: flex;
         justify-content: end;
         padding: 1.5rem 0;
+        align-items: center;
 
         .next,
         .prev {
             border-radius: 50%;
             border: 1px solid var(--color_dark);
-            aspect-ratio: 1/1;
+            height: 3rem;
             width: 3rem;
             padding: 0.5rem;
             color: var(--bnb-lighter);
@@ -344,9 +426,72 @@ export default {
         }
 
         .prev {
-            margin-right: 1rem;
+            margin-right: 0.5rem;
         }
     }
 
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin-right: 0.5rem;
+    }
+
+    .btn_pagination {
+        color: var(--bnb-main);
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        padding: 0.3rem 0.6rem;
+        border: 2px solid var(--bnb-main);
+        color: var(--bnb-main);
+        border-radius: 50%;
+        width: 2.5rem;
+        aspect-ratio: 1 / 1;
+    }
+
+    .pagination li button:hover,
+    .pagination li.active button {
+        background-color: var(--bnb-main);
+        color: var(--bnb-lighter);
+    }
+
+}
+
+
+
+.services {
+    overflow-y: auto;
+    margin-top: 0 !important;
+
+
+    ul {
+        flex-wrap: wrap;
+
+    }
+
+    li {
+        align-items: center;
+        text-align: center;
+        margin: 0.3rem;
+        list-style: none;
+        padding: 0.3rem;
+        font-size: 1.1rem;
+        border: 1px solid var(--color_grey_shadow);
+        border-radius: 50%;
+
+        & i {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem;
+
+        }
+    }
 }
 </style>
