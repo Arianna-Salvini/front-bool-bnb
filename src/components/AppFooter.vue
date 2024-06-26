@@ -31,8 +31,11 @@ export default {
                 </div>
             </div>
             <div class="right footer-button">
-                <a class="btn btn-principal btn-sm rounded-5 px-3" href="http://127.0.0.1:8000/login" role="button">Rent
-                    your apartment</a>
+                <a class="btn btn-principal btn-sm rounded-5 px-3" href="http://127.0.0.1:8000/login" role="button">
+                    <span class="text"> Rent
+                        your apartment</span>
+                    <i class="fa-solid fa-house icon"></i>
+                    <i class="fa-sm fa-plus icon plus"></i></a>
             </div>
             <div class="footer-copyright">
                 <p>&copy; 2024 Boolbnb. All rights reserved.</p>
@@ -121,5 +124,42 @@ footer .container {
 
 .rounded-5 {
     border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .btn-principal .text {
+        display: none;
+    }
+
+    .btn-principal .icon {
+        display: inline-block;
+    }
+
+    .footer-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+@media (max-width: 425px) {
+    .footer-button .btn-principal {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .footer-links a {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 769px) {
+    .btn-principal .text {
+        display: inline-block;
+    }
+
+    .btn-principal .icon {
+        display: none;
+    }
 }
 </style>
