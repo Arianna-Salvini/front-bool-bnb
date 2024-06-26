@@ -203,259 +203,297 @@ export default {
 </script>
 
 <template>
-
     <div class="container">
 
-        <div class="row d-flex">
-            <div class="col-8">
-                <div class="cards box_shadow">
-                    <div class="card_top">
-                        <div class="title_card">
-                            <h2 class="">{{ apartment.title }}</h2>
-                        </div>
-                    </div>
-                    <div class="card_body">
-                        <img v-if="apartment.image"
-                            :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                            alt="Apartment Image" class=" card-img img-fluid w-100"
-                            style="object-fit: cover; height: 400px;">
-                        <img v-else src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                            alt="">
-                    </div>
+        <div class="actions">
+           
+<button @click="goBack" class="button_back">
+            <i class="fa fa-circle-left"></i> Back
+        </button>
+        </div>
+        <h2>{{ apartment.title }}</h2>
+        <div class="row main">
+            <div class="col-8 d-flex">
+                <div class="apartment_heading">
+                    <img v-if="apartment.image"
+                        :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
+                        alt="Apartment Image" class="img w-100">
+                    <img v-else src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png" alt="Image not available" class="img w-100">
+
                 </div>
+
                 <div class="description">
                     <strong>Description:</strong>
                     <p>{{ apartment.description }}</p>
+                    <span class="credit_apartment">by {{ modName }} {{ modLastName }}</span>
                 </div>
 
-                <!--    Add Map  -->
-                <div id="map" class="box_shadow"></div>
+                <div id="map" class="map box_shadow"></div>
             </div>
+
             <div class="col-4">
-                <div class="cards box_shadow">
-                    <div class="title_card bg_dark">
-                        <h2>Details:</h2>
-                    </div>
-                    <div class="card_body">
-                        <div class="d-flex services-card flex-wrap gap-1">
-                            <div class="">
-                                <span class="bg-dark rounded-5 p-2">
-                                    <strong><i class="fa-solid fa-map-pin"></i></strong>
-                                    {{ apartment.address }}, {{ apartment.street_number }}, {{ apartment.zip_code }}
-                                </span>
-                            </div>
-                            <div class="">
-                                <span class="badges bg-dark rounded-5 p-2">
+                <div class="details box_shadow">
+                    <h3>Details</h3>
+                    <div class="services-card">
+                        <div class="detail-item address">
+                            <span class="badge bg-dark">
+                                <strong><i class="fa-solid fa-map-pin"></i> Address:</strong>
+                                {{ apartment.address }}, {{ apartment.street_number }}, {{ apartment.zip_code }}
+                            </span>
+                        </div>
+                        <h4>Apartment Details</h4>
+                        <div class="detail-pairs">
+                            <div class="detail-item">
+                                <span class="badge bg-dark">
                                     <i class="fa-solid fa-ruler-combined"></i>
                                     {{ apartment.square_meters }} m²
                                 </span>
                             </div>
-                            <div class="">
-                                <span class="badges bg-dark rounded-5 p-2">
+                            <div class="detail-item">
+                                <span class="badge bg-dark">
                                     <strong><i class="fa-solid fa-person-booth"></i></strong>
                                     {{ apartment.rooms }} rooms
                                 </span>
                             </div>
-                            <div class="">
-                                <span class="badges bg-dark rounded-5 p-2">
+                            <div class="detail-item">
+                                <span class="badge bg-dark">
                                     <strong><i class="fa-solid fa-bed"></i></strong>
                                     {{ apartment.beds }} beds
                                 </span>
                             </div>
-                            <div class="">
-                                <span class="badges bg-dark rounded-5 p-2">
+                            <div class="detail-item">
+                                <span class="badge bg-dark">
                                     <strong><i class="fa-solid fa-toilet"></i></strong>
                                     {{ apartment.bathrooms }} bathrooms
                                 </span>
                             </div>
-                            <!-- Services -->
-                            <div class="services ">
-                                <strong>Services:</strong>
-                                <ul>
-                                    <li v-for="service in apartment.services" :key="service.id">{{
-                                service.service_name }}</li>
-                                </ul>
-                            </div>
+                        </div>
+                        <h4>Services</h4>
+                        <div class="services">
+                            <ul>
+                                <li v-for="service in apartment.services" :key="service.id">{{ service.service_name }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="box_shadow my-5 rounded-5 form-container">
+        <div class="form-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center">
+            <h2>Contact Owner: {{ modName }} {{ modLastName }} </h2>
         </div>
 
-        <!-- Form -->
-        <div class="box_shadow my-5 rounded-5 form-container">
-            <div class="form-header bg-dark text-white rounded-5 d-flex align-items-center justify-content-center ">
-                <h2>Contact Owner: {{ modName }}
-                    {{ modLastName }} </h2>
-            </div>
 
-            <div class="card_body p-3 ">
-                <form @submit.prevent="handleForm" class="form-body d-flex">
-                    <div class="form-tag">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" :class="{ 'is-invalid': nameError && nameTouched }"
-                            id="name" v-model="name" required name="name" placeholder="Type your name"
-                            @input="validateInput('name')">
-                        <div class="error-message" v-if="nameError && nameTouched">{{ nameError }}</div>
-                    </div>
-                    <div class="form-tag">
-                        <label for="lastname" class="form-label">Lastname</label>
-                        <input type="text" class="form-control"
-                            :class="{ 'is-invalid': lastnameError && lastnameTouched }" id="lastname" v-model="lastname"
-                            required name="lastname" placeholder="Type your lastname"
-                            @input="validateInput('lastname')">
-                        <div class="error-message" v-if="lastnameError && lastnameTouched">{{ lastnameError }}</div>
-                    </div>
-                    <div class="form-tag">
-                        <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" :class="{ 'is-invalid': emailError && emailTouched }"
-                            id="sender_email" v-model="sender_email" required name="sender_email"
-                            placeholder="Type your e-mail" @input="validateInput('sender_email')">
-                        <div class="error-message" v-if="emailError && emailTouched">{{ emailError }}</div>
-                    </div>
-                    <div class="form-tag">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" :class="{ 'is-invalid': contentError && contentTouched }"
-                            id="content" rows="5" v-model="content" required name="content"
-                            placeholder="Type your message" @input="validateInput('content')"></textarea>
-                        <div class="error-message" v-if="contentError && contentTouched">{{ contentError }}</div>
-
-                    </div>
-                    <div style="font-style: italic;" v-if="showAlert">
-                        <span style="color: red;">*</span>All fields are required!
-                    </div>
-                    <button type="submit"
-                        :class="[{ 'btn btn-dark submit': true }, { 'disabled_button': !isValidForm || submittedForm || loading }]"
-                        :disabled="!isValidForm || submittedForm || loading">
-                        <span v-if="loading">Loading...</span>
-                        <span v-else>Send Message</span>
-                    </button>
-                </form>
-                <div v-if="confirmSubmitForm" class="banner_form">
-                    The message has been successfully sent! Thanks {{ submittedName }} {{ submittedLastname }} for your
-                    contact.
+        <div class="card_body p-3">
+            <form @submit.prevent="handleForm" class="form-body">
+                <div class="form-tag">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" :class="{ 'is-invalid': nameError && nameTouched }"
+                        id="name" v-model="name" required name="name" placeholder="Type your name"
+                        @input="validateInput('name')">
+                    <div class="error-message" v-if="nameError && nameTouched">{{ nameError }}</div>
                 </div>
+                <div class="form-tag">
+                    <label for="lastname" class="form-label">Lastname</label>
+                    <input type="text" class="form-control" :class="{ 'is-invalid': lastnameError && lastnameTouched }"
+                        id="lastname" v-model="lastname" required name="lastname" placeholder="Type your lastname"
+                        @input="validateInput('lastname')">
+                    <div class="error-message" v-if="lastnameError && lastnameTouched">{{ lastnameError }}</div>
+                </div>
+                <div class="form-tag">
+                    <label for="email" class="form-label">Your Email</label>
+                    <input type="email" class="form-control" :class="{ 'is-invalid': emailError && emailTouched }"
+                        id="sender_email" v-model="sender_email" required name="sender_email"
+                        placeholder="Type your e-mail" @input="validateInput('sender_email')">
+                    <div class="error-message" v-if="emailError && emailTouched">{{ emailError }}</div>
+
+                </div>
+                <div class="form-tag">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" :class="{ 'is-invalid': contentError && contentTouched }" id="content"
+                        rows="5" v-model="content" required name="content" placeholder="Type your message"
+                        @input="validateInput('content')"></textarea>
+                    <div class="error-message" v-if="contentError && contentTouched">{{ contentError }}</div>
+                </div>
+                <div class="alert" v-if="showAlert">
+                    <span class="alert-message">* All fields are required!</span>
+                </div>
+                <button type="submit"
+                    :class="[{ 'btn btn-dark submit': true }, { 'disabled_button': !isValidForm || submittedForm || loading }]"
+                    :disabled="!isValidForm || submittedForm || loading">
+                    <span v-if="loading">Loading...</span>
+                    <span v-else>Send Message</span>
+                </button>
+            </form>
+            <div v-if="confirmSubmitForm" class="banner_form">
+                The message has been successfully sent! Thanks {{ submittedName }} {{ submittedLastname }} for your
+                contact.
             </div>
         </div>
+    </div>
+            </div>
+        </div>
+
         <button @click="goBack" class="button_back">
             <i class="fa fa-circle-left"></i> Back
         </button>
 
+
     </div>
 </template>
 
+
+
+
+
 <style scoped>
 .container {
-    padding: 1rem 0;
+    padding: 2rem;
+}
+
+.actions {
+    margin-bottom: 2rem;
+}
+.w-100 {
+    width: 100%;
+}
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 2rem;
+}
+
+.col-8,
+.col-4 {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.img {
+    border-radius: 30px;
+    object-fit: cover;
+    height: 400px;
+    transition: transform 0.3s ease;
+}
 
 
-    .row {
-        gap: 1rem;
+.description {
+    padding: 2rem;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(124, 124, 124, 0.5);
+    text-align: justify;
+}
 
-        .col-6 {
-            flex: 0 0 calc((100% / 2) - 1rem);
-        }
+.credit_apartment {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 100;
+    color: #6c6c6c;
+    font-size: 0.9rem;
+    font-style: italic;
+}
 
-        .col-4 {
-            flex: 0 0 calc((100% / 3) - 1rem);
-        }
+.button_back {
+    text-decoration: none;
+    padding: 1rem 2rem;
+    margin: 0;
+    font-size: 1rem;
+    border-radius: 2rem;
+    color: #f8f9fa;
+    background-color: #228e80;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}
 
-        .description {
-            margin: 1rem 0.8rem;
-        }
+.button_back:hover {
+    background-color: #1a6f65;
+    color: #fff;
+}
 
-        #map {
-            border-radius: 2rem;
-            height: 400px;
-            width: 100%;
-            margin-left: 1rem 0 2rem -0.8rem;
-            padding: 3rem 0;
-        }
+.map {
+    border-radius: 2rem;
+    height: 400px;
+}
 
-        img {
-            border-radius: 0 0 3rem 3rem;
-            width: 100%;
-        }
+.details {
+    background: #f0f0f0;
+    border-radius: 30px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.box_shadow {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.services-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail-item {
+    margin-top: 1rem;
+}
+
+.address {
+    margin-bottom: 1.5rem;
+}
+
+.detail-pairs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.detail-pairs .detail-item {
+    flex: 1 1 45%; /* Adjust to control the width of each pair item */
+}
+
+.badge {
+    background-color: #228e80;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    display: inline-block;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+    background-color: #1a6f65;
+}
+
+.services {
+    margin-top: 1rem;
+}
+
+.services ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.services li {
+    background-color: #228e80;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+}
+
+
+.services li:hover {
+    background-color: #1a6f65;
     }
-
-
-    /* Card-section */
-    .cards {
-        border-radius: 3rem;
-        border: none;
-        box-shadow: 0 0 20px var(--color_grey_shadow);
-
-        .card_top {
-            background-color: var(--color_dark);
-            border-radius: 2rem 2rem 0 0;
-
-        }
-
-        .title_card {
-            padding: 1.5rem 1.5rem 1rem;
-            color: white;
-            border-radius: 2rem 2rem 0 0;
-        }
-
-        .card_body {
-            border-radius: 3rem;
-            flex-direction: column;
-
-            .services-card {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1.5rem;
-
-                .services {
-                    margin-top: 10px;
-
-                    & ul {
-                        list-style: none;
-                    }
-                }
-
-                .badges {
-                    padding: 0.3rem;
-                    color: white;
-                    background-color: var(--color_dark);
-                }
-            }
-        }
-    }
-
-    /* form-section */
-    .form-container {
-        border-radius: 3rem;
-        border: none;
-        box-shadow: 0 0 20px var(--color_grey_shadow);
-        margin: 1rem 0 2rem -0.8rem;
-
-        .form-header {
-            align-items: center;
-            justify-content: center;
-            border-radius: 2rem 2rem 0 0;
-            color: white;
-            padding: 0.8rem 1.5rem 0.5rem;
-            background-color: var(--color_dark);
-            margin-top: 1rem;
-        }
-
-        .form-body {
-            padding: 0.5rem 1rem;
-            flex-direction: column;
-            gap: 0.3rem;
-
-            .form-control {
-                min-height: 30px;
-                border-radius: 0.3rem;
-                border: 1px solid #ced4da;
-                padding: 0.5rem;
-            }
-
-            .form-tag {
-                display: flex;
-                flex-direction: column;
-            }
 
             .submit {
                 align-self: center;
@@ -466,34 +504,130 @@ export default {
                 border-radius: 5px;
                 color: var(--bnb-lighter);
                 cursor: pointer;
-            }
-        }
-    }
+
 }
 
-.banner_form {
+.form-container {
+    background-color: #f0f0f0;
+    border-radius: 30px;
+    padding: 2rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-header {
+    background-color: #228e80;
+    color: white;
+    border-radius: 30px;
     padding: 1rem;
-    margin-bottom: 1rem;
-    margin-top: 0.5rem;
-    border: 1px solid transparent;
-    border-radius: 0.25rem;
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
+    text-align: center;
 }
 
-.error-message {
-    border: 1px solid #FF0000;
-    padding: 5px;
-    color: #FF0000;
-    font-size: 12px;
+.form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-tag {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
     font-weight: bold;
+    color: #228e80;
+}
+
+.form-control {
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 30px;
+    font-size: 1rem;
 }
 
 .is-invalid {
-    border-color: #FF0000;
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    border-color: red;
 }
+
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+}
+
+.alert {
+    font-style: italic;
+    color: red;
+}
+
+.submit {
+    background-color: #228e80;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+
+.submit:hover {
+    background-color: #1a6f65;
+}
+
+.banner_form {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 30px;
+    text-align: center;
+}
+
+
+@media (max-width: 768px) {
+    .main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+        width: 100%;
+    }
+    .col-8, .col-4 {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    .form-header, .banner-header {
+        text-align: center;
+    }
+
+    .map {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main {
+        flex-flow: column;
+    }
+    .container {
+        padding: 0.5em;
+    }
+
+    .form-header, .banner-header {
+        font-size: 1em;
+    }
+
+    .box_shadow {
+        padding: 0.5em;
+    }
+}
+
 
 .disabled_button {
     background-color: #d3d3d3 !important;
@@ -517,4 +651,8 @@ export default {
     border-color: #3c4043;
     color: white;
 }
+
 </style>
+
+
+
