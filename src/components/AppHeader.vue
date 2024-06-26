@@ -76,6 +76,7 @@ header {
         .navigation {
             display: flex;
             width: 20%;
+            justify-content: end;
 
         }
 
