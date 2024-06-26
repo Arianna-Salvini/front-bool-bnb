@@ -195,7 +195,7 @@ export default {
             </router-link>
         </div>
         <h2>{{ apartment.title }}</h2>
-        <div class="row">
+        <div class="row main">
             <div class="col-8 d-flex">
                 <div class="apartment_heading">
                     <img v-if="apartment.image"
@@ -551,6 +551,46 @@ export default {
     border: 1px solid #c3e6cb;
     border-radius: 30px;
     text-align: center;
+}
+
+
+@media (max-width: 768px) {
+    .main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+        width: 100%;
+    }
+    .col-8, .col-4 {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    .form-header, .banner-header {
+        text-align: center;
+    }
+
+    .map {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main {
+        flex-flow: column;
+    }
+    .container {
+        padding: 0.5em;
+    }
+
+    .form-header, .banner-header {
+        font-size: 1em;
+    }
+
+    .box_shadow {
+        padding: 0.5em;
+    }
 }
 
 </style>
