@@ -37,6 +37,8 @@ export default {
             lastnameTouched: false,
             emailTouched: false,
             contentTouched: false,
+
+            ip_address: ''
         }
 
     },
@@ -189,15 +191,42 @@ export default {
         },
         goBack() {
             this.$router.go(-1); // funzione per  tornare alla pagina precedente
+        },
+
+
+        getIp() {
+            return axios
+                .get('https://api.ipify.org/?format=json')
+                .then(response => {
+                    console.log(response);
+                    this.ip_address = response.data.ip;
+                    console.log(this.ip_address);
+                })
+                .catch(err => console.log(err))
+        },
+
+        sendIp() {
+            const dataToSend = { apartment_id: this.apartment.id, ip_address: this.ip_address };
+            return axios
+                .post(state.base_api + '/api/statistics', dataToSend)
+                .then(response => {
+                    console.log('fatto');
+                    console.log(response);
+                })
+                .catch(error => console.log(error))
         }
     },
 
-
+    created() {
+        this.getIp().then(() => {
+            return this.sendIp();
+        });
+    },
     mounted() {
+        console.log(this.ip_address);
+        //this.getIp();
         this.callApartment();
         this.showAlert = true; // mostra l avviso
-
-
     }
 };
 </script>
@@ -228,7 +257,7 @@ export default {
                         :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
                         alt="Apartment Image" class="img w-100">
                     <img v-else src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                        alt="Image not available" class="img w-100">
+                        alt="Image not available" class="img w-100" style="border: 1px solid var(--color_grey_shadow);">
                 </div>
 
                 <!-- owner + description -->
