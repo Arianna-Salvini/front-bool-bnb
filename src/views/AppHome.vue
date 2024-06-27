@@ -197,28 +197,46 @@ export default {
                 </ul>
             </div>
 
-            <div class="row g-4">
+            <div class="row">
                 <div v-for="apartment in this.apartments" class="col">
 
                     <router-link :to="{ name: 'SingleApartment', params: { slug: apartment.slug } }"
                         style="text-decoration: none;">
                         <div class="card" :class="{ sponsorship_highlight: apartment.sponsorships.length > 0 }">
-
-                            <img v-if="apartment.image"
-                                :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                                alt="Apartment Image" class="card-img-top w-100 ">
-                            <img v-else
-                                src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                                alt="not-available">
+                            <div class="image">
+                                <img v-if="apartment.image"
+                                    :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
+                                    alt="Apartment Image" class="card-img-top w-100 ">
+                                <img v-else
+                                    src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
+                                    alt="not-available">
+                            </div>
                             <div class="card-body">
                                 <h3>{{ apartment.title }}</h3>
                                 <p class="card-text">
                                     <i class="fa-solid fa-location-dot"></i>
                                     {{ apartment.address }}
                                 </p>
-                                <p class="card-text"><strong><i class="fa-solid fa-bed"></i> Beds</strong>
-                                    {{ apartment.beds }} <strong><i class="fa-solid fa-person-booth"></i> Rooms</strong>
-                                    {{ apartment.rooms }}
+                                <p class="card-text">
+                                    <span class="chip">
+                                        <span>
+                                            <strong>
+                                                <i class="fa-solid fa-bed"></i>
+                                                <span>Beds</span>
+                                            </strong>
+                                        </span>
+                                        <span>{{ apartment.beds }} </span>
+                                    </span>
+
+                                    <span class="chip">
+                                        <span>
+                                            <strong>
+                                                <i class="fa-solid fa-person-booth"></i>
+                                                <span>Rooms</span>
+                                            </strong>
+                                        </span>
+                                        <span>{{ apartment.rooms }} </span>
+                                    </span>
                                 </p>
                                 <p class="card-text crown" v-if="apartment.sponsorships.length > 0">
                                     <i class="fa-solid fa-crown"></i>
@@ -383,12 +401,53 @@ export default {
 
     }
 
-    .card,
-    img {
+    .card {
         border-radius: 20px;
-        width: 100%;
-        object-fit: cover;
+
+        .card-text {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+
+            >.chip {
+                color: var(--bnb-lighter);
+                background-color: var(--bnb-main);
+                border-radius: 20px;
+                padding: 0.5rem;
+                display: flex;
+                gap: 0.5rem;
+                justify-content: center;
+                align-items: center;
+
+                .fa-person-booth,
+                .fa-bed {
+                    padding-right: 0.3rem;
+                }
+            }
+        }
     }
+
+    .image {
+        width: 100%;
+        height: 200px;
+
+        @media(max-width: 1176px) {
+            height: 300px;
+        }
+
+        @media(max-width: 768px) {
+            height: 400px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+    }
+
+
 
     .card-body {
         max-height: 250px;
