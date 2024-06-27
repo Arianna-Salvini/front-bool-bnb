@@ -309,12 +309,21 @@ export default {
             gap: 0.5rem;
             align-items: center;
 
+            @media(max-width: 768px) {
+                width: 100%;
+            }
+
+
             .search-form {
                 padding: 0.5rem;
                 border: 1px solid var(--color_grey_shadow);
                 border-radius: 60px;
                 gap: 1rem;
                 align-items: center;
+
+                @media(max-width: 768px) {
+                    width: 100%;
+                }
 
                 .range-wrap {
                     padding: 0 1rem;
@@ -333,7 +342,13 @@ export default {
                     padding: 0 1rem;
                     outline: none;
                     border: none;
+
+                    @media(max-width: 768px) {
+                        width: 80%;
+                    }
                 }
+
+
             }
 
             .search-btn {
