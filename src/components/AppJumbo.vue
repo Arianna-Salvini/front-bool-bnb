@@ -66,4 +66,45 @@ export default {
         }
     }
 }
+
+@media (max-width: 1176px) {
+
+    .suitecase,
+    .map {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    #jumbotron {
+        height: 400px;
+    }
+
+    .suitecase,
+    .map {
+        display: none;
+    }
+
+    .presentation h1 {
+        font-size: 2rem;
+    }
+
+    .presentation p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 425px) {
+    #jumbotron {
+        height: 300px;
+    }
+
+    .presentation h1 {
+        font-size: 2.5rem !important;
+    }
+
+    .presentation p {
+        font-size: 1rem;
+    }
+}
 </style>

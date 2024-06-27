@@ -206,10 +206,10 @@ export default {
 
                             <img v-if="apartment.image"
                                 :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                                alt="Apartment Image" class="card-img-top w-100 " style="height: 200px;">
+                                alt="Apartment Image" class="card-img-top w-100 ">
                             <img v-else
                                 src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
-                                alt="not-available" style="height: 200px;">
+                                alt="not-available">
                             <div class="card-body">
                                 <h3>{{ apartment.title }}</h3>
                                 <p class="card-text">
@@ -335,6 +335,7 @@ export default {
     .suggestions {
         display: flex;
         justify-content: end;
+        margin-bottom: 1rem;
 
         ul {
             list-style: none;
@@ -377,6 +378,7 @@ export default {
             border-top: none;
             border-left: none;
             border-right: none;
+
         }
 
     }
@@ -386,7 +388,6 @@ export default {
         border-radius: 20px;
         width: 100%;
         object-fit: cover;
-
     }
 
     .card-body {
@@ -415,7 +416,7 @@ export default {
         }
     }
 
-
+    /* pagination */
     .navigation {
         display: flex;
         justify-content: end;
@@ -472,15 +473,12 @@ export default {
 }
 
 
-
 .services {
     overflow-y: auto;
     margin-top: 0 !important;
 
-
     ul {
         flex-wrap: wrap;
-
     }
 
     li {
@@ -500,7 +498,6 @@ export default {
             align-items: center;
             justify-content: center;
             padding: 0.8rem;
-
         }
     }
 }
@@ -508,40 +505,88 @@ export default {
 @media (max-width: 425px) {
     .top-bar {
         flex-direction: column;
-        margin-top: 3rem;
+        margin-top: 3rem !important;
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
     }
 
     .search-form {
         flex-direction: column;
-        gap: 1rem;
+        border-radius: 20px !important;
     }
 
     .range-wrap {
-        flex-direction: column;
+        border-right: none !important;
+
+
+    }
+
+    #search {
+        border: 1px solid var(--color_grey_shadow) !important;
+        padding: 0.5rem !important;
+        border-radius: 1.2rem !important;
     }
 
     .pagination {
         justify-content: center;
     }
 
-    .prev,
-    .next {
-        margin: 1rem;
+    .suggestions {
+        margin-bottom: 1.5rem !important;
     }
-
 }
 
 @media (max-width: 768px) {
-    .row {
-        flex-wrap: wrap;
-        gap: 20px;
+
+    .top-bar {
+        flex-direction: column;
+        margin-top: 3rem !important;
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    .pagination {
         justify-content: center;
     }
 
-    .card {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
+    .suggestions {
+        margin-bottom: 1.5rem;
+    }
+
+
+    .search-form {
+        flex-direction: column;
+        border-radius: 20px !important;
+    }
+
+    #search {
+        border: 1px solid var(--color_grey_shadow) !important;
+        padding: 0.5rem !important;
+        border-radius: 1.2rem !important;
+    }
+
+
+    .range-wrap {
+        border-right: none !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width:1176px) {
+    .top-bar {
+        flex-direction: column;
+        margin-top: 3rem !important;
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .suggestions {
+        margin-bottom: 1.5rem !important;
     }
 }
 </style>
