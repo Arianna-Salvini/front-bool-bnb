@@ -226,7 +226,6 @@ export default {
         console.log(this.ip_address);
         //this.getIp();
         this.callApartment();
-        this.getUserData();
         this.showAlert = true; // mostra l avviso
     }
 };
