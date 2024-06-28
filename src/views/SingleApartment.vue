@@ -38,7 +38,7 @@ export default {
             emailTouched: false,
             contentTouched: false,
 
-            ip_address: ''
+            ip_address: '',
         }
 
     },
@@ -214,7 +214,7 @@ export default {
                     console.log(response);
                 })
                 .catch(error => console.log(error))
-        }
+        },
     },
 
     created() {
@@ -226,6 +226,7 @@ export default {
         console.log(this.ip_address);
         //this.getIp();
         this.callApartment();
+        this.getUserData();
         this.showAlert = true; // mostra l avviso
     }
 };
