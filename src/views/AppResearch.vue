@@ -412,12 +412,11 @@ export default {
                 <div v-for="result in results" class="col">
                     <router-link :to="{ name: 'SingleApartment', params: { slug: result.slug } }"
                         style="text-decoration: none;">
-
                         <!-- Card results -->
                         <div class="card" :class="{ sponsorship_highlight: result.is_sponsorship_active !== 0 }">
                             <div class="image" :class="{ sponsorship_highlight: result.is_sponsorship_active !== 0 }">
                                 <img v-if="result.image"
-                                    :src="result.image.startsWith('http') ? result.image : state.base_api + '/storage/' + result.image"
+                                    :src="result.image.startsWith('apartments') ? state.base_api + '/' + result.image : state.base_api + '/storage/' + result.image"
                                     alt="result Image" class="card-img-top w-100" style="height: 350px;">
                                 <img v-else
                                     src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"

@@ -254,8 +254,8 @@ export default {
                 <!-- image -->
                 <div class="image">
                     <img v-if="apartment.image"
-                        :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
-                        alt="Apartment Image" class="img w-100">
+                        :src="apartment.image.startsWith('apartments') ? state.base_api + '/' + apartment.image : state.base_api + '/storage/' + apartment.image"
+                        class="img w-100">
                     <img v-else src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
                         alt="Image not available" class="img w-100" style="border: 1px solid var(--color_grey_shadow);">
                 </div>

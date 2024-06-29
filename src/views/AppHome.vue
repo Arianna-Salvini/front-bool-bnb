@@ -205,7 +205,7 @@ export default {
                         <div class="card" :class="{ sponsorship_highlight: apartment.sponsorships.length > 0 }">
                             <div class="image">
                                 <img v-if="apartment.image"
-                                    :src="apartment.image.startsWith('http') ? apartment.image : state.base_api + '/storage/' + apartment.image"
+                                    :src="apartment.image.startsWith('apartments') ? state.base_api + '/' + apartment.image : state.base_api + '/storage/' + apartment.image"
                                     alt="Apartment Image" class="card-img-top w-100 ">
                                 <img v-else
                                     src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png"
