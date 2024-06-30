@@ -294,7 +294,7 @@ export default {
 }
 
 #homepage {
-    padding-bottom: 5rem;
+    padding-bottom: 1%;
 
     h2 {
         font-size: 2.5rem;
