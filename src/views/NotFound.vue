@@ -18,7 +18,7 @@ export default {
 
 <style scoped>
 .container {
-    height: calc(100vh - 265px);
+    max-width: 1200px;
 
     .not_found {
         height: 100%;
