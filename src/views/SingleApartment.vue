@@ -15,6 +15,9 @@ export default {
             apartment: {},
             base_api: 'http://127.0.0.1:8000/api/',
             url_apartment: 'apartments/',
+            //definisco il user
+            user: {
+            },
             //form contact 
             name: '',
             lastname: '',
@@ -49,6 +52,7 @@ export default {
             axios.get(fullUrl).then(response => {
                 if (response.data.success) {
                     this.apartment = response.data.response;
+                    this.user = this.apartment.user; //memorizzo il user
                     this.apartmentId = this.apartment.id; // memorizzo ID dell apartment
                     console.log(this.$route.name === 'SingleApartment');
                     console.log(this.apartment)
@@ -260,17 +264,17 @@ export default {
                         alt="Image not available" class="img w-100" style="border: 1px solid var(--color_grey_shadow);">
                 </div>
 
-                <!-- owner + description -->
+                <!--  owner + description -->
                 <div class="owner-general">
-
-                    <!-- owner -->
                     <div class="owner">
                         <span><strong>Owner: </strong></span>
                         <span class="credit_apartment" v-if="modName !== '' && modLastName !== ''">{{ modName }} {{
-                            modLastName }}</span>
+                modLastName }}</span>
                         <span v-else class="credit_apartment">Not available</span>
+                        <div class="credit_apartment"> Total Apartments Online:
+                            <span>{{ user.total_apartments }}</span>
+                        </div>
                     </div>
-
                     <!-- details about rooms -->
                     <div class="rooms-detail d-flex">
 
