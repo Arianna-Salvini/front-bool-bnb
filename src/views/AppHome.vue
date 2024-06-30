@@ -70,7 +70,7 @@ export default {
             /* if search field isn't empty */
             if (this.search_address.trim() != '') {
                 let addressValue = this.search_address.replace(' ', '%20');
-                let tomtom_url = `https://api.tomtom.com/search/2/search/${addressValue}.json?view=Unified&relatedPois=off&key=${this.api_key}`;
+                let tomtom_url = `https://api.tomtom.com/search/2/search/${addressValue}.json?countrySet=IT&view=Unified&relatedPois=off&key=${this.api_key}`;
 
                 /* call tomtom url */
                 axios
