@@ -299,7 +299,7 @@ export default {
     h2 {
         font-size: 2.5rem;
         font-weight: bold;
-        width: 30%;
+        width: 40%;
     }
 
     .top-bar {
@@ -333,7 +333,7 @@ export default {
                 }
 
                 .range-wrap {
-                    width: 36%;
+                    width: 40%;
                     padding: 0 1rem;
                     border-right: 1px solid var(--color_grey_shadow);
                     gap: 0.5rem;
@@ -355,7 +355,6 @@ export default {
                     font-size: 1.2rem;
                     font-style: italic;
                     width: 90%;
-                    padding: 0 1rem;
                     outline: none;
                     border: none;
 
