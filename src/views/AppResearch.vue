@@ -397,7 +397,7 @@ export default {
             <!-- research title -->
             <div class="researched-address d-flex">
                 <div class="title d-flex">
-                    <h2>Your research:</h2>
+                    <h2>Here you are the apartments within the range of your search:</h2>
                     <div class="address">{{ researchedAddress }}</div>
                 </div>
 
@@ -854,6 +854,7 @@ export default {
 
     .tot-results {
         color: var(--color_grey_shadow);
+        font-size: 1.2rem;
     }
 
 }
