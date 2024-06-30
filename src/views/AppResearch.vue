@@ -28,7 +28,7 @@ export default {
             search_address: '',
             suggestions: [],
             search_url: '/api/apartments/search',
-            range_distance: 20,
+            range_distance: null,
             api_key: 'TubXmNyzFnYoGMpgu1RAnYEHnVO24pfI',
 
             rooms: 1,
@@ -280,6 +280,8 @@ export default {
         this.updateQueryString();
         console.log(this.chosenServices);
         this.fetchResults(this.researchedAddress, this.researchedRange);
+        this.search_address = this.researchedAddress;
+        this.range_distance = this.researchedRange;
 
     },
 
