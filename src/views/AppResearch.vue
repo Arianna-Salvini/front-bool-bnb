@@ -665,6 +665,7 @@ export default {
 
 
                 #search {
+                    font-size: 1.2rem;
                     padding: 0 1rem;
                     outline: none;
                     border: none;
