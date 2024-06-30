@@ -20,14 +20,12 @@ export default {
 <template>
     <footer>
         <div class="container footer-grid">
-            <div class="left">
+            <div class="left d-flex">
                 <div class="footer-logo">
                     <img src="/img/logo.png" alt="Logo" width="70">
                 </div>
                 <div class="footer-links">
                     <router-link :to="{ name: 'home' }">Home</router-link>
-                    <router-link :to="{ name: 'about' }">About</router-link>
-                    <router-link :to="{ name: 'contacts' }">Contacts</router-link>
                 </div>
             </div>
             <div class="right footer-button">
@@ -49,16 +47,16 @@ footer {
     background-color: #333;
     color: white;
     text-align: center;
-    padding: 20px 0;
     margin-top: auto;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 footer .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
-
-    gap: 20px;
 }
 
 .footer-grid {
@@ -69,11 +67,13 @@ footer .container {
 
 .footer-logo img {
     max-width: 100%;
+    padding-top: 1rem;
 }
 
 .footer-links {
     display: flex;
     gap: 10px;
+
 }
 
 .footer-links a {
@@ -81,6 +81,17 @@ footer .container {
     text-decoration: none;
     transition: color 0.3s ease;
 
+}
+
+.left {
+    align-items: center;
+    width: 20%;
+    gap: 2rem;
+}
+
+.right {
+    align-items: center;
+    flex-grow: grow;
 }
 
 .footer-button {
@@ -112,6 +123,8 @@ footer .container {
 .footer-copyright {
     margin-top: 10px;
     font-size: 14px;
+    width: 20%;
+    justify-self: flex-end;
 }
 
 .d-flex {
