@@ -18,7 +18,9 @@ export default {
 
 <style scoped>
 .container {
-    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     .not_found {
         height: 100%;
@@ -29,6 +31,7 @@ export default {
 
         img {
             filter: grayscale();
+            height: 600px;
         }
 
         p {
