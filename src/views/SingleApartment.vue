@@ -29,13 +29,13 @@ export default {
             submittedLastname: '', // il cognome inviato per farlo vedere nel banner
             nameError: '',
             lastnameError: '',
-            emailError: '',
+            sender_emailError: '',
             contentError: '',
-            isValidForm: true,//impostiamo il form su true
+            isValidForm: false,//impostiamo il form su true
             nameTouched: false,
             loading: false, // variabile per gestire lo stato di caricamento
             lastnameTouched: false,
-            emailTouched: false,
+            sender_emailTouched: false,
             contentTouched: false,
 
             ip_address: '',
@@ -85,6 +85,64 @@ export default {
             });
         },
 
+        validateForm() {
+            this.validateInput('name');
+            this.validateInput('lastname');
+            this.validateInput('sender_email');
+            this.validateInput('content');
+            return this.isValidForm;
+        },
+
+        validateEmail(sender_email) {
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const isValid = emailPattern.test(sender_email);
+            return isValid;
+        },
+
+        updateIsValidForm() {
+            this.isValidForm = !this.nameError && !this.lastnameError && !this.sender_emailError && !this.contentError && this.nameTouched && this.lastnameTouched && this.sender_emailTouched && this.contentTouched;
+            console.log('form ok:', this.isValidForm);
+        },
+
+        validateInput(nameInput) {
+            let inputValue = this[nameInput];
+            let inputErrorDiv = `${nameInput}Error`;
+            //switch case per controllare ogni input e mostrare il errore 
+            switch (nameInput) {
+                case 'name':
+                case 'lastname':
+                    if (!inputValue || inputValue.length < 3) {
+                        this[inputErrorDiv] = `${nameInput.charAt(0).toUpperCase() + nameInput.slice(1)} must be at least 3 characters.`;
+                    } else {
+                        this[inputErrorDiv] = '';
+                    }
+                    break;
+                case 'sender_email':
+                    if (!inputValue || !this.validateEmail(inputValue)) {
+                        this[inputErrorDiv] = 'Invalid email address.';
+                    } else {
+                        this[inputErrorDiv] = '';
+                    }
+                    break;
+                case 'content':
+                    if (!inputValue || inputValue.length < 10) {
+                        this[inputErrorDiv] = 'Message must be at least 10 characters.';
+                    } else {
+                        this[inputErrorDiv] = '';
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            // imposto il campo touched solo se il campo ha un valore(touched e per tenere traccia in quale input è entrato il user)
+            if (inputValue) {
+                this[`${nameInput}Touched`] = true;
+            }
+
+            this.updateIsValidForm();
+        },
+
         handleForm() {
             if (!this.validateForm()) {
                 return;
@@ -131,64 +189,6 @@ export default {
                 });
         },
 
-        validateInput(nameInput) {
-            let inputValue = this[nameInput];
-            let inputErrorDiv = `${nameInput}Error`;
-            //switch case per controllare ogni input e mostrare il errore 
-            switch (nameInput) {
-                case 'name':
-                case 'lastname':
-                    if (!inputValue || inputValue.length < 3) {
-                        this[inputErrorDiv] = `${nameInput.charAt(0).toUpperCase() + nameInput.slice(1)} must be at least 3 characters.`;
-                    } else {
-                        this[inputErrorDiv] = '';
-                    }
-                    break;
-                case 'sender_email':
-                    if (!inputValue || !this.validateEmail(inputValue)) {
-                        this[inputErrorDiv] = 'Invalid email address.';
-                    } else {
-                        this[inputErrorDiv] = '';
-                    }
-                    break;
-                case 'content':
-                    if (!inputValue || inputValue.length < 10) {
-                        this[inputErrorDiv] = 'Message must be at least 10 characters.';
-                    } else {
-                        this[inputErrorDiv] = '';
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            // imposto il campo touched solo se il campo ha un valore(touched e per tenere traccia in quale input è entrato il user)
-            if (inputValue) {
-                this[`${nameInput}Touched`] = true;
-            }
-
-            this.updateIsValidForm();
-        },
-
-
-
-        validateForm() {
-            this.validateInput('name');
-            this.validateInput('lastname');
-            this.validateInput('email');
-            this.validateInput('content');
-            return this.isValidForm;
-        },
-
-        validateEmail(email) {
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            return emailPattern.test(email);
-
-        },
-        updateIsValidForm() {
-            this.isValidForm = !this.nameError && !this.lastnameError && !this.emailError && !this.contentError;
-            console.log('form ok:', this.isValidForm);
-        },
         goBack() {
             this.$router.go(-1); // funzione per  tornare alla pagina precedente
         },
@@ -383,10 +383,12 @@ export default {
                     <!-- email -->
                     <div class="form-tag">
                         <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" :class="{ 'is-invalid': emailError && emailTouched }"
-                            id="sender_email" v-model="sender_email" required name="sender_email"
-                            placeholder="Type your e-mail" @input="validateInput('sender_email')">
-                        <div class="error-message" v-if="emailError && emailTouched">{{ emailError }}</div>
+                        <input type="email" class="form-control"
+                            :class="{ 'is-invalid': sender_emailError && sender_emailTouched }" id="sender_email"
+                            v-model="sender_email" required name="sender_email" placeholder="Type your e-mail"
+                            @input="validateInput('sender_email')">
+                        <div class="error-message" v-if="sender_emailError && sender_emailTouched">{{ sender_emailError
+                            }}</div>
 
                     </div>
 
