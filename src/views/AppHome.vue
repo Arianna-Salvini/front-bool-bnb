@@ -177,13 +177,15 @@ export default {
                         </div>
 
                         <!-- search input -->
-                        <input type="search" name="search" id="search" v-model="search_address" @input="getSuggestions"
-                            placeholder="Via dei cipressi">
+                        <div class="searchbar d-flex">
+                            <input type="search" name="search" id="search" v-model="search_address"
+                                @input="getSuggestions" placeholder="Look for your address here. Ex. via dei Cipressi">
 
-                        <!-- submit btn -->
-                        <button type="submit" class="btn search-btn" :disabled="!searchButton()">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
+                            <!-- submit btn -->
+                            <button type="submit" class="btn search-btn" :disabled="!searchButton()">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
 
                     </form>
                 </div>
@@ -297,17 +299,21 @@ export default {
     h2 {
         font-size: 2.5rem;
         font-weight: bold;
+        width: 30%;
     }
 
     .top-bar {
+        width: 100%;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
         margin-top: 6rem;
 
         .search {
+
             gap: 0.5rem;
             align-items: center;
+            width: 80%;
 
             @media(max-width: 768px) {
                 width: 100%;
@@ -315,6 +321,7 @@ export default {
 
 
             .search-form {
+                width: 100%;
                 padding: 0.5rem;
                 border: 1px solid var(--color_grey_shadow);
                 border-radius: 60px;
@@ -326,6 +333,7 @@ export default {
                 }
 
                 .range-wrap {
+                    width: 36%;
                     padding: 0 1rem;
                     border-right: 1px solid var(--color_grey_shadow);
                     gap: 0.5rem;
@@ -338,7 +346,15 @@ export default {
                     }
                 }
 
+                .searchbar {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+
                 #search {
+                    font-size: 1.2rem;
+                    font-style: italic;
+                    width: 90%;
                     padding: 0 1rem;
                     outline: none;
                     border: none;
