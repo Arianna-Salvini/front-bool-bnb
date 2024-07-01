@@ -432,6 +432,17 @@ export default {
 
 <style scoped>
 .container {
+
+    @media (max-width: 1176px) {
+        padding: 0 1.5rem;
+    }
+
+    .row {
+        @media (max-width: 1176px) {
+            padding: 0 1.5rem;
+        }
+    }
+
     .title {
         display: flex;
         gap: 1rem;
@@ -470,10 +481,16 @@ export default {
     .owner-general {
         padding: 1.5rem;
         border-bottom: 1px solid rgba(124, 124, 124, 0.5);
+
     }
 
     .rooms-detail {
         margin-top: 1rem;
+
+        @media (max-width: 768px) {
+            width: 90%;
+            margin: auto;
+        }
 
         .badge {
             border: 1px solid var(--color_grey_shadow);
@@ -484,6 +501,14 @@ export default {
             gap: 0.3rem;
             align-items: center;
             transition: transform 0.3s ease, background-color 0.3s ease;
+
+            @media (max-width: 768px) {
+                text-align: center;
+            }
+
+            @media (max-width: 576px) {
+                padding: 0.8rem 1.2rem;
+            }
 
             i {
                 color: var(--bnb-main);
@@ -642,6 +667,10 @@ export default {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 800px;
     margin: 2rem auto;
+
+    @media (max-width: 768px) {
+        width: 90%;
+    }
 
     .form-header {
         font-size: 1.2rem;
