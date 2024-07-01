@@ -29,15 +29,29 @@ export default {
         align-items: center;
         justify-content: center;
 
+        @media(max-width: 768px) {
+            width: 70%;
+            text-align: center;
+        }
+
         img {
             filter: grayscale();
             height: 600px;
+
+            @media(max-width:768px) {
+                height: 100%;
+                max-width: 100%;
+            }
         }
 
         p {
             margin-bottom: 5rem;
             font-size: 2rem;
             color: var(--bnb-main);
+
+            @media(max-width: 768px) {
+                font-size: 1.5rem;
+            }
         }
 
     }
