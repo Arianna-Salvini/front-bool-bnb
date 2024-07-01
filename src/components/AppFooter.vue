@@ -48,8 +48,6 @@ footer {
     color: white;
     text-align: center;
     margin-top: auto;
-    position: fixed;
-    bottom: 0;
     width: 100%;
 }
 
