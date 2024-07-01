@@ -150,7 +150,7 @@ export default {
 
         <AppJumbo />
 
-        <div class="container">
+        <div class="container home-container">
 
             <!-- title + searchbar -->
             <div class="top-bar d-flex">
@@ -285,6 +285,29 @@ export default {
 </template>
 
 <style scoped>
+.home-container {
+    @media(max-width: 1176px) {
+        padding: 0 1.5rem;
+    }
+
+    .row {
+        margin-top: 3.5rem;
+    }
+
+    h1 {
+        @media(max-width: 576px) {
+            font-size: 2rem;
+        }
+    }
+}
+
+.footer-grid {
+    @media (max-width:768px) {
+        gap: 1rem !important;
+
+    }
+}
+
 .services {
     margin-top: 10px;
 
@@ -300,13 +323,19 @@ export default {
         font-size: 2.5rem;
         font-weight: bold;
         width: 40%;
+
+        @media (max-width: 768px) {
+            text-align: center;
+            font-size: 1.8rem;
+            width: 100%;
+        }
     }
 
     .top-bar {
         width: 100%;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
+        margin-bottom: 0.5rem;
         margin-top: 6rem;
 
         .search {
@@ -337,6 +366,11 @@ export default {
                     padding: 0 1rem;
                     border-right: 1px solid var(--color_grey_shadow);
                     gap: 0.5rem;
+
+                    @media(max-width: 768px) {
+                        width: 100%;
+                        justify-content: center;
+                    }
 
                     .bubble {
                         color: var(--bnb-lighter);
@@ -398,7 +432,7 @@ export default {
         display: flex;
         justify-content: end;
         width: 100%;
-        margin: -2.5rem 0 2rem;
+        margin: 0 0 2rem;
         padding: 0.5rem;
         background-color: white;
 
@@ -406,10 +440,16 @@ export default {
             list-style: none;
             border: 2px solid var(--color_grey_shadow);
             border-radius: 20px;
-            /* position: absolute; */
+            position: absolute;
+            z-index: 100;
             background-color: var(--bnb-lighter);
             padding: 0.5rem;
             width: 47%;
+
+            @media(max-width: 1176px) {
+                width: 80%;
+                left: 10%;
+            }
 
             &>li {
                 font-size: 1rem;
@@ -433,9 +473,9 @@ export default {
             }
         }
 
-        @media(max-width: 1176px) {
+        /* @media(max-width: 1176px) {
             display: none;
-        }
+        } */
     }
 
 

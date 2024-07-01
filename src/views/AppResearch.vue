@@ -399,7 +399,7 @@ export default {
             <!-- research title -->
             <div class="researched-address d-flex">
                 <div class="title d-flex">
-                    <h2>Here you are the apartments within the range of your search:</h2>
+                    <h2>Apartments within {{ range_distance }}km from your research:</h2>
                     <div class="address">{{ researchedAddress }}</div>
                 </div>
 
@@ -844,6 +844,11 @@ export default {
         display: flex;
         gap: 1rem;
         align-items: center;
+
+        @media (max-width: 768px) {
+            align-items: start;
+            flex-direction: column;
+        }
 
         h2 {
             color: var(--bnb-main);

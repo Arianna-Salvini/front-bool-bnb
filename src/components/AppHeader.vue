@@ -25,8 +25,8 @@ export default {
             </div>
 
             <div class="links d-flex">
-                <i class="fa fa-home" aria-hidden="true"></i>
                 <router-link :to="{ name: 'home' }">
+                    <i class="fa fa-home" aria-hidden="true"></i>
                     Home
                 </router-link>
 
