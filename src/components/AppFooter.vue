@@ -150,6 +150,22 @@ footer .container {
     .footer-grid {
         flex-direction: column;
         align-items: center;
+
+        .left,
+        .right,
+        .footer-copyright {
+            padding: 0.5rem 0;
+            justify-content: center;
+        }
+
+        .footer-links {
+            display: none;
+        }
+
+        .footer-copyright {
+            padding-bottom: 1rem;
+            width: auto;
+        }
     }
 }
 

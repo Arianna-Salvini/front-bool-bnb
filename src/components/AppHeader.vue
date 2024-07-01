@@ -157,8 +157,6 @@ header {
         padding: 5px 10px;
         font-size: 14px;
     }
-
-
 }
 
 @media (min-width: 1177px) {
