@@ -684,6 +684,10 @@ export default {
                 color: var(--bnb-lighter);
                 background-color: var(--bnb-main);
                 border: none;
+
+                :hover {
+                    cursor: pointer;
+                }
             }
 
             @media(max-width:1176px) {
@@ -873,7 +877,7 @@ export default {
 .card {
     border-radius: 20px;
     position: relative;
-    overflow: hidden;
+
 
     &:hover img {
         transform: scale(1.2);

@@ -409,6 +409,10 @@ export default {
                 color: var(--bnb-lighter);
                 background-color: var(--bnb-main);
                 border: none;
+
+                :hover {
+                    cursor: pointer;
+                }
             }
         }
 
