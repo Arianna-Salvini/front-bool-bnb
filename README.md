@@ -22,14 +22,6 @@
   - I proprietari possono mettere in evidenza i loro appartamenti attraverso pacchetti di sponsorizzazione, aumentando la visibilità nella ricerca e sulla homepage.
   - Il sistema permette ai proprietari di scegliere tra diverse opzioni di sponsorizzazione, contribuendo a una maggiore esposizione e a potenziali prenotazioni.
 
-## Grafici e Statistiche
-
-La piattaforma utilizza **Chart.js** per visualizzare grafici statistici, consentendo ai proprietari di vedere metriche chiave come il numero di visualizzazioni e messaggi ricevuti per i loro appartamenti. Gli utenti sono invitati a consultare la [documentazione di Chart.js](https://www.chartjs.org/docs/latest/) per maggiori dettagli sulle funzionalità offerte.
-
-## Clausola sull'uso della libreria Chart
-
-La libreria Chart.js è integrata per migliorare l'esperienza utente attraverso la visualizzazione di dati statistici. Gli sviluppatori e gli utenti sono incoraggiati a esplorare la documentazione per ottimizzare l'uso dei grafici nella loro interfaccia.
-
 ## Conclusione
 
 Front Bool BnB rappresenta un importante passo avanti nella creazione di una piattaforma per affitti a breve termine, combinando un design accattivante con funzionalità utili per migliorare l'esperienza degli utenti e dei proprietari.
